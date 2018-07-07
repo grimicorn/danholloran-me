@@ -1,0 +1,17 @@
+{
+    "gitlens.gitExplorer.enabled": false,
+    "search.exclude": {
+        "**/.git": true,
+        "**/node_modules": true,
+        "**/vendor/composer/autoload_*.php": true,
+        "**/build_*": true
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/vendor/composer/autoload_*.php": true,
+        "**/build_*": true
+    },
+    "explorer.openEditors.visible": 0,
+    "projectManager.treeview.visible": false
+}
