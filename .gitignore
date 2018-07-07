@@ -3,3 +3,4 @@
 /vendor/
 /build_production
 .DS_Store
+/source/assets
