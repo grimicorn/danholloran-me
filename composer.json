@@ -1,0 +1,16 @@
+{
+    "name": "dholloran/danholloran",
+    "description": "My blog",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dan Holloran",
+            "email": "dtholloran@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "tightenco/jigsaw": "^1.2"
+    }
+}
