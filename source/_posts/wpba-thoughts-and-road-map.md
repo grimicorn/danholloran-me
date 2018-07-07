@@ -1,12 +1,12 @@
 ---
-layout: post
-title: WPBA Thoughts and Road Map
+extends: _layouts.post
+title: "WPBA Thoughts and Road Map"
 date: "2015-07-18 11:36"
 wpbaInlineForm: true
 redirect_from:
   - /2015/03/30/wpba-thoughts-and-road-map/
 image:
-  featured: 'photo-1429152937938-07b5f2828cdd.jpg'
+  featured: '/uploads/photo-1429152937938-07b5f2828cdd.jpg'
 ---
 
 ### Update (7/18/2015) Survey Responses
@@ -15,7 +15,7 @@ Thank you to all who participated in the survey about WP Better Attachments Re-w
 {% include wpba-inline-newsletter-signup.html %}
 
 ### Thoughts and Road Map
-So I have been attempting to rewrite WPBA so it would be less of a frustration to update on my part since WordCamp SF 2013, I believe if was July/August of 2013.  If you have been under a rock it is now 2015, I keep feeling stuck because of some of the decisions I made before having the experience to make the correct decision.  
+So I have been attempting to rewrite WPBA so it would be less of a frustration to update on my part since WordCamp SF 2013, I believe if was July/August of 2013.  If you have been under a rock it is now 2015, I keep feeling stuck because of some of the decisions I made before having the experience to make the correct decision.
 
 One of the main pain points is the settings architecture I  really want to do away with if for the most part and move more towards filters.  I honestly wouldn't mind maintaining a settings page with the filters so less advanced users wouldn't have to touch the code.  Which I understand is a big road block for a non-developer, really it's a big road block even for many developers, think fear of CLI its just code in the end.  However migrating to a different settings solution requires writing database migration logic which I just cannot seem to force myself to do yet.
 

@@ -1,9 +1,9 @@
 ---
-layout: post
-title: St. Louis WordCamp 2015 Notes
-date: '2015-03-15 13:16:54'
+extends: _layouts.post
+title: "St. Louis WordCamp 2015 Notes"
+date: "2015-03-15 13:16:54"
 image:
-  featured: 'wcstl-header.png'
+  featured: "/uploads/wcstl-header.png"
 ---
 
 In all WordCamp 2015 was definetly interesting. I thought that the Cain and Obeland in the Morning! "show" was pretty funny.  I think my favorite talk of the day was Atomic Design Principles, I've read about it before and semi-practice it even though I could do something like that better.  I also like the podcasting panel as well it was rather informative and a nice change of pace usually I just attened the full on developer talks.
@@ -19,7 +19,7 @@ Below I have my simple notes and schedule for posteritiy and will try to updated
 *[8:00am]*
 
 ### CAIN & OBENLAND IN THE MORNING!
-*[9:00am | Michael Cain, Konstantin Obenland]*  
+*[9:00am | Michael Cain, Konstantin Obenland]*
 Cain & Obenland in the morning! – a morning show-style WordCamp talk with three segments: two that will cover any number of WordPress topics – current WP happenings, theming, design, development, best practices, worst practices, future trends, you name it – and a special guest interview with a big name from the WordPress world.
 
 #### Notes:
@@ -27,7 +27,7 @@ Cain & Obenland in the morning! – a morning show-style WordCamp talk with thre
 * Apply Filters Podcast?
 
 ### LESSONS FROM THE 314 TEAM (BEGINNER)
-*[Developer 2 | Room 201 | 10:15am | Chris Carter]*  
+*[Developer 2 | Room 201 | 10:15am | Chris Carter]*
 “Having toddlers as coworkers” and other life lessons from the 314 team.
 
 #### Notes:
@@ -35,7 +35,7 @@ Cain & Obenland in the morning! – a morning show-style WordCamp talk with thre
 * Code Poet Directory?
 
 ### CSS SPECIFICITY IS A RAT-HOLE (INTERMEDIATE)
-*[Developer 1 | Room 250 | 11:00am | Drew Bell]*  
+*[Developer 1 | Room 250 | 11:00am | Drew Bell]*
 Decouple from the cascade and free your styles.
 
 #### Notes:
@@ -45,7 +45,7 @@ Decouple from the cascade and free your styles.
 * Specificity Calculator (Site)
 
 ### MANAGING WORDPRESS PROJECTS (INTERMEDIATE)
-*[Developer 2 | Room 201 | 11:45am | Lucas Lima]*  
+*[Developer 2 | Room 201 | 11:45am | Lucas Lima]*
 **MANAGING WORDPRESS PROJECTS – LET’S GET BETTER ON THIS!**
 
 Developers and Designers love to use their creativity to build amazing things for their clients with WordPress , however it’s not always that they are able to delivery those on time. WordPress is a wonderful tool that allow us to have a powerful website up and running in a couple of hours, so why do we need to be worried on how we manage our projects? I’m pretty sure you have tons of reasons to be worried about it…
@@ -57,7 +57,7 @@ We all know how hard it is to keep the expectations of our clients in a proper l
 #### Notes:
 
 ### ATOMIC DESIGN PRINCIPLES IN WORDPRESS THEMES (INTERMEDIATE)
-*[Developer 1 | Room 250 | 12:30pm | Joe McGill]*  
+*[Developer 1 | Room 250 | 12:30pm | Joe McGill]*
 <a href="https://speakerdeck.com/joemcgill/atomic-design-with-wordpress" target="_blank">Slides</a>
 If you spend your days designing and developing WordPress themes, you probably find yourself building the same elements over and over. Preprocessors like Sass and Less can speed things up inside a given site, but still – every site needs menus, buttons, headers, footers, form elements … you get the idea.
 
@@ -117,7 +117,7 @@ And once you’re up and running, you can also use the WordPress template functi
 * You don't have to be perfect
 
 ### UNDERSTANDING AND APPLYING SECURITY TO YOUR WORDPRESS INSTALLATION (INTERMEDIATE)
-*[Developer 2 | Room 201 | 2:45pm | Gregory Ray]*  
+*[Developer 2 | Room 201 | 2:45pm | Gregory Ray]*
 Be prepared! Whether you are responsible only for running a single site for yourself, or maintaining dozens for your clients, you should know how to take reasonable precautions to secure WordPress against common attacks. We will review the types of active threats that WordPress sites face, how and why a site gets targeted, and then look at a variety of techniques for improving security.
 
 * Some areas we will cover:
@@ -144,7 +144,7 @@ The overall goal will be to make your site(s) less attractive to opportunistic e
 * Multi-tenancy/McCreary Method?
 
 ### AN ELEGANT WORDPRESS WORKFLOW WITH GIT (ADVANCED)
-*[Developer 1 | Room 250 | 3:30pm | Bobby Bryant]*  
+*[Developer 1 | Room 250 | 3:30pm | Bobby Bryant]*
 In this talk, I would be discussing version control. But more specifically, I would be outlining a version control workflow called git flow. I would also be outlining how we use git flow in conjunction with services like beanstalk and bitbucket to auto deploy commits to staging and production environments.
 
 I think this would be a great talk for various attendees. Beginners could begin to understand the power of version control, and advanced users could see how using git flow can be a benefit when working on larger projects, with multiple developers. As WordPress continues to make inroads into the enterprise marketplace, it is becoming more important for WordPress developers to implement safe and organized development processes.
@@ -163,7 +163,7 @@ I think this would be a great talk for various attendees. Beginners could begin 
 * Add deprecated funcitons file and through debug error
 
 ### CLOSING REMARKS
-*[4:45pm]*  
+*[4:45pm]*
 Phew, we made it to the end of the first day of WordCamp St. Louis! We’d like to highlight a few superstars and remind folks of what the heck is happening on Sunday.
 
 Then, on to the after party with a few pointers on travel/parking and where to go once you reach the City Museum.

@@ -1,9 +1,9 @@
 ---
-layout: post
-title: WP Better Attachments
-date: '2015-03-08 17:00:54'
+extends: _layouts.post
+title: "WP Better Attachments"
+date: "2015-03-08 17:00:54"
 image:
-  featured: 'iFJ5qQylTD2POC68qBgh_Uluru.jpg'
+  featured: "/uploads/iFJ5qQylTD2POC68qBgh_Uluru.jpg"
 ---
 
 **Description:** WordPress plugin that allows you to add/edit/attach/un-attach/sort the files attached to your WordPress posts all from the post editor. Integrates seamlessly with WordPress using the default WordPress attachments type and no configuration needed to add WP Better Attachments to custom post types. You can now also have full control over cropping of the different attachment image sizes through the media editor.
@@ -46,7 +46,7 @@ wpba_get_attachments(array(
 
 ### WPBA Attachment List
 
-![WPBA Attachment List](/dist/uploads/screenshot-6.png)
+![WPBA Attachment List](/uploads/screenshot-6.png)
 
 #### Shortcode
 
@@ -102,23 +102,23 @@ wpba_attachment_list( array(
 
 ### WPBA Post Editor Button
 
-![WPBA Post Editor Button](/dist/uploads/screenshot-1.png)
+![WPBA Post Editor Button](/uploads/screenshot-1.png)
 
 ### WPBA Meta Box
 
-![WPBA Meta Box](/dist/uploads/screenshot-2.png)
+![WPBA Meta Box](/uploads/screenshot-2.png)
 
 ### WPBA Unattach Media Library Link
 
-![WPBA Unattach Media Library Link](/dist/uploads/screenshot-3.png)
+![WPBA Unattach Media Library Link](/uploads/screenshot-3.png)
 
 ### WPBA Attachment Editor
 
-![WPBA Attachment Editor](/dist/uploads/screenshot-4.png)
+![WPBA Attachment Editor](/uploads/screenshot-4.png)
 
 ### WPBA Crop Editor
 
-![WPBA Crop Editor](/dist/uploads/screenshot-5.png)
+![WPBA Crop Editor](/uploads/screenshot-5.png)
 
 ## Getting Started
 

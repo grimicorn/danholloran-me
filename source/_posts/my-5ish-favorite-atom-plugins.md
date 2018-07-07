@@ -1,9 +1,9 @@
 ---
-layout: post
-title: My 5ish Favorite Atom Plugins
+extends: _layouts.post
+title: "My 5ish Favorite Atom Plugins"
 date: "2015-07-19 20:46"
 image:
-  featured: 'photo-1429547584745-d8bec594c82e.jpg'
+  featured: "/uploads/photo-1429547584745-d8bec594c82e.jpg"
 ---
 
 So I have been migrating from using [Sublime Text](http://www.sublimetext.com/3) lately after using it exclusively for the past 3 or so years to [Atom](https://atom.io/). So I figured I would document my current 5 or so favorite plugins. I am sure a lot of them have ended up on multiple top 5 lists but hopefully you will find a new one.
@@ -14,28 +14,28 @@ Atom Beautify makes beautifying your code really easy. Sublime Text had some bea
 ### [Dockblockr](https://atom.io/packages/docblockr)
 Dockblockr helps adding Doc Blocks to your code it supports both Javascript and PHP among other languages. This is basically a port of the Sublime Text plugin which was one of my favorites on Sublime Text as well. It makes it super easy to add a doc block just type {/**} + {tab} on the line before a structural element. It will handle setting up your parameter values, return value, and whatever else you need. You are commenting your code right? Right?
 
-![Dockblockr Example](/dist/uploads/dockblockr.png)
+![Dockblockr Example](/uploads/dockblockr.png)
 
 <br><br>
 
 ###[Linter](https://atom.io/packages/linter)
 Linter is an excellent code linter for Atom. I liked the [SublimeLinter](http://www.sublimelinter.com/en/latest/) plugin for ST3 and this one functions much in the same way. It handles all of the repetitive core tasks that new linters can extend. I also prefer the way it displays the errors over that of SublimeLinter. In both SublimeLinter and Linter both show the lines that have issues with dots in the gutter. However I never liked the option to display all of the errors on save since it would open the command palette and to continue editing you would have to dismiss it. Linter handles this by listing all of the errors in a text area at the bottom of the editor so it is not in your immediate field of vision but it is still annoying enough so you do not dismiss it. You also get the error on the current line as a tooltip as well which helps when fixing a large set of issues. I personally use [JSHint](https://atom.io/packages/linter-jshint), [JSCS](https://atom.io/packages/linter-jscs), [SCSSLint](https://atom.io/packages/linter-scss-lint), [PHPCS](https://atom.io/packages/linter-phpcs), and [YAML](https://atom.io/packages/linter-js-yaml) however there is a large [list of supported linters](http://atomlinter.github.io/). You are linting your code right? Right?
 
-![Linter Example](/dist/uploads/linter.png)
+![Linter Example](/uploads/linter.png)
 
 <br><br>
 
 ### [File Icons](https://atom.io/packages/file-icons)
 File Icons is an excellent idea display a small simple icon to show what the type of file is. I know I could just read the extension but this just seems like a much easier way to figure it out by a quick glance. I had started to use a theme which include the same thing prior to leaving sublime. However it is so much nice that I am not tied to any one theme since I spend at least 8 hours every day staring at my editor its nice to change it up once in a while.
 
-![File Icons Example](/dist/uploads/file-icons.png)
+![File Icons Example](/uploads/file-icons.png)
 
 <br><br>
 
 ### [Pigments](https://atom.io/packages/minimap-pigments)/[Minimap Pigments](https://atom.io/packages/minimap-pigments)
 Pigments basically highlights any color in your files the actual color. So no more guessing is the hex value the correct one you can just see it. It also helps with autocompletion of your colors and variables which is awesome. It also has a plugin for the minimap as well which is just kind of cool. I had a plugin like this on ST3 though it seemed to conflict with some other plugins and did not have the autocomplete for colors.
 
-![Pigments Example](/dist/uploads/pigments.png)
+![Pigments Example](/uploads/pigments.png)
 
 <br><br>
 

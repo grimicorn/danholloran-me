@@ -1,9 +1,9 @@
 ---
-layout: post
+extends: _layouts.post
 title: "Linting Your Code: Installing the Linters"
 date: "2015-08-27 20:47"
 image:
-  featured: 'photo-1433424007598-bd5d102e8597.jpg'
+  featured: '/uploads/photo-1433424007598-bd5d102e8597.jpg'
 ---
 Linting is basically the act of running your code through a tool that catches syntax issues, common pitfalls, and helps enforce a general coding style among other things. This does not actually test the code like a unit test or integration test. How ever it helps stop you from shooting yourself in the foot with simple typos.
 
@@ -44,7 +44,7 @@ Install WordPress PHPCS standards
 $ git clone -b master` https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
 {% endhighlight %}
 
-Add WordPress standards to PHPCS configuration.  
+Add WordPress standards to PHPCS configuration.
 
 {% highlight bash %}
 # Make sure to change {PHPCS_VERSION} to the installed PHPCS version 2.3.2 is the current version as of this post.
@@ -110,7 +110,7 @@ $ gem install scss_lint
 $ which scss-lint
 {% endhighlight %}
 
-Note: Configuration is handled via the  
+Note: Configuration is handled via the
 Configuration is handled via the [.scss-lint.yml](https://github.com/brigade/scss-lint#configuration) you can read more about the available configuration options [in the docs](https://github.com/brigade/scss-lint/blob/master/lib/scss_lint/linter/README.md).
 
 You can check out my [SCSS-Lint configuration](https://github.com/DHolloran/linter-examples/blob/master/.scss-lint.yml).

@@ -1,9 +1,9 @@
 ---
-layout: post
+extends: _layouts.post
 title: "Setting Up Your Shell"
 date: "2015-09-29 20:38"
 image:
-  featured: 'photo-1433833103303-111110aae192.jpg'
+  featured: '/uploads/photo-1433833103303-111110aae192.jpg'
 ---
 
 So you want to setup your shell thats awesome! This will be primarily relevant to Mac OS X since if your on Linux you should already be comfortable with the shell and if your on Windows I'm sorry even though Windows 10 does look pretty cool. I will go through some basic configuration of iTerm 2 and get zshell setup.

@@ -1,6 +1,7 @@
 ---
-title: Check Out Down Them All Extension for Firefox
-layout: post
+extends: _layouts.post
+title: "Check Out Down Them All Extension for Firefox"
+date: "2016-11-08 18:18"
 ---
 Quick tip I figured I would share. If you ever need to download a larger amount of images and you do not have FTP access and you know the URLs. [Down Them All](http://www.downthemall.net) extension for Firefox is great.
 

@@ -1,9 +1,9 @@
 ---
-layout: post
+extends: _layouts.post
 title: "Display PHP Errors in MAMP"
 date: "2015-07-15 20:16"
 image:
-  featured: 'photo-1428908728789-d2de25dbd4e2.jpg'
+  featured: '/uploads/photo-1428908728789-d2de25dbd4e2.jpg'
 ---
 
 Granted you never make any mistakes I am sure. However just in case you do you can  easily enable error reporting on MAMP to help catch the obvious ones. All you have to do is edit the `php.ini` in the MAMP directory `/Applications/MAMP/conf/php{Version}/php.ini`. If you're not sure what PHP version you are using you can find it in the MAMP at Preferences>PHP.

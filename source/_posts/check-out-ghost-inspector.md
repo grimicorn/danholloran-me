@@ -1,9 +1,9 @@
 ---
-layout: post
+extends: _layouts.post
 title: "Check Out Ghost Inspector"
 date: "2015-07-18 09:00"
 image:
-  featured: 'photo-1429032021766-c6a53949594f.jpg'
+  featured: '/uploads/photo-1429032021766-c6a53949594f.jpg'
 ---
 I saw this cool tool the other day on Twitter [Ghost Inspector ](https://ghostinspector.com) which allows your to record your actions or setup by drag/drop website regression testing. I've done some work with [Nightwatch.js](http://nightwatchjs.org) which helps writing tests for [Selenium](http://www.seleniumhq.org) which allows you test across all the major browsers.
 

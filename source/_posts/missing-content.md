@@ -1,9 +1,9 @@
 ---
-layout: post
-title: Missing Content
-date: '2015-03-10 00:16:31'
+extends: _layouts.post
+title: "Missing Content"
+date: "2015-03-10 00:16:31"
 image:
-  featured: 'photo-1427955569621-3e494de2b1d2.jpg'
+  featured: '/uploads/photo-1427955569621-3e494de2b1d2.jpg'
 ---
 
 ## Cache

@@ -1,9 +1,9 @@
 ---
-layout: post
+extends: _layouts.post
 title: Moving From Sublime to Atom
 date: "2015-07-12 20:00"
 image:
-  featured: 'photo-1428765048792-aa4bdde46fea.jpg'
+  featured: "/uploads/photo-1428765048792-aa4bdde46fea.jpg"
 ---
 
 I try to keep a semi-open mind when I see a new tool like Atom.  I had tried a few new editors such as Brackets which was really cool but still had some growing up to do.  I also tried PHPStorm I kind of miss using a full fledged IDE but I really want something a little more flexible.  I still plan on using Sublime since it does still have a little better text searching and editing than Atom.  Also Atom is a little buggier than Sublime but it is under really active development which is something Sublime seems to be iffy on.

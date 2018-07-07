@@ -1,9 +1,9 @@
 ---
-layout: post
-title: Has WP_Query Abstracted To Much?
+extends: _layouts.post
+title: "Has WP_Query Abstracted To Much?"
 date: "2015-08-18 19:53"
 image:
-  featured: photo-1432691301971-c8b920198bd7.jpg
+  featured: /uploads/photo-1432691301971-c8b920198bd7.jpg
 ---
 
 I was working on a project recently where I ran into a situation where `WP_Query`, well actually it was `WP_User_Query`, just would not work. So I feel back to raw SQL through `wpdb` and to my astonishment PHPCS with WordPress coding standards discourages the use of `wpdb`. I know it is not a total outright do not use but still. It got me to thinking maybe `WP_Query` abstracts too much away from the developer.

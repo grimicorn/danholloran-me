@@ -1,9 +1,9 @@
 ---
-layout: post
-title: Setting Up a Jekyll Blog - Part 3
+extends: _layouts.post
+title: "Setting Up a Jekyll Blog - Part 3"
 date: "2015-07-29 20:37"
 image:
-  featured: 'photo-1430620081187-c59647bac29e.jpg'
+  featured: '/uploads/photo-1430620081187-c59647bac29e.jpg'
 series:
   url: "/2015/08/09/setting-up-a-jekyll-blog-part-4/"
   label: "Setting Up a Jekyll Blog - Part 4"

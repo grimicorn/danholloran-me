@@ -1,9 +1,9 @@
 ---
-layout: post
+extends: _layouts.post
 title: "Change URLs On Your WP Engine Install"
 date: "2015-08-04 18:18"
 image:
-  featured: 'photo-1430760814266-9c81759e5e55.jpg'
+  featured: '/uploads/photo-1430760814266-9c81759e5e55.jpg'
 ---
 We recently switched to [WP Engine](http://wpengine.com) which is an excellent choice for WordPress hosting. Managed hosting I believe is the best way to host a WordPress site. However it does have some quirks compared to our old host.
 

@@ -1,9 +1,9 @@
 ---
-layout: post
-title: Setting Up a Jekyll Blog - Part 5
+extends: _layouts.post
+title: "Setting Up a Jekyll Blog - Part 5"
 date: "2015-08-10 21:08"
 image:
-  featured: 'photo-1432234525151-015bc7937f1c.jpg'
+  featured: '/uploads/photo-1432234525151-015bc7937f1c.jpg'
 ---
 
 So now we have setup, tweaked, and styled our new Jekyll site. Now it is time for the whole world to see and admire our work, at least we hope they will. There is a large range of options in the [Jekyll Documentation about Deployments](http://jekyllrb.com/docs/deployment-methods/) but I am going to focus on [Github Pages](https://pages.github.com/) since it is extremely easy to get started. The one caveat is that Github rightfully so restricts you to a few [plugins](https://help.github.com/articles/using-jekyll-plugins-with-github-pages/) so if you need some more control you will need to move to a new hosting provider. Which moving a static site compared to a traditional CMS is relatively easier since everything is just a static file in a Git repository.
@@ -14,7 +14,7 @@ For the purpose of this post I am assuming you have at least some familiarity wi
 
 So the first thing you will need is a Github account if you do not already have one you can [get one here](https://github.com/join). The next thing you will need to do once you have signed/signed up is to create a new repository that is {username}.github.io this will also be the URL you will access your site from.
 
-![My personal site example](/dist/uploads/dholloran.github.png)
+![My personal site example](/uploads/dholloran.github.png)
 
 While you are creating the repository you might as well add a Jekyll .gitignore and a license file. Github requires you to ignore the `_sites` directory since it will handle building that each time you push changes. Now you will either need to add the Github remote with `git remote add origin https://github.com/user/{username}.github.io.git` if you have been tracking your changes with Git already. If not you should run `git init` in the Jekyll directory then stage all of your files with `git add .`.  After that you can add your initial commit `git commit -m "Initial commit"` then you can run `git remote add origin https://github.com/user/{username}.github.io.git`.  From here on out every time you push something to your master branch with `git push origin master` Github Pages will build your site and then deploy it. Now you should be able to access you site at http://{username}.github.io/ it is usually pretty fast but give it a minute if it is not instantly up.
 

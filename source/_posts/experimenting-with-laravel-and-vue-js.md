@@ -1,9 +1,9 @@
 ---
-layout: post
+extends: _layouts.post
 title: "Experimenting With Laravel and Vue.js"
 date: "2015-12-05 21:49:22"
 image:
-  featured: 'photo-1438216983993-cdcd7dea84ce.jpg'
+  featured: '/uploads/photo-1438216983993-cdcd7dea84ce.jpg'
 ---
 
 So I've been playing with [Laravel](http://laravel.com/) and [Vue.js](http://vuejs.org/) which I have really started to like. It seems every time I have to write boring repetitive code there's already something that handles it for you.

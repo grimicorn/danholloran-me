@@ -1,8 +1,9 @@
 ---
 title: "Introducing Press CLI: A Configurable WordPress Installer"
-layout: post
+extends: _layouts.post
+date: "2016-10-30"
 image:
-  featured: 'press-cli.png'
+  featured: '/uploads/press-cli.png'
 ---
 So I have been wanting to build a WordPress installer for a while now. It is a lot of effort setting up multiple WordPress installs in the same basic configuration to start a project. I admit it I am extremely lazy but thats okay. I also wanted an excuse to build something with the Symfony Console component which makes building a CLI tool fairly easy.
 

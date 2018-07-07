@@ -1,12 +1,12 @@
 ---
-layout: post
-title: Setting Up a Jekyll Blog - Part 2
+extends: _layouts.post
+title: "Setting Up a Jekyll Blog - Part 2"
 date: "2015-07-17 15:38"
 series:
   url: "/2015/07/29/setting-up-a-jekyll-blog-part-3/"
   label: "Setting Up a Jekyll Blog - Part 3"
 image:
-  featured: 'photo-1429000263672-1b8b4008d2f7.jpg'
+  featured: '/uploads/photo-1429000263672-1b8b4008d2f7.jpg'
 ---
 
 ### Adding Your First Post.
@@ -23,8 +23,8 @@ title: My First Jekyll Blog Post
 ```
 
 
-By default Jekyll supports [Markdown](http://daringfireball.net/projects/markdown/syntax) but you can add formatters for [many different formats](http://jekyllrb.com/docs/plugins/#converters-1). You can also access media assets in a folder such as assets using the &#123;&#123; site.url &#125;&#125; /assets/screenshot.jpg variable in the post.  
-`![My helpful screenshot](/dist/uploads/screenshot.jpg)`
+By default Jekyll supports [Markdown](http://daringfireball.net/projects/markdown/syntax) but you can add formatters for [many different formats](http://jekyllrb.com/docs/plugins/#converters-1). You can also access media assets in a folder such as assets using the &#123;&#123; site.url &#125;&#125; /assets/screenshot.jpg variable in the post.
+`![My helpful screenshot](/uploads/screenshot.jpg)`
 
 ### Building Your Blog.
 There are a couple options depending on if you are planning on hosting through [Github Pages](https://pages.github.com/) or somewhere else. Either way there is a build command that just builds the required files for the blog. Then there is a server command that builds the site and then servers it up on http://127.0.0.1:4000/ while watching for changes. Both the build and server command have a --drafts flag that will also build/serve your drafts as your latest posts. Which makes it easy for writing your draft posts just make sure not to deploy the sites directory right after building with the --drafts flag.

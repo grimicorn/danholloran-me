@@ -1,6 +1,7 @@
 ---
-title: Setting up Mailhog on MAMP
-layout: post
+extends: _layouts.post
+title: "Setting up Mailhog on MAMP"
+date: "2016-06-26"
 ---
 [Mailhog](https://github.com/mailhog/MailHog) is a tool that allows all of your outgoing mail to be intercepted. This is great for your development environment since you may need to test things incrementally. You really do not want your clients or users receiving your test emails.
 

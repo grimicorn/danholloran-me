@@ -1,9 +1,9 @@
 ---
-layout: post
-title: What I Miss From WordPress & What Ghost Does Better
+extends: _layouts.post
+title: "What I Miss From WordPress & What Ghost Does Better"
 date: '2015-03-22 23:51:05'
 image:
-  featured: 'ghost-wordpress.png'
+  featured: '/uploads/ghost-wordpress.png'
 ---
 
 I started compiling this list when I first decided to switch from WordPress to Ghost for my personal blog.  Just a short list of what I do and do not miss from WordPres, might help if you are trying to make the decision on which to use.

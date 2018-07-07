@@ -1,6 +1,6 @@
 ---
-layout: post
-title: Setting Up a Jekyll Blog - Part 1
+extends: _layouts.post
+title: "Setting Up a Jekyll Blog - Part 1"
 date: "2015-07-14 20:21"
 series:
   url: "/2015/07/17/setting-up-a-jekyll-blog-part-2/"
@@ -8,7 +8,7 @@ series:
 redirect_from:
   - /2015/07/14/setting-up-a-jeykll-blog-part-1/
 image:
-  featured: 'photo-1428908684367-2fe456a630bb.jpg'
+  featured: '/uploads/photo-1428908684367-2fe456a630bb.jpg'
 ---
 
 I found Jeykll fairly easy to setup not quite 5 minute setup easy but not to bad. Honestly I spent most of the time reading the documentation which is simple and excelent. I did want to go through the steps of how to setup your own Jeykll blog. I am going to assume some level of comfortability with the command line and non-Windows OS.
@@ -16,10 +16,10 @@ I found Jeykll fairly easy to setup not quite 5 minute setup easy but not to bad
 ### Initial Setup
 We first have to setup a few dependencies such as Ruby and Jeykll.
 
-I prefer to install Ruby via RVM but any other method is fine more options can be found [here](https://www.ruby-lang.org/en/documentation/installation/)  
+I prefer to install Ruby via RVM but any other method is fine more options can be found [here](https://www.ruby-lang.org/en/documentation/installation/)
 {% highlight sh %}\curl -sSL https://get.rvm.io | bash -s stable --ruby{% endhighlight %}
 
-Once you have Ruby installed you can install Jeykll  
+Once you have Ruby installed you can install Jeykll
 {% highlight sh %}gem install jekyll{% endhighlight %}
 
 Now we are ready to create a new Jeykll blog.

@@ -1,9 +1,9 @@
 ---
-layout: post
-title: WP Better Attachments v1.3.11 Released
+extends: _layouts.post
+title: "WP Better Attachments v1.3.11 Released"
 date: "2015-07-18 13:55"
 image:
-  featured: 'photo-1429042007245-890c9e2603af.jpg'
+  featured: "/uploads/photo-1429042007245-890c9e2603af.jpg"
 ---
 
 WP Better Attachments version 1.3.11 has been relased to [wordpress.org](https://wordpress.org/plugins/wp-better-attachments/). If you have a question feel free to ask it on the [support forums](https://wordpress.org/support/plugin/wp-better-attachments) or open an [issue on Github](https://github.com/DHolloran/wp-better-attachments/issues/). You can find the list of changes below.
