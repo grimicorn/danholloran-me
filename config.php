@@ -1,7 +1,12 @@
 <?php
 
 return [
-    'baseUrl' => '',
+    'baseUrl' => '/',
     'production' => false,
-    'collections' => [],
+    'collections' => [
+        'posts' => [
+            'path' => 'blog/{date|Y/m/d}/{filename}',
+            'author' => 'Dan Holloran',
+        ],
+    ],
 ];
