@@ -4,13 +4,15 @@
         "**/.git": true,
         "**/node_modules": true,
         "**/vendor/composer/autoload_*.php": true,
-        "**/build_*": true
+        "**/build_*": true,
+        "**/_tmp": true
     },
     "files.exclude": {
         "**/.git": true,
         "**/.DS_Store": true,
         "**/vendor/composer/autoload_*.php": true,
-        "**/build_*": true
+        "**/build_*": true,
+        "**/_tmp": true
     },
     "explorer.openEditors.visible": 0,
     "projectManager.treeview.visible": false
