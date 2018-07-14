@@ -15,7 +15,7 @@ class TailwindExtractor {
     }
 }
 
-mix.disableSuccessNotifications();
+// mix.disableSuccessNotifications();
 mix.setPublicPath("source/assets/");
 mix.webpackConfig({
     plugins: [
@@ -26,6 +26,10 @@ mix.webpackConfig({
 });
 
 mix.js("source/_assets/js/main.js", "js")
+    .copyDirectory(
+        "./node_modules/highlight.js/styles/",
+        "./source/assets/css/vendor/highlight.js/"
+    )
     .sass("source/_assets/sass/main.scss", "css/main.css")
     .version()
     .options({

@@ -23,6 +23,9 @@ return [
             collect(explode(' ', $content))->slice(0, $characters)->implode(' ')
         ) . $more;
     },
+    'featuredImageSrc' => function ($page) {
+        return $page->image['featured'] ?? '';
+    },
     'collections' => [
         'posts' => [
             'path' => 'blog/{date|Y/m/d}/{filename}',

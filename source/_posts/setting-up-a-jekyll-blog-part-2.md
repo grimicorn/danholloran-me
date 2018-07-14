@@ -29,7 +29,7 @@ By default Jekyll supports [Markdown](http://daringfireball.net/projects/markdow
 ### Building Your Blog.
 There are a couple options depending on if you are planning on hosting through [Github Pages](https://pages.github.com/) or somewhere else. Either way there is a build command that just builds the required files for the blog. Then there is a server command that builds the site and then servers it up on http://127.0.0.1:4000/ while watching for changes. Both the build and server command have a --drafts flag that will also build/serve your drafts as your latest posts. Which makes it easy for writing your draft posts just make sure not to deploy the sites directory right after building with the --drafts flag.
 
-{% highlight sh %}
+```bash
 # Default Jekyll build.
 jekyll build;
 # Jekyll serve on http://127.0.0.1:4000/.
@@ -47,13 +47,13 @@ bundle exec jekyll serve;
 bundle exec jekyll build --drafts;
 # Github Pages Jekyll serve on http://127.0.0.1:4000/ drafts.
 bundle exec jekyll serve --drafts;
-{% endhighlight %}
+```
 
 The main difference between the default Jekyll and Github Pages is that with Github Pages you use Bundler as well. This way you have the same environment as Github Pages.
 
 ### Front matter
 So I am still learning about front matter my self. However I just view it as meta you add to the post. I come from the WordPress world and it would be the equivalent of custom meta. Without the having to add form fields, save, sanitize, retrieve, and display the data. You can find more information about [Front Matter](http://jekyllrb.com/docs/frontmatter/) in the docs. The built in types of Front Matter are layout, permalink, published, category, categories and tags. You are free to add anything you want so you can use it in your templates. You can even set defaults in your `_config.yaml` so you do not have to repeat yourself. An example of what I include in mine right now is below and you can find more in the [documentation](http://jekyllrb.com/docs/configuration/#front-matter-defaults)
-{% highlight yaml %}
+```yaml
 defaults:
   -
     scope:
@@ -61,6 +61,6 @@ defaults:
     values:
       layout: "default"
       author: "Dan Holloran"
-{% endhighlight %}
+```
 
 So now we can get started sharing all of our knowledge with the world one post at a time. Up next I will be diving more into editing the different templates in Jeykll. Jeykll uses a templating language called [Liquid](http://liquidmarkup.org/) developed at [Shopify](http://www.shopify.com/). If you have used any other templating language such as [Mustache](https://mustache.github.io/), [Handlebars](http://handlebarsjs.com/), [Twig](http://twig.sensiolabs.org/), etc. it should be fairly easy to pickup.

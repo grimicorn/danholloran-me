@@ -17,27 +17,27 @@ I found Jeykll fairly easy to setup not quite 5 minute setup easy but not to bad
 We first have to setup a few dependencies such as Ruby and Jeykll.
 
 I prefer to install Ruby via RVM but any other method is fine more options can be found [here](https://www.ruby-lang.org/en/documentation/installation/)
-{% highlight sh %}\curl -sSL https://get.rvm.io | bash -s stable --ruby{% endhighlight %}
+`\curl -sSL https://get.rvm.io | bash -s stable --ruby`
 
 Once you have Ruby installed you can install Jeykll
-{% highlight sh %}gem install jekyll{% endhighlight %}
+`gem install jekyll`
 
 Now we are ready to create a new Jeykll blog.
-{% highlight sh %}jekyll new my-blog{% endhighlight %}
+`jekyll new my-blog`
 
 
 ### (Optional) Github Pages setup
 Since your already using Git and Github you might as well host your blog there. Hey its free and simple don't have to worry about hosting.
 If you are planning on deploying to [Github Pages](https://pages.github.com/) you can install the [Github Pages Gem](https://github.com/github/pages-gem) via [Bundler](http://bundler.io/).
 1. Install bundler
-{% highlight sh %}gem install bundler;{% endhighlight %}
+`gem install bundler;`
 2. Create a new Gemfile in the `my-blog` directory.
 3. Add `gem 'github-pages'` into the Gemfile.
 4. Run `bundle install` in the `my-blog` directory.
 
 ### Setting up _config.yml
 Here is some of the main configuration I did granted there are way more things you can do. I am currently just using the default theme I hope to update it soon. You can find a list of all the options [here](http://jekyllrb.com/docs/configuration/).
-{% highlight yaml %}
+```yaml
 # Site settings
 title: Your Site Name
 email: youremail@provider.com
@@ -66,7 +66,7 @@ highlighter: pygments # Requires python to be installed
 
 # Build settings
 markdown: kramdown
-{% endhighlight %}
+```
 
 ### Wrapping up
 Ok we now have a Jeykll blog setup and ready to go!  That was not to hard was it? Next up we will add our first post and some [Front Matter](http://jekyllrb.com/docs/frontmatter/) which is where Jeykll becomes really powerful.

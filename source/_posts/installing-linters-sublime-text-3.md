@@ -52,13 +52,13 @@ You can change the gutter theme, lint mode, mark style, show errors on save and 
 ### PHP Code Sniffer(PHPCS) Configuration
 
 One last thing you may want to edit is to set WordPress as the default PHPCS standard this so far has been the only linter I had to manually configure. In `Preferences > Package Settings > SublimeLinter > Settings - User` under linters you just need to set `phpcs.standard` to WordPress.
-{% highlight JavaScript %}
+```javascript
 "linters": {
 	"phpcs": {
 		"standard": "WordPress"
 	},
 },
-{% endhighlight %}
+```
 
 <br>
 

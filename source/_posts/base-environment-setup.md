@@ -15,17 +15,18 @@ I have a few posts in mind that require a few of the same steps so I figured I w
 
 Install [Node.js](https://nodejs.org/).
 
-{% highlight bash %}
+```bash
 # Verify Node is installed
 $ node -v
 
 # Verify NPM is installed
-$ npm -v{% endhighlight %}
+$ npm -v
+```
 
 ### Ruby
 
 Ruby should be already installed in Mac OS X you can check Ruby
-{% highlight bash %}$ ruby -v{% endhighlight %}
+`$ ruby -v`
 
 At the time of this writing 2.x.x is fine if not you can install Ruby via [RVM](https://rvm.io/) by following the instructions on the [RVM website](https://rvm.io/).
 
@@ -36,9 +37,9 @@ At the time of this writing 2.x.x is fine if not you can install Ruby via [RVM](
 1. Download the [Xcode Command Line Tools](https://developer.apple.com/downloads/) for your version of Mac OS x. You may need to sign up for a free developer account.
 2. Install the Xcode Command Line by clicking on the downloaded package and following the install prompts.
 3. Once installed you should accept the Xcode license agreement.
-{% highlight bash %}
+```bash
 $ sudo xcodebuild -license
-{% endhighlight %}
+```
 
 ### Git
 
@@ -47,49 +48,49 @@ $ sudo xcodebuild -license
 1. Download [Git for Mac OS X](https://git-scm.com/download/mac).
 2. Install Git by clicking on the downloaded package and following the install prompts.
 3. Check if Git has been installed correctly.
-{% highlight bash %}
+```bash
 $ git --version
-{% endhighlight %}
+```
 
 ### Homebrew
 
 Install [Homebrew](http://brew.sh/).
 You can view the install [instructions here](http://brew.sh/#install).
-{% highlight bash %}
+```bash
 # As of 8/24/2015
 $ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-{% endhighlight %}
+```
 
 ### Homebrew PHP
 
 Tap [Homebrew PHP](https://github.com/Homebrew/homebrew-php) to install helpful PHP Tools easily.
 
-{% highlight bash %}
+```bash
 $ brew tap homebrew/dupes
 $ brew tap homebrew/versions
 $ brew tap homebrew/homebrew-php
-{% endhighlight %}
+```
 
 ### PHP
 Install PHP as of this writing the current stable version is 5.6.11 but you should install the [current version](http://php.net/releases/).
 
-{% highlight bash %}
+```bash
 # php 5.6.x === php56
 $ brew install php56
-{% endhighlight %}
+```
 
 Add this to your `~/.bashrc`, `~/.zshrc`, or other `~/.shellrc`
-{% highlight bash %}
+```bash
 $ export PATH="$(brew --prefix php56)/bin:$PATH"
-{% endhighlight %}
+```
 
 ### Composer
 
 *Composer allows you to install PHP packages with ease. Much like `npm` for Node.js and `gem` for Ruby.*
 
-{% highlight bash %}
+```bash
 $ brew install composer
-{% endhighlight %}
+```
 
 
 ### Wrapping Up

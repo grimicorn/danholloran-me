@@ -23,57 +23,57 @@ So lets get started!
 
 *Installing PHPCS is the hardest of the linters the rest should be fairly simple.*
 
-{% highlight bash %}
+```bash
 $ brew install php-code-sniffer
-{% endhighlight %}
+```
 
 Make sure linter is in your $PATH (It should return the path to the executable)
-{% highlight bash %}
+```bash
 # /usr/local/bin/phpcs
 $ which phpcs
-{% endhighlight %}
+```
 
 Go to the PHPCS directory
-{% highlight bash %}
+```bash
 # Make sure to change {PHPCS_VERSION} to the installed PHPCS version 2.3.2 is the current version as of this post.
 $ cd /usr/local/Cellar/php-code-sniffer/{PHPCS_VERSION}/CodeSniffer/Standards
-{% endhighlight %}
+```
 
 Install WordPress PHPCS standards
-{% highlight bash %}
+```bash
 $ git clone -b master` https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git wpcs
-{% endhighlight %}
+```
 
 Add WordPress standards to PHPCS configuration.
 
-{% highlight bash %}
+```bash
 # Make sure to change {PHPCS_VERSION} to the installed PHPCS version 2.3.2 is the current version as of this post.
 $ phpcs --config-set installed_paths /usr/local/Cellar/php-code-sniffer/{PHPCS_VERSION}/CodeSniffer/Standards/wpcs
-{% endhighlight %}
+```
 
 Check the installed standards, make sure one is WordPress.
-{% highlight bash %}
+```bash
 $ phpcs -i
-{% endhighlight %}
+```
 
 Set the default standard.
-{% highlight bash %}
+```bash
 $ phpcs --config-set default_standard WordPress
-{% endhighlight %}
+```
 
 <br>
 
 
 ### JSCS Installation
 Install JSCS
-{% highlight bash %}
+```bash
 $ npm install -g jscs
-{% endhighlight %}
+```
 Make sure linter is in your $PATH (It should return the path to the executable)
-{% highlight bash %}
+```bash
 # /usr/local/bin/jshint
 $ which jscs
-{% endhighlight %}
+```
 
 Configuration is handled via the [.jscs.json](http://jscs.info/overview.html#-config-c) you can read more about the available configuration options [in the docs](http://jscs.info/rules.html).
 
@@ -84,14 +84,14 @@ You can check out my [JSCS configuration](https://github.com/DHolloran/linter-ex
 
 ### JSHint Installation
 Install JSHint
-{% highlight bash %}
+```bash
 npm install -g jshint
-{% endhighlight %}
+```
 
 Make sure linter is in your $PATH (It should return the path to the executable)
-{% highlight bash %}
+```bash
 $ which jshint
-{% endhighlight %}
+```
 
 Configuration is handled via the [.jshintrc](http://jshint.com/docs/) you can read more about the available configuration options [in the docs](http://jshint.com/docs/options/).
 
@@ -101,14 +101,14 @@ You can check out my [JSHint configuration](https://github.com/DHolloran/linter-
 
 ### SCSS-Lint Installation
 Install SCSS Lint
-{% highlight bash %}
+```bash
 $ gem install scss_lint
-{% endhighlight %}
+```
 
 3. Make sure linter is in your $PATH (It should return the path to the executable)
-{% highlight bash %}
+```bash
 $ which scss-lint
-{% endhighlight %}
+```
 
 Note: Configuration is handled via the
 Configuration is handled via the [.scss-lint.yml](https://github.com/brigade/scss-lint#configuration) you can read more about the available configuration options [in the docs](https://github.com/brigade/scss-lint/blob/master/lib/scss_lint/linter/README.md).

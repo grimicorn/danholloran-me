@@ -10,13 +10,13 @@ Few things first I am only using You're Doing It Wrong because WordPress core us
 So I've seen quite a few complaints about [issues/changes to shortcodes](https://make.wordpress.org/core/2015/07/23/changes-to-the-shortcode-api/) after the [4.2.3 security release](https://wordpress.org/news/2015/07/wordpress-4-2-3/). First of all it's a security release so it cannot be publicly announced or even privately announced to plugin developers. Yes, I know that's kind of bad news and it is kind of bad that a large amount of site had shortcodes that were doing it wrong. It is however good that now you have one less venerability since being in the top 20ish% percent of websites makes WordPress a large easy target. Something at the scale of WordPress will once in a while not be able to cover every edge case when pushing out a security release. So before everyone starts to go blaming auto updates and WordPress lets take a look at the use cases outlined in the changes to the Shortcode API. Please feel free to add more use cases that I have missed in the comments below.
 
 In the use cases outlined in the post they seem kind of weird that this is even a big issue. Would you put a `<span>` in  a style attribute or any other attribute for that matter?
-{% highlight html %}
+```html
 <!-- This doesn't feel right... -->
 <div style="background-image: url('<span></span>');">
 
 <!-- So why would this ? -->
 <div style="background-image: url('[shortcode]');">
-{% endhighlight %}
+```
 Yes, I know the shortcode would output an images URL but still... maybe I am wrong and you should be allowed to do this? Hopefully not then why would you put a shortcode in an HTML attribute granted. I get it you want access to a URL not easily accessible in the editor. Wouldn't it be a better experience just to tack on the attributes to the wrapping element to the shortcode? Maybe not in certain cases I could be wrong but I think in the vast majority of cases using a shortcode in an HTML attribute would be an error.
 
 For the second use case the double quotes nested in double quotes I mean seriously. This doesn't work in PHP, it doesn't work in Javascript and I doubt it would work anywhere else. Sure you can escape quotes with a `/"` or `/'` however it is much more legible to do `"They're awesome!"` than `'They\'re awesome!'`. Sure these are fairly short strings so yeah not to bad in the form of legibility however if you have a paragraph or a large amount of `'` or `"` it gets real murky real quick. I'm sure your at least somewhat familiar with one if not both PHP and Javascript if you build shortcodes. So it should magically work this way forever if you knowingly exploit an obvious bug don't get upset when it gets patched. if you need the ability to add more general text don't use a self closing shortcode let the random text go in the body of the shortcode.

@@ -36,6 +36,8 @@
  * @import "components/forms";
  */
 
+// @import 'vendor/highlight.js/default';
+
 // ================================
 // Links
 // ================================
@@ -92,10 +94,32 @@ a.button-small {
 .content {
   @apply leading-tight;
 
-  p {
-    @apply mb-2;
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply mb-1;
+  }
+
+  p,
+  pre {
+    @apply mb-4;
   }
 } // .content
+
+// ================================
+// Featured Image
+// ================================
+.featured-image {
+  @apply bg-no-repeat mb-8 relative bg-cover bg-fixed bg-center p-8;
+  height: 50vh;
+}
+
+.featured-image-title {
+  @apply text-white absolute pin flex items-center justify-center;
+  background-color: rgba(#22292f, 0.35);
+}
 
 /**
  * This injects all of Tailwind's utility classes, generated based on your

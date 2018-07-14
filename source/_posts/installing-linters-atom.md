@@ -25,9 +25,9 @@ There is two was to install packages in Atom either through command line tool or
 1. Search the [Atom Package Repository](https://atom.io/packages/) for the package you want to install.
 1. The packages name is easy to find in the URL `https://atom.io/packages/package-name/`
 1. Install the package
-{% highlight bash %}
+```bash
 $ apm install package-name
-{% endhighlight %}
+```
 
 ### Linter Installation
 All of the linters require the [Linter Package](https://atom.io/packages/linter/) to be installed first.
@@ -51,36 +51,36 @@ All of the linters have a pretty easy setup the main thing you need to know is t
 1. Navigate to `Atom > Preferences > Packages`.
 1. Search for `linter-scss-lint`.
 1. You will need to know the location of the SCSS-Lint executable.
-- {% highlight bash %}
+- ```bash
 $ which scss-lint
-{% endhighlight %}
+```
 1. Enter the location of the SCSS-Lint in the Executable Path setting.
 
 #### JSHint
 1. Navigate to `Atom > Preferences > Packages`.
 1. Search for `linter-jshint`.
 1. You will need to know the location of the JSHint executable.
-- {% highlight bash %}
+- ```bash
 $ which jshint
-{% endhighlight %}
+```
 1. Enter the location of the JSHint in the Executable Path setting.
 
 #### JSCS
 1. Navigate to `Atom > Preferences > Packages`.
 1. Search for `linter-jscs`.
 1. You will need to know the location of the JSCS executable.
-- {% highlight bash %}
+- ```bash
 $ which jscs
-{% endhighlight %}
+```
 1. Enter the location of the JSCS in the Executable Path setting.
 
 #### PHPCS
 1. Navigate to `Atom > Preferences > Packages`.
 1. Search for `linter-phpcs`.
 1. You will need to know the location of the PHPCS executable.
-- {% highlight bash %}
+- ```bash
 $ which phpcs
-{% endhighlight %}
+```
 1. Enter the location of the PHPCS in the Executable Path setting.
 
 ### Wrapping Up

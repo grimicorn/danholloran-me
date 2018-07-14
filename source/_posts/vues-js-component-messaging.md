@@ -14,7 +14,7 @@ So my solution currently is to send an event to the main Vue.js instance that co
 
 So basically there is a List component that I want to be able to add alerts from without it having to know about the Alert component. So firing off an event seems like the way to do it right? The following is the important parts of the list component.
 
-{% highlight javascript %}
+```javascript
 // The message details.
 var message = {
 	'This is the message value', // Value
@@ -25,11 +25,11 @@ var message = {
 // This will be fired at some point when something happens in the list.
 // Such as an item was removed successfully.
 this.$dispatch('add-alert-message', message );
-{% endhighlight %}
+```
 
 The `this.$dispatch` sends an event up the parent chain you can learn more about component events [here](http://vuejs.org/guide/components.html#Custom_Events). However, there does not seem to be a way to subscribe to this event from another component. The next step happens in the main Vue.js instance where you can subscribe to the event and then apply it to a messages array on the Vue.js data object. You can also do something like check for duplicates at this level as well this could also be handled in the computed properties section as well. Which kind of feels weird since the Alert component should be in charge of what consists as a duplicate alert.
 
-{% highlight javascript %}
+```javascript
 // The main Vue.js Instance.
 new Vue( {
     el         : '#app',
@@ -41,17 +41,17 @@ new Vue( {
         }
     }
 } );
-{% endhighlight %}
+```
 
 So this works and all however you now have to let the alert component know about `this.messages` which you can do by passing messages to the alert component. The following snippet binds the Vue.js messages to the Alert component messages property. Using the `.sync` modifier will allow the values to sync from the Vue.js instance to the Alert component.
 
-{% highlight html %}
+```html
 <alert :messages.sync="messages"></alert>
-{% endhighlight %}
+```
 
 Then you will need to use computed properties on the alert component since you need to know when it is updated. So far I have not found a better way to handle this. I needed to be able to set a timeout so the messages would disappear after a short time. You could handle this in the main Vue.js instance but that would kind of defeat the point of a component.
 
-{% highlight javascript %}
+```javascript
 // Alert component configuration.
 {
     methods : {
@@ -71,19 +71,19 @@ Then you will need to use computed properties on the alert component since you n
         }
     }
 }
-{% endhighlight %}
+```
 
 No finally you can loop over the alerts and output them in the Alert components.
 
-{% highlight html %}
+```html
 <ul v-for="message in alertMessages">
     <li class="alert alert-{message.status}">{message.value}</li>
 </ul>
-{% endhighlight %}
+```
 
 So it almost seems like there should be a better way... I have considered firing an event off of the body or whatever element that is used for the Vue.js instance. This way you could easily pass messages between components. You could have 2 helper functions one that handles firing the event so you will not have to worry about it and one that subscribes to the event. This would basically bypass the main Vue.js instance having to know about what the components are doing.
 
-{% highlight javascript %}
+```javascript
 // In component 1
 componentFireEvent('event-name', 'event-details');
 
@@ -91,6 +91,6 @@ componentFireEvent('event-name', 'event-details');
 componentSubscribe('event-name', function( eventDetails ) {
 	// Do whatever you need to do now.
 });
-{% endhighlight %}
+```
 
 Using some sort of abstraction like this would help you not have to remember what element you are firing the event on each time. I may refactor and flesh this thought out more as I learn. Maybe there is an even better way to handle it that I have not thought of. I also may have missed something in the documentation that solves this. Maybe I am trying to force a square peg into a round hole and there is a good reason why it is the way it is. I may never know...

@@ -12,7 +12,7 @@ image:
 ### Update (7/18/2015) Survey Responses
 Thank you to all who participated in the survey about WP Better Attachments Re-write. It did help to reinforce a few things I already thought. Primarialy the cropping portion probably would be best spun of as an add on. That would make it a little more easier to use as well as maintain. I will also be looking into external atachments and extending the WordPress attachments to allow for attaching media to multiple posts. I was actually surprised that there were some yes responses to paying for consistent updates, I appreciate that. I do not have any immediate plans for adding any sort of fees but feel free to donate through my [Pledgie campaign](https://pledgie.com/campaigns/20476). In all it went over pretty well basically re-inforcing almost every idea I had, thanks again. You can view the [final results here](https://www.surveymonkey.com/results/SM-Y2SKS2DY/).
 
-{% include wpba-inline-newsletter-signup.html %}
+@include('_partials.wpba-inline-newsletter-signup')
 
 ### Thoughts and Road Map
 So I have been attempting to rewrite WPBA so it would be less of a frustration to update on my part since WordCamp SF 2013, I believe if was July/August of 2013.  If you have been under a rock it is now 2015, I keep feeling stuck because of some of the decisions I made before having the experience to make the correct decision.

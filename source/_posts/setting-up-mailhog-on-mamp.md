@@ -11,14 +11,14 @@ This setup could be adapted to almost any environment since Mailhog is written i
 
 ## Getting Started
 So lets get started setting up Mailhog on MAMP. You can install Mailhog through [Homebrew](http://brew.sh/).
-{% highlight bash %}
+```bash
 $ brew install mailhog
-{% endhighlight %}
+```
 
 To start Mailhog when OSX boots up you can use [Homebrew Services](https://github.com/Homebrew/homebrew-services).
-{% highlight bash %}
+```bash
 $ brew services start mailhog
-{% endhighlight %}
+```
 
 You should now be able to access Mailhog on [http://127.0.0.1:8025/](http://127.0.0.1:8025/)
 

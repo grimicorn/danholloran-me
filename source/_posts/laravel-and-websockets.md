@@ -10,31 +10,31 @@ Working with WebSockets and Larvel is extremely easy! If you are new to Laravel 
 
 ## Dependencies and Configuration
 So lets get started with installing the required dependencies.
-{% highlight bash %}
+```bash
 $ composer require predis/predis
 $ npm install express ioredis socket.io --save
-{% endhighlight %}
+```
 
 We will then need to update our `.env` with `BROADCAST_DRIVER=redis`.
 
 ## Event Class
 Now we will need to create a new event.
-{% highlight bash %}
+```bash
 $ php artisan make:event EventName
-{% endhighlight %}
+```
 
 Go ahead open the new event `app/Events/EventName.php`.
 
 You need to make sure that your event `implements ShouldBroadcast` by default it does not.
-{% highlight php %}
+```php
 <?php
 // ...
 class EventName extends Event implements ShouldBroadcast
 // ...
-{% endhighlight %}
+```
 
 For this example we will use a `$data` property to pass information to socket.io however by default you will have access to any public property.
-{% highlight php %}
+```php
 <?php
 // ...
 public $data;
@@ -44,9 +44,9 @@ public function __construct($some_data)
     $this->data = compact('some_data');
 }
 // ...
-{% endhighlight %}
+```
 Then you will need to set the channel you are going to broadcast the events on. We will use this later with Socket.io to listen for the events.
-{% highlight php %}
+```php
 <?php
 // ...
 public function broadcastOn()
@@ -54,9 +54,9 @@ public function broadcastOn()
     return ['event-example'];
 }
 // ...
-{% endhighlight %}
+```
 Our whole event class should now look like this.
-{% highlight php %}
+```php
 <?php
 
 namespace App\Events;
@@ -91,12 +91,12 @@ class EventName extends Event implements ShouldBroadcast
         return ['event-example'];
     }
 }
-{% endhighlight %}
+```
 
 ## Socket.io
 Now we will need to make a `socket.js` file in the root of our Laravel installation and place the following into it.
 
-{% highlight js %}
+```javascript
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -112,22 +112,22 @@ redis.on('message', function(channel, message) {
 http.listen(3000, function(){
     console.log('Listening on Port 3000');
 });
-{% endhighlight %}
+```
 
 If you want to update the channel you will need to change `event-example` in `redis.subscribe('event-example', function(err, count) {
 });`.
 
 Now we are ready to run the `socket.js` file and Redis in **separate tabs on your server** run the following.
-{% highlight bash %}
+```bash
 $ node socket.js
 # You should see Listening on Port 3000
 $ redis-server --port 3001
 # You should see a whole bunch of output
-{% endhighlight %}
+```
 
 ## Event listener
 Now for simplicity you can add the following to your main view template. This basically listens for an event on the `event-example` we have setup that as fired by the `EventName` class. You will want to move this into is own separate JS file.
-{% highlight js %}
+```javascript
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script>
 var socketURL = 'http://192.168.10.10:3000'; // 192.168.10.10 can be replaced with the IP address of your server.
@@ -142,11 +142,11 @@ socket.on('event-example:App\\Events\\EventName', function (event) {
     alert(event.data.some_data);
 });
 </script>
-{% endhighlight %}
+```
 
 ## Event testing
 For simplicity sake when testing we can just add a route to fire the event. In reality this will happen elsewhere possibly in a controller. The main thing to take away is `Event::fire(new EventName('Some data about the event.'));` will be how you can fire the event.
-{% highlight php %}
+```php
 Route::group(['middleware' => 'web'], function () {
     Route::get('/fire', function () {
         Event::fire(new EventName('Event data'));
@@ -154,7 +154,7 @@ Route::group(['middleware' => 'web'], function () {
         return 'Event Fired';
     });
 });
-{% endhighlight %}
+```
 
 Now if you open your site in one tab and go to `/fire` in the other. Then in the first tab you should see an alert with the text `Event data`. Now you have a fully functional setup with Laravel and WebSockets!
 
@@ -166,7 +166,7 @@ So obviously we do not want to manually run `node socket.js` and `redis-server -
 If you do not already have Supervisor installed you can install it via `sudo apt-get install supervisor`. Then you will need to restart Supervisor via `sudo service supervisor restart`
 
 Now we need to set the configuration file for `socket.js`	via `sudo nano /etc/supervisor/conf.d/socket.conf`.
-{% highlight bash %}
+```bash
 # socket.conf content
 [program:socket]
 command=node /path/to/install/socket.js # IMPOTANT: Update /path/to/install
@@ -174,10 +174,10 @@ autostart=true
 autorestart=true
 stderr_logfile=/var/log/socket.err.log
 stdout_logfile=/var/log/socket.out.log
-{% endhighlight %}
+```
 
 Then we will need to setup the configuration for Redis `sudo nano /etc/supervisor/conf.d/redis.conf`
-{% highlight bash %}
+```bash
 # redis.conf content
 [program:redis]
 command=redis-server --port 3001
@@ -185,26 +185,26 @@ autostart=true
 autorestart=true
 stderr_logfile=/var/log/redis.err.log
 stdout_logfile=/var/log/redis.out.log
-{% endhighlight %}
+```
 
 Now we need to tell Supervisor about our new configuration.
-{% highlight bash %}
+```bash
 $ sudo supervisorctl reread
 $ sudo supervisorctl update
-{% endhighlight %}
+```
 
 You can verify everything went ok by the following
-{% highlight bash %}
+```bash
 $ tail /var/log/socket.out.log
 # You should see Listening on Port 3000
 $ tail /var/log/redis.out.log
 # You should see a whole bunch of output
-{% endhighlight %}
+```
 
 If something does not seem to work correctly you can check the error logs via the following.
-{% highlight bash %}
+```bash
 $ tail /var/log/socket.err.log
 $ tail /var/log/redis.err.log
-{% endhighlight %}
+```
 
 So thats all there basically is now go out and build something awesome!

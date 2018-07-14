@@ -1,9 +1,19 @@
 @extends('_layouts.master')
 
 @section('body')
-<div class="container mx-auto">
-    <h1 class="mb-4">{{ $page->title }}</h1>
 
+@if($page->featuredImageSrc())
+        <div
+        style="background-image:url('{{ $page->featuredImageSrc() }}')"
+        class="featured-image">
+            <h1 class="featured-image-title">{{ $page->title }}</h1>
+        </div>
+@else
+    <div class="container mx-auto">
+        <h1 class="mb-4">{{ $page->title }}</h1>
+    </div>
+@endif
+<div class="container mx-auto">
     <div class="mb-8">
         @include('_partials.post-meta')
     </div>

@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <link rel="stylesheet" href="{{ mix('/css/main.css') }}">
+        <link rel="stylesheet" href="/assets/css/vendor/highlight.js/github.css">
 
 
         <title>{{ $page->siteTitle }}{{ $page->title ? ": {$page->title}" : '' }}</title>
@@ -57,7 +58,9 @@
         <script src="{{ mix('/js/main.js') }}"></script>
     </head>
     <body class="font-sans leading-light bg-white text-grey-darkest">
-        <header class="py-2 md:mb-8 mb-4 border border-grey-lighter">
+        <header
+            class="{{ $page->featuredImageSrc() ? 'py-4' : 'py-2 md:mb-8 mb-4 border border-grey-lighter' }}"
+        >
             <div class="container mx-auto">
                 <a
                     class="text-xl bold text-grey-darkest no-underline"
