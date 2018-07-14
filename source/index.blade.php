@@ -6,22 +6,41 @@ pagination:
 @extends('_layouts.master')
 
 @section('body')
-  <p>Total of {{ $posts->count() }} posts</p>
+    <div class="container mx-auto">
+        <div>
+            <ul class="list-reset">
+                @foreach ($pagination->items as $post)
+                    <li class="mb-10">
+                        <div class="flex mb-2 items-center">
+                            <div class="flex rounded-full overflow-hidden mr-4">
+                                <img
+                                    src="{{ $post->authorImageSrcSmall }}"
+                                    alt="{{ $post->author }}"
+                                    width="{{ $post->authorImageSmallSize }}"
+                                    height="{{ $post->authorImageSmallSize }}"
+                                >
+                            </div>
+                            <div class="text-sm text-grey-darkest">
+                                <span class="block">{{ $post->author }}</span>
+                                @if($post->date)
+                                    <span class="block">{{ $post->dateFormatted() }}</span>
+                                @endif
+                            </div>
+                        </div>
 
-<ul>
-@foreach ($pagination->items as $post)
-    <li>
-      @if($post->date)
-        <span>{{ date('j M Y',  strtotime($post->date)) }}</span>
-      @endif
+                        <h2 class="mb-4">
+                            <a href="{{ $post->getUrl() }}" class="no-underline">{{ $post->title }}</a>
+                        </h2>
 
-      <span>{{ $post->author }}</span>
-      <h2>
-        <a href="{{ $post->getUrl() }}">{{ $post->title }}</a>
-      </h2>
+                        <div class="mb-4">
+                            {{ $post->excerpt() }}
+                        </div>
 
-      <a href="{{ $post->getUrl() }}">Read More</a>
-    </li>
-@endforeach
-</ul>
+                        <a href="{{ $post->getUrl() }}" class="no-underline bold">Read More &gt;</a>
+                    </li>
+                @endforeach
+            </ul>
+            @include('_partials.pagination')
+        </div>
+    </div>
 @endsection

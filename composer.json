@@ -11,6 +11,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "tightenco/jigsaw": "^1.2"
+        "tightenco/jigsaw": "^1.2",
+        "nesbot/carbon": "^1.32"
     }
 }
