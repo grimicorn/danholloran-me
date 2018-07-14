@@ -61,7 +61,7 @@
         <header
             class="{{ $page->featuredImageSrc() ? 'py-4' : 'py-2 md:mb-8 mb-4 border border-grey-lighter' }}"
         >
-            <div class="container mx-auto">
+            <div class="container">
                 <a
                     class="text-xl bold text-grey-darkest no-underline"
                     href="{{ $page->baseUrl }}"
@@ -71,7 +71,7 @@
 
         @yield('body')
 
-        <footer class="container mx-auto py-8 flex md:items-center flex md:flex-row flex-col-reverse">
+        <footer class="container py-8 flex md:items-center flex md:flex-row flex-col-reverse">
             <div class="md:mr-4">
                 @include('_partials.social-links')
             </div>

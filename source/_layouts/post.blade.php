@@ -9,11 +9,11 @@
             <h1 class="featured-image-title">{{ $page->title }}</h1>
         </div>
 @else
-    <div class="container mx-auto">
+    <div class="container">
         <h1 class="mb-4">{{ $page->title }}</h1>
     </div>
 @endif
-<div class="container mx-auto">
+<div class="container">
     <div class="mb-8">
         @include('_partials.post-meta')
     </div>

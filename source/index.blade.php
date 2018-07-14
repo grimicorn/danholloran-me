@@ -6,7 +6,7 @@ pagination:
 @extends('_layouts.master')
 
 @section('body')
-    <div class="container mx-auto">
+    <div class="container">
         <div>
             <ul class="list-reset">
                 @foreach ($pagination->items as $post)
