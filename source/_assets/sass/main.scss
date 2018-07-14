@@ -32,10 +32,13 @@
  *
  * Or if using a preprocessor or `postcss-import`:
  *
- * @import "components/buttons";
+ * @import "components/Turbolinks";
  * @import "components/forms";
  */
 
+// ================================
+// Links
+// ================================
 a {
   @apply text-teal;
   transition: 300ms ease-in-out;
@@ -48,6 +51,9 @@ a {
   }
 }
 
+// ================================
+// Buttons
+// ================================
 .button,
 a.button,
 button,
@@ -61,10 +67,35 @@ input[type='submit'] {
   }
 }
 
+.button-small,
+a.button-small {
+  @apply border inline-block px-3 py-1 text-sm border-teal no-underline bg-white text-teal;
+
+  &:active,
+  &:focus,
+  &:hover {
+    @apply bg-teal text-white;
+  }
+}
+
+// ================================
+// Turbolinks
+// ================================
 .turbolinks-progress-bar {
   @apply bg-teal;
   height: 5px;
 }
+
+// ================================
+// Content
+// ================================
+.content {
+  @apply leading-tight;
+
+  p {
+    @apply mb-2;
+  }
+} // .content
 
 /**
  * This injects all of Tailwind's utility classes, generated based on your

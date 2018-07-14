@@ -56,11 +56,11 @@
 
         <script src="{{ mix('/js/main.js') }}"></script>
     </head>
-    <body class="font-sans leading-light bg-white text-black">
+    <body class="font-sans leading-light bg-white text-grey-darkest">
         <header class="py-2 md:mb-8 mb-4 border border-grey-lighter">
             <div class="container mx-auto">
                 <a
-                    class="text-xl bold text-black no-underline"
+                    class="text-xl bold text-grey-darkest no-underline"
                     href="{{ $page->baseUrl }}"
                 >{{ $page->siteTitle }}</a>
             </div>
@@ -68,11 +68,11 @@
 
         @yield('body')
 
-        <footer class="container mx-auto py-8 md:flex items-center">
-            <div class="md:mr-4 md:mb-0 mb-2">
+        <footer class="container mx-auto py-8 flex md:items-center flex md:flex-row flex-col-reverse">
+            <div class="md:mr-4">
                 @include('_partials.social-links')
             </div>
-            <div class="md:ml-auto">
+            <div class="md:ml-auto md:mb-0 mb-2">
                 My adventures on and off of the internetz.
             </div>
         </footer>
