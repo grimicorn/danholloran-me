@@ -4,8 +4,15 @@ use Illuminate\Support\Carbon;
 
 return [
     'siteTitle' => 'DanHolloran',
+    'siteDescription' => 'My adventures on and off of the internetz.',
     'baseUrl' => 'http://danholloran.test',
     'production' => false,
+    'metaDescription' => function ($page) {
+        $excerpt = str_replace("\n", '', $page->excerpt(160, ''));
+        $excerpt = trim($excerpt);
+
+        return $excerpt ?: $page->siteDescription;
+    },
     'dateFormatted' => function ($page, $format = 'j M Y') {
         if (!$page->date) {
             return '';
@@ -23,8 +30,8 @@ return [
             collect(explode(' ', $content))->slice(0, $characters)->implode(' ')
         ) . $more;
     },
-    'featuredImageSrc' => function ($page) {
-        return $page->image['featured'] ?? '';
+    'featuredImageSrc' => function ($page, $fallback = '') {
+        return $page->image['featured'] ?? $fallback;
     },
     'collections' => [
         'posts' => [

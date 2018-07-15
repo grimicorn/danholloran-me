@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'baseUrl' => 'https://priceless-banach-981229.netlify.com',
+    'baseUrl' => 'https://danholloran.me',
     'production' => true,
 ];

@@ -9,9 +9,9 @@
 
 
         <title>{{ $page->siteTitle }}{{ $page->title ? ": {$page->title}" : '' }}</title>
-        {{-- <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}"> --}}
+        <meta name="description" content="{{ $page->metaDescription() }}">
 
-        {{-- <link rel="alternate" type="application/rss+xml" title="{{ $page->siteTitle }}" href="/feed.xml" /> --}}
+        <link rel="alternate" type="application/rss+xml" title="{{ $page->siteTitle }}" href="{{ $page->baseUrl}}/feed.xml" />
 
         <link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="{{ $page->baseUrl }}/favicon.ico">
 
@@ -31,28 +31,20 @@
         {{-- End Apple Icons --}}
 
         {{-- Start Open Graph --}}
-        {{-- <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}" />
-        <meta property="og:url" content="{{ page.url | prepend: site.url }}" />
-        {% if page.image.featured %}
-        <meta property="og:image" content="{{ $page->baseUrl }}{{ site.uploadurl }}{{page.image.featured}}" />
-        {% else %}
-        <meta property="og:image" content="{{ $page->baseUrl }}/images/logo.png" />
-        {% endif %}
-        <meta property="og:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" />
-        <meta property="og:type" content="website" /> --}}
+        <meta property="og:title" content="{{ $page->title ?? $page->siteTitle }}" />
+        <meta property="og:url" content="{{ $page->getUrl() }}" />
+        <meta property="og:image" content="{{ $page->featuredImageSrc("{$page->baseUrl}/images/logo.png") }}" />
+        <meta property="og:description" content="{{ $page->metaDescription() }}" />
+        <meta property="og:type" content="website" />
         {{-- End Open Graph --}}
 
         {{-- Start Twitter Card --}}
-        {{-- <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@dholloran" />
         <meta name="twitter:creator" content="@dholloran" />
-        <meta name="twitter:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}" />
-        {% if page.image.featured %}
-        <meta name="twitter:image" content="{{ $page->baseUrl }}{{ site.uploadurl }}{{page.image.featured}}" />
-        {% else %}
-        <meta name="twitter:image" content="{{ $page->baseUrl }}/images/logo.png" />
-        {% endif %}
-        <meta name="twitter:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" /> --}}
+        <meta name="twitter:title" content="{{ $page->title ?? $page->siteTitle }}" />
+        <meta name="twitter:image" content="{{ $page->featuredImageSrc("{$page->baseUrl}/images/logo.png") }}" />
+        <meta name="twitter:description" content="{{ $page->metaDescription() }}" />
         {{-- End Twitter Card --}}
 
         <script src="{{ mix('/js/main.js') }}"></script>
@@ -76,7 +68,7 @@
                 @include('_partials.social-links')
             </div>
             <div class="md:ml-auto md:mb-0 mb-2">
-                My adventures on and off of the internetz.
+                {{ $page->siteDescription }}
             </div>
         </footer>
     </body>
