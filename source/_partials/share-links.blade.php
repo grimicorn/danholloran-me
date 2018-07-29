@@ -6,6 +6,7 @@
     <li class="mr-2 mb-2">
         <a
             href="https://www.facebook.com/sharer/sharer.php?u=//danholloran.me/2016/12/17/sync-google-tasks-with-ifttt/"
+            rel="noopener"
             title="Facebook"
             class="flex items-center no-underline"
             target="_blank"
@@ -19,6 +20,7 @@
     <li class="mr-2 mb-2">
         <a
             href="https://twitter.com/intent/tweet?text=Sync%20Google%20Tasks%20With%20IFTTT&amp;url=//danholloran.me/2016/12/17/sync-google-tasks-with-ifttt/&amp;via=dholloran"
+            rel="noopener"
             title="Twitter"
             class="flex items-center no-underline"
             target="_blank"
@@ -32,6 +34,7 @@
     <li class="mr-2 mb-2">
         <a
             href="https://plus.google.com/share?url=//danholloran.me/2016/12/17/sync-google-tasks-with-ifttt/"
+            rel="noopener"
             title="Google+"
             class="flex items-center no-underline"
             target="_blank"
@@ -45,6 +48,7 @@
     <li class="mr-2 mb-2">
         <a
             href="https://www.linkedin.com/shareArticle?mini=true&amp;url=//danholloran.me/2016/12/17/sync-google-tasks-with-ifttt/&amp;title=Sync%20Google%20Tasks%20With%20IFTTT&amp;summary=So%20I%20recently%20purchased%20an%20Amazon%20Echo%20and%20I%20wanted%20to%20be%20able%20to%20add%20todos%20to%20my%20list%20via%20my%20voice.%20However%20the%20built%20in%20task%20manager%20is%20extremely%20simple%20and%20I%20did%20not%20have%20any%20interest%20in%20the%20two%20options%20that%20can%20directly%20integrate%20with%20Echo.%20So%20I%20needed%20to%20find%20a%20better%20solution.&amp;source=//danholloran.me"
+            rel="noopener"
             title="LinkedIn"
             class="flex items-center no-underline"
             target="_blank"
@@ -58,6 +62,7 @@
     <li class="mr-2 mb-2">
         <a
             href="https://bufferapp.com/add?id=14b2d6de0d159823&amp;url=//danholloran.me/2016/12/17/sync-google-tasks-with-ifttt/&amp;text=Sync%20Google%20Tasks%20With%20IFTTT&amp;via=dholloran&amp;placement=button&amp;utm_source=https%3A%2F%2Fbuffer.com%2Fextras%2Fbutton&amp;utm_medium=buffer_button&amp;utm_campaign=buffer&amp;source=button"
+            rel="noopener"
             title="Buffer"
             class="flex items-center no-underline"
             target="_blank"
