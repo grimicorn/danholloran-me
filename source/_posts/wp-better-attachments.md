@@ -4,6 +4,8 @@ title: "WP Better Attachments"
 date: "2015-03-08 17:00:54"
 image:
   featured: "/uploads/iFJ5qQylTD2POC68qBgh_Uluru.jpg"
+alert:
+    message: "This project is no longer maintained."
 ---
 
 **Description:** WordPress plugin that allows you to add/edit/attach/un-attach/sort the files attached to your WordPress posts all from the post editor. Integrates seamlessly with WordPress using the default WordPress attachments type and no configuration needed to add WP Better Attachments to custom post types. You can now also have full control over cropping of the different attachment image sizes through the media editor.
@@ -20,7 +22,7 @@ image:
 
 If you have any issues please submit an [issue](https://github.com/DHolloran/wp-better-attachments/issues/new) or fix it/submit a pull request I will try to handle it ASAP. You an also contact me at [DTHolloran@gmail.com](mailto:dtholloran@gmail.com).
 
-[![Click here to lend your support to: WP Better Attachments and make a donation at www.pledgie.com !](http://www.pledgie.com/campaigns/20476.png?skin_name=chrome)](http://www.pledgie.com/campaigns/20476)
+<!-- [![Click here to lend your support to: WP Better Attachments and make a donation at www.pledgie.com !](http://www.pledgie.com/campaigns/20476.png?skin_name=chrome)](http://www.pledgie.com/campaigns/20476) -->
 
 * * *
 
