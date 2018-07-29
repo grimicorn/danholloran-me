@@ -18,6 +18,16 @@
         @include('_partials.post-meta')
     </div>
 
+    @if($page->alert ?? [])
+        @if($page->alert['message'] ?? '')
+            @component('_partials.alert', [
+                'type' => $page->alert['type'] ?? 'info',
+            ])
+                {!! $page->alert['message'] !!}
+            @endcomponent
+        @endif
+    @endif
+
     <div class="mb-4 content">
         @yield('content')
     </div>

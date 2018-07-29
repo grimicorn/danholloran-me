@@ -125,6 +125,25 @@ a.button-small {
   background-color: rgba(#22292f, 0.35);
 }
 
+// ================================
+// Alert
+// ================================
+.alert {
+  @apply border-l-4 p-4 mb-4 border-teal text-teal-dark bg-teal-lightest;
+
+  &.alert-danger {
+    @apply border-red text-red-dark bg-red-lightest;
+  }
+
+  &.alert-success {
+    @apply border-green text-green-dark bg-green-lightest;
+  }
+
+  &.alert-warning {
+    @apply border-yellow text-yellow-dark bg-yellow-lightest;
+  }
+}
+
 /**
  * This injects all of Tailwind's utility classes, generated based on your
  * config file.

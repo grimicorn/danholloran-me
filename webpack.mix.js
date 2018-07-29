@@ -44,7 +44,8 @@ mix.webpackConfig({
             extractors: [
                 {
                     extractor: TailwindExtractor,
-                    extensions: ["html", "js", "php", "vue"]
+                    extensions: ["html", "js", "php", "vue"],
+                    whitelistPatterns: [/alert-[-a-zA-Z0-9]+/]
                 }
             ]
         })
