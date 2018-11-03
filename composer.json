@@ -12,6 +12,12 @@
     "minimum-stability": "stable",
     "require": {
         "tightenco/jigsaw": "^1.2",
-        "nesbot/carbon": "^1.32"
+        "nesbot/carbon": "^1.32",
+        "samdark/sitemap": "^2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\Listeners\\": "Listeners"
+        }
     }
 }
