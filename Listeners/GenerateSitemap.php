@@ -11,7 +11,7 @@ class GenerateSitemap
         $sitemap = new Sitemap($jigsaw->getDestinationPath() . '/sitemap.xml');
 
         collect($jigsaw->getOutputPaths())->each(function ($path) use ($baseUrl, $sitemap) {
-            if (! $this->isAsset($path)) {
+            if (! $this->shouldSkip($path)) {
                 $sitemap->addItem($baseUrl . $path, time(), Sitemap::DAILY);
             }
         });
@@ -19,8 +19,20 @@ class GenerateSitemap
         $sitemap->write();
     }
 
-    public function isAsset($path)
+    public function shouldSkip($path)
     {
-        return starts_with($path, '/assets');
+        if (starts_with($path, '/assets')) {
+            return true;
+        }
+
+        if (starts_with($path, '/images')) {
+            return true;
+        }
+
+        if (starts_with($path, '/uploads')) {
+            return true;
+        }
+
+        return false;
     }
 }
