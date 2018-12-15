@@ -51,6 +51,10 @@ a {
   &:focus {
     @apply text-teal-light;
   }
+
+  svg {
+    fill: config('colors.grey');
+  }
 }
 
 // ================================
