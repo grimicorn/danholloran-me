@@ -111,7 +111,9 @@ a.button-small {
   }
 
   p,
-  pre {
+  pre,
+  ul,
+  ol {
     @apply mb-4;
   }
 } // .content
