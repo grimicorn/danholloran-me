@@ -116,6 +116,17 @@ a.button-small {
   ol {
     @apply mb-4;
   }
+
+  code {
+    background: #f8f8f8;
+    color: #d14;
+    padding: 0 0.5em;
+  }
+
+  pre code {
+    color: #333;
+    padding: 0.5em;
+  }
 } // .content
 
 // ================================
