@@ -3,7 +3,7 @@ extends: _layouts.post
 section: content
 title:  Testing mocked email in WordPress with PHPUnit
 date: 2018-12-15
-categories: [featured]
+categories: []
 ---
 
 <div class="alert alert-info">

@@ -1,7 +1,7 @@
 ---
 pagination:
     collection: posts
-    perPage: 4
+    perPage: 10
 ---
 @extends('_layouts.master')
 
@@ -24,6 +24,8 @@ pagination:
             <hr class="border-b my-6">
         @endif
     @endforeach
+
+    @include('_components.newsletter-signup')
 
     @if ($pagination->pages->count() > 1)
         <nav class="flex text-base my-8">
