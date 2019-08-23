@@ -2,8 +2,6 @@
 extends: _layouts.post
 title: "St. Louis WordCamp 2015 Notes"
 date: "2015-03-15 13:16:54"
-image:
-  featured: "/uploads/wcstl-header.png"
 ---
 
 In all WordCamp 2015 was definetly interesting. I thought that the Cain and Obeland in the Morning! "show" was pretty funny.  I think my favorite talk of the day was Atomic Design Principles, I've read about it before and semi-practice it even though I could do something like that better.  I also like the podcasting panel as well it was rather informative and a nice change of pace usually I just attened the full on developer talks.

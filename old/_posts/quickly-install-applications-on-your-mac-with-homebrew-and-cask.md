@@ -2,8 +2,6 @@
 extends: _layouts.post
 title: "Quickly Install Applications on Your Mac With Homebrew and Cask"
 date: "2016-01-12"
-image:
-  featured: "/uploads/photo-1422504090664-c57eba84293f.jpeg"
 ---
 
   I have been having some issues with my work Macbook and I needed to reinstall Mac OS X. I like to do a complete restore every so often any way since I like to hack and play with things so there is quite a bit of junk that accumulates. I figured this time I would document some of the helpful things you can do with a few tools and a little scripting.

@@ -1,11 +1,10 @@
 ---
 extends: _layouts.post
-title: "Check Out Hyperpolygot"
-date: "2015-04-04 15:47:01"
-image:
-  featured: '/uploads/photo-1428452932365-4e7e1c4b0987.jpg'
+section: content
+title: Check Out Hyperpolygot
+date: 2015-04-04
+categories: []
 ---
-
 If you've been curious how one programming languages syntax matches with another then you should check out [Hyperpolygot](http://hyperpolyglot.org).
 
 I was kind of amazed how close Javascript, PHP, Python, and Ruby are on a syntax level.  It really seems that at a high level it maters more about the community and the ideals than the syntax when choosing a language.  Granted every job requires a specific set of tools and this helps show how you can pick up another language easier.

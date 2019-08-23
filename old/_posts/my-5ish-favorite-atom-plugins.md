@@ -2,8 +2,6 @@
 extends: _layouts.post
 title: "My 5ish Favorite Atom Plugins"
 date: "2015-07-19 20:46"
-image:
-  featured: "/uploads/photo-1429547584745-d8bec594c82e.jpg"
 ---
 
 So I have been migrating from using [Sublime Text](http://www.sublimetext.com/3) lately after using it exclusively for the past 3 or so years to [Atom](https://atom.io/). So I figured I would document my current 5 or so favorite plugins. I am sure a lot of them have ended up on multiple top 5 lists but hopefully you will find a new one.

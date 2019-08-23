@@ -1,11 +1,10 @@
 ---
 extends: _layouts.post
-title: "Has WP_Query Abstracted To Much?"
-date: "2015-08-18 19:53"
-image:
-  featured: /uploads/photo-1432691301971-c8b920198bd7.jpg
+section: content
+title: Has WP_Query Abstracted To Much?
+date: 2015-08-18
+categories: []
 ---
-
 I was working on a project recently where I ran into a situation where `WP_Query`, well actually it was `WP_User_Query`, just would not work. So I feel back to raw SQL through `wpdb` and to my astonishment PHPCS with WordPress coding standards discourages the use of `wpdb`. I know it is not a total outright do not use but still. It got me to thinking maybe `WP_Query` abstracts too much away from the developer.
 
 I am definitely not advocating writing MySQL you should use some layer of abstraction primarily for security reasons. Not because MySQL is insecure, but you are human it is safer if the tool you use forces you to be secure. Which `WP_Query` definitely makes your code more secure but it can make it harder to understand what is going on under the hood. This can be an issue with performance if you are not careful. WordPress can be somewhat of a black box that can hurt you just as much as it helps.

@@ -2,8 +2,7 @@
 extends: _layouts.post
 title: "WP Multi File Uploader"
 date: "2015-03-10 00:56:42"
-image:
-  featured: "/uploads/photo-1428278953961-a8bc45e05f72.jpg"
+
 alert:
     message: "This project is no longer maintained."
 ---

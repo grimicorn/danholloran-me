@@ -5,8 +5,7 @@ date: "2015-07-18 11:36"
 wpbaInlineForm: true
 redirect_from:
   - /2015/03/30/wpba-thoughts-and-road-map/
-image:
-  featured: '/uploads/photo-1429152937938-07b5f2828cdd.jpg'
+
 alert:
     message: "This project is no longer maintained."
 ---

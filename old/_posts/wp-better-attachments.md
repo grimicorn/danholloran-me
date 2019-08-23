@@ -2,8 +2,7 @@
 extends: _layouts.post
 title: "WP Better Attachments"
 date: "2015-03-08 17:00:54"
-image:
-  featured: "/uploads/iFJ5qQylTD2POC68qBgh_Uluru.jpg"
+
 alert:
     message: "This project is no longer maintained."
 ---

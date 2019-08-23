@@ -2,8 +2,6 @@
 extends: _layouts.post
 title: "Vue.js Component Messaging Continued"
 date: "2015-12-8 18:16"
-image:
-  featured: '/uploads/photo-1434394673726-e8232a5903b4.jpg'
 ---
 
 So yesterday I posted about Vue.js component messaging. This is in a way a continuation so you will want to read that first "[Vue.js Component Messaging](/2015/12/07/vues-js-component-messaging/)".

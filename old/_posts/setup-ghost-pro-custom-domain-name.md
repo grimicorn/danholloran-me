@@ -2,8 +2,6 @@
 extends: _layouts.post
 title: "How I (Almost...) Setup My Ghost Pro Custom Domain Name"
 date: "2015-03-20 13:20:55"
-image:
-  featured: "/uploads/photo-1421757295538-9c80958e75b0.jpeg"
 ---
 
 I was going to do a writeup about how I setup a Ghost Pro custom domain the details below almost worked.  I just love how DNS and the internetz works, you change something it changes something and everything works just nicely.  Then you go and check it the next day and the whole world has exploded. So long story short I gave up and decided to just forward the domain but I wanted to post this for fun. Feel free to post a solution or ideas in the comments below.

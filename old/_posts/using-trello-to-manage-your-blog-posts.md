@@ -2,8 +2,6 @@
 extends: _layouts.post
 title: "Using Trello to Manage Your Blog Posts"
 date: "2015-08-06 20:21"
-image:
-  featured: /uploads/photo-1431898542497-133ad897e05f.jpg
 ---
 
 So I have been trying to get in the habit of writing more but to do that it helps to have a bank of ideas. So I do not have to sit down and try to find something to write about. I've really liked using [Trello](https://trello.com) to catalog my possible ideas for posts to write. This has really been helping me keep up with at least writing a few times a week since I have a large range of ideas to write about.

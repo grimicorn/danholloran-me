@@ -2,8 +2,6 @@
 extends: _layouts.post
 title: "Moving From WordPress to Ghost to Jekyll"
 date: "2015-07-10 19:24"
-image:
-  featured: "/uploads/photo-1428677361686-f9d23be145c9.jpg"
 ---
 
 So I had previously moved my blog from WordPress to Ghost.  I really like the fact that ghost is a lot lighter and you can write your posts in markdown by default.  For hosting a blog I almost feel for a developer WordPress is overkill obviously for a general user Jekyll would be way too difficult.  I spend most of my day in a code editor and a large amount in a terminal.  So it is not much of a stretch to use a static site generator like Jeykll for me.

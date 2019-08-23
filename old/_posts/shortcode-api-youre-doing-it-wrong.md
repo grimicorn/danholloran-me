@@ -2,8 +2,6 @@
 extends: _layouts.post
 title: "Shortcode API You're Doing It Wrong"
 date: "2015-07-25 08:30"
-image:
-  featured: "/uploads/photo-1430598825529-927d770c194f.jpg"
 ---
 Few things first I am only using You're Doing It Wrong because WordPress core uses that internally so please do not take offense to it. Second for full disclosure I'm not a big fan of shortcodes in the first place they are fairly temperamental for anything complicated. I think it may mainly have to do with Tiny MCE and whitespace. Last thing before we get going lets shortcode all the things! Yeah that will make it super useable...
 

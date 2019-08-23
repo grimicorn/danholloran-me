@@ -2,8 +2,6 @@
 extends: _layouts.post
 title: "Installing Linters Sublime Text 3"
 date: "2015-08-30 19:06"
-image:
-  featured: '/uploads/photo-1433785124354-92116416b870.jpg'
 ---
 Sublime Text is one of my favorite editors I have ever used and it has excellent support for linting. This will cover Sublime Text 3 only since the plugin used SublimeLinter went through a major shift from Sublime text 2 to 3. The biggest difference is in ST2 the linters where bundled with the plugin now in ST3 they are created as plugins.
 

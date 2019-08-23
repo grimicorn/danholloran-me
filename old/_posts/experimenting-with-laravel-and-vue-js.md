@@ -1,11 +1,10 @@
 ---
 extends: _layouts.post
-title: "Experimenting With Laravel and Vue.js"
-date: "2015-12-05 21:49:22"
-image:
-  featured: '/uploads/photo-1438216983993-cdcd7dea84ce.jpg'
+section: content
+title: Experimenting With Laravel and Vue.js
+date: 2015-12-05
+categories: []
 ---
-
 So I've been playing with [Laravel](http://laravel.com/) and [Vue.js](http://vuejs.org/) which I have really started to like. It seems every time I have to write boring repetitive code there's already something that handles it for you.
 
 It's fairly refreshing coming from the WordPresss world were a lot of this is handled via plugins. Which is great since they are easy to use but they have the draw back of loading assets on there own and saving their options to the database. Those two things we all know are the biggest bottlenecks in your sites speed. It is also nice to have testing  built in from the get go so you do not have to do any real work except to start writing test. Also with [Laravel Elixir](http://laravel.com/docs/5.1/elixir) it makes using Gulp a breeze. Your development environments are easily setup using [Laravel Homestead](http://laravel.com/docs/5.1/homestead) and [Vagrant](https://www.vagrantup.com/). The Laravel templating engine [Blade](http://laravel.com/docs/5.1/blade) is so easy to use and so much cleaner then having PHP all over your HTML. Also you have [Routes](http://laravel.com/docs/5.1/routing) which to me is a lot less painful than WordPress permalinks. There are so many things that Laravel can do.

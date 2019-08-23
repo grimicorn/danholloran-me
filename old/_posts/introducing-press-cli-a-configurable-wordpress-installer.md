@@ -2,8 +2,7 @@
 title: "Introducing Press CLI: A Configurable WordPress Installer"
 extends: _layouts.post
 date: "2016-10-30"
-image:
-  featured: '/uploads/press-cli.png'
+
 alert:
     message: "This project is no longer maintained."
 ---

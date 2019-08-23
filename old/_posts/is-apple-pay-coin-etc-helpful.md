@@ -2,8 +2,6 @@
 extends: _layouts.post
 title: "Is Apple Pay, Coin, etc. Helpful?"
 date: "2015-08-02 19:36"
-image:
-  featured: '/uploads/photo-1429277096327-11ee3b761c93.jpg'
 ---
 
 Are "card consolidators" like [Apple Pay](http://www.apple.com/apple-pay/), [Coin](https://onlycoin.com/), etc. useful? I would say it depends on, it really depends on where you shop and if you are ok still bringing a backup card. I have been using both Apple Pay and Coin for the last few months interchangeably when I can. I know the field is still young and has a long way to go however the support really makes it tough to justify. As well as when I first ordered my coin almost 2 years ago I had probably more like 5-8 cards possible in my wallet now I have 2 payment cards on average.

@@ -2,8 +2,6 @@
 extends: _layouts.post
 title: "Testing mocked email in WordPress with PHPUnit"
 date: "2018-12-15 07:26"
-image:
-  featured: '/uploads/eric-muhr-1224399-unsplash.jpg'
 ---
 
 <div class="alert alert-info">

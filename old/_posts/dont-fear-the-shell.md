@@ -1,9 +1,9 @@
 ---
 extends: _layouts.post
-title: "Don't Fear The Shell"
-date: "2015-09-20 19:36"
-image:
-  featured: '/uploads/photo-1433833103303-111110aae192.jpg'
+section: content
+title: Don't Fear The Shell
+date: 2015-09-20
+categories: []
 ---
 So, I have noticed a rather alarming aversion to the command line (CLi) for developers. If you really think about it the CLi is not much different from a normal text editor.
 

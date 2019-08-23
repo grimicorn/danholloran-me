@@ -2,8 +2,7 @@
 extends: _layouts.post
 title: "WP Github Recent Commit Widget"
 date: "2015-03-10 00:49:39"
-image:
-  featured: "/uploads/photo-1426200830301-372615e4ac54.jpeg"
+
 alert:
     message: "This project is no longer maintained."
 ---
