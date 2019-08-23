@@ -59,7 +59,4 @@ return [
 
         return $excerpt ?: $page->siteDescription;
     },
-    'featuredImageSrc' => function ($page, $fallback = '') {
-        return $page->image['featured'] ?? $fallback;
-    },
 ];

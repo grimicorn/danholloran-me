@@ -4,7 +4,8 @@ section: content
 title: A minute with a Ghost...
 date: 2015-03-12
 categories: []
-cover_image: /assets/img/uploads/GOMY9CQSvmjKLxigsfxg_Attic.jpg
+cover_image: /assets/img/post-cover-image-1.png
+featured: true
 ---
 
 
