@@ -53,5 +53,13 @@
         "view",
         "xml",
         "z"
-    ]
+    ],
+    "workbench.colorCustomizations": {
+        "list.focusBackground": "#6a7d89",
+        "list.focusForeground": "#fff",
+        "titleBar.activeBackground": "#81c1c9",
+        "titleBar.inactiveBackground": "#81c1c999",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveForeground": "#15202b99"
+    }
 }

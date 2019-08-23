@@ -5,7 +5,7 @@ use Illuminate\Support\Carbon;
 return [
     'siteTitle' => 'DanHolloran',
     'siteDescription' => 'My adventures on and off of the internetz.',
-    'baseUrl' => 'http://danholloran.test',
+    'baseUrl' => 'https://danholloran.test',
     'production' => false,
     'metaDescription' => function ($page) {
         $excerpt = str_replace("\n", '', $page->excerpt(160, ''));
