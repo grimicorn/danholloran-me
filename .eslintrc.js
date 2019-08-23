@@ -1,5 +1,10 @@
 module.exports = {
-    extends: ["eslint:recommended", "plugin:vue/essential"],
+    extends: [
+        "eslint:recommended",
+        "plugin:vue/essential",
+        "plugin:vue/strongly-recommended",
+        "plugin:vue/recommended"
+    ],
     env: {
         browser: true,
         commonjs: true,

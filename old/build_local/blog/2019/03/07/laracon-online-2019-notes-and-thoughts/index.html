@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-64998225-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-64998225-1');
+        </script>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <link rel="stylesheet" href="/assets/css/main.css?id=d53392a11ebe491c3eb9">
+        <link rel="stylesheet" href="/assets/css/vendor/highlight.js/github.css">
+
+
+        <title>DanHolloran: Laracon Online 2019 Notes and Thoughts</title>
+        <meta name="description" content="These are my notes from Laracon 2019 was an interesting conference and a lot of fun. I think you may still be able to buy tickets to access the recordings at https://laracon.net/. It is nice being online not having to travel makes it easier to go.Getting started with event sourcing in LaravelFreek Van der Herten @freekmurzeSlides: https://speakerdeck.com/freekmurze/event-sourcing-laracon-onlineApplication fires events when data changes and those are loggedGood for auditing, issue recreation and reportinghttps://github.com/spatie/laravel-event-projectorhttps://github.com/spatie/laravel-eventsauceWriting less complex, more readable codeJason McCreary @gonedarkCode quality level how many WTFs per minuteMartin Fowler - RefactoringGuidelines for good codeFormattingConsitency mattersChoose it, automate it and forget itUse community standard if possiblehttps://styleci.io/Dead codeWhy is it here and why is it not usedCommented code just remove itUnused variablesBoy Scouting - Leave it better than you found itUnreachable code may be harder to see in larger blocksUnnecessary syntax. Such as a switch with just returns break is not needed and never for defaultFlagged code some sort of state such as promotion">
+
+        <link rel="alternate" type="application/rss+xml" title="DanHolloran" href="https://danholloran.test/feed.xml" />
+
+        <link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="https://danholloran.test/favicon.ico">
+
+        
+        <link rel="apple-touch-icon" sizes="60x60" href="https://danholloran.test/images/icons/ios/icon-60.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="https://danholloran.test/images/icons/ios/icon-60@2x.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="https://danholloran.test/images/icons/ios/icon-60@3x.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="https://danholloran.test/images/icons/ios/icon-72.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="https://danholloran.test/images/icons/ios/icon-72@2x.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="https://danholloran.test/images/icons/ios/icon-76.png">
+        <link rel="apple-touch-icon" sizes="156x156" href="https://danholloran.test/images/icons/ios/icon-76@2x.png">
+        <link rel="apple-touch-icon" sizes="40x40" href="https://danholloran.test/images/icons/ios/icon-small-40.png">
+        <link rel="apple-touch-icon" sizes="80x80" href="https://danholloran.test/images/icons/ios/icon-small-40@2x.png">
+        <link rel="apple-touch-icon" sizes="40x40" href="https://danholloran.test/images/icons/ios/icon-small-40@3x.png">
+        <link rel="apple-touch-icon" sizes="50x50" href="https://danholloran.test/images/icons/ios/icon-small-50.png">
+        <link rel="apple-touch-icon" sizes="50x50" href="https://danholloran.test/images/icons/ios/icon-small-50@2x.png">
+        
+
+        
+        <meta property="og:title" content="Laracon Online 2019 Notes and Thoughts" />
+        <meta property="og:url" content="https://danholloran.test/blog/2019/03/07/laracon-online-2019-notes-and-thoughts" />
+        <meta property="og:image" content="/uploads/cristofer-jeschke-1389560-unsplash.jpg" />
+        <meta property="og:description" content="These are my notes from Laracon 2019 was an interesting conference and a lot of fun. I think you may still be able to buy tickets to access the recordings at https://laracon.net/. It is nice being online not having to travel makes it easier to go.Getting started with event sourcing in LaravelFreek Van der Herten @freekmurzeSlides: https://speakerdeck.com/freekmurze/event-sourcing-laracon-onlineApplication fires events when data changes and those are loggedGood for auditing, issue recreation and reportinghttps://github.com/spatie/laravel-event-projectorhttps://github.com/spatie/laravel-eventsauceWriting less complex, more readable codeJason McCreary @gonedarkCode quality level how many WTFs per minuteMartin Fowler - RefactoringGuidelines for good codeFormattingConsitency mattersChoose it, automate it and forget itUse community standard if possiblehttps://styleci.io/Dead codeWhy is it here and why is it not usedCommented code just remove itUnused variablesBoy Scouting - Leave it better than you found itUnreachable code may be harder to see in larger blocksUnnecessary syntax. Such as a switch with just returns break is not needed and never for defaultFlagged code some sort of state such as promotion" />
+        <meta property="og:type" content="website" />
+        
+
+        
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@dholloran" />
+        <meta name="twitter:creator" content="@dholloran" />
+        <meta name="twitter:title" content="Laracon Online 2019 Notes and Thoughts" />
+        <meta name="twitter:image" content="/uploads/cristofer-jeschke-1389560-unsplash.jpg" />
+        <meta name="twitter:description" content="These are my notes from Laracon 2019 was an interesting conference and a lot of fun. I think you may still be able to buy tickets to access the recordings at https://laracon.net/. It is nice being online not having to travel makes it easier to go.Getting started with event sourcing in LaravelFreek Van der Herten @freekmurzeSlides: https://speakerdeck.com/freekmurze/event-sourcing-laracon-onlineApplication fires events when data changes and those are loggedGood for auditing, issue recreation and reportinghttps://github.com/spatie/laravel-event-projectorhttps://github.com/spatie/laravel-eventsauceWriting less complex, more readable codeJason McCreary @gonedarkCode quality level how many WTFs per minuteMartin Fowler - RefactoringGuidelines for good codeFormattingConsitency mattersChoose it, automate it and forget itUse community standard if possiblehttps://styleci.io/Dead codeWhy is it here and why is it not usedCommented code just remove itUnused variablesBoy Scouting - Leave it better than you found itUnreachable code may be harder to see in larger blocksUnnecessary syntax. Such as a switch with just returns break is not needed and never for defaultFlagged code some sort of state such as promotion" />
+        
+
+        <script src="/assets/js/main.js?id=5c94fe9fab440d05e4d1"></script>
+    </head>
+    <body class="font-sans leading-light bg-white text-grey-darkest">
+        <header
+            class="py-4"
+        >
+            <div class="container">
+                <a
+                    class="text-xl bold text-grey-darkest no-underline"
+                    href="https://danholloran.test"
+                >DanHolloran</a>
+            </div>
+        </header>
+
+        
+        <div
+        style="background-image:url('/uploads/cristofer-jeschke-1389560-unsplash.jpg')"
+        class="featured-image">
+            <h1 class="featured-image-title">Laracon Online 2019 Notes and Thoughts</h1>
+        </div>
+<div class="container">
+    <div class="mb-8">
+        <div class="flex mb-2 items-center">
+    <div class="flex rounded-full overflow-hidden mr-4">
+        <img
+            src="//www.gravatar.com/avatar/beea2174d2076aa60e679c19f2aee1bf?s=36"
+            alt="Dan Holloran"
+            width="36"
+            height="36"
+        >
+    </div>
+    <div class="text-sm text-grey-darkest">
+        <span class="block">Dan Holloran</span>
+                    <span class="block">7 Mar 2019</span>
+            </div>
+</div>
+    </div>
+
+    
+    <div class="mb-4 content">
+        <p>These are my notes from Laracon 2019 was an interesting conference and a lot of fun. I think you may still be able to buy tickets to access the recordings at <a href="https://laracon.net/">https://laracon.net/</a>. It is nice being online not having to travel makes it easier to go.</p>
+<h2>Getting started with event sourcing in Laravel</h2>
+<ul>
+<li>Freek Van der Herten <a href="https://twitter.com/freekmurze">@freekmurze</a></li>
+<li><strong>Slides:</strong> <a href="https://speakerdeck.com/freekmurze/event-sourcing-laracon-online">https://speakerdeck.com/freekmurze/event-sourcing-laracon-online</a></li>
+<li>Application fires events when data changes and those are logged</li>
+<li>Good for auditing, issue recreation and reporting</li>
+<li><a href="https://github.com/spatie/laravel-event-projector">https://github.com/spatie/laravel-event-projector</a></li>
+<li><a href="https://github.com/spatie/laravel-eventsauce">https://github.com/spatie/laravel-eventsauce</a></li>
+</ul>
+<h2>Writing less complex, more readable code</h2>
+<ul>
+<li>Jason McCreary <a href="https://twitter.com/gonedark">@gonedark</a></li>
+<li>Code quality level how many WTFs per minute</li>
+<li>Martin Fowler - Refactoring</li>
+</ul>
+<h3>Guidelines for good code</h3>
+<ul>
+<li>Formatting
+<ul>
+<li>Consitency matters</li>
+<li>Choose it, automate it and forget it</li>
+<li>Use community standard if possible</li>
+<li><a href="https://styleci.io/">https://styleci.io/</a></li>
+</ul></li>
+<li><strong>Dead code</strong>
+<ul>
+<li>Why is it here and why is it not used</li>
+<li>Commented code just remove it</li>
+<li>Unused variables</li>
+<li>Boy Scouting - Leave it better than you found it</li>
+<li>Unreachable code may be harder to see in larger blocks</li>
+<li>Unnecessary syntax. Such as a switch with just returns break is not needed and never for default</li>
+<li>Flagged code some sort of state such as promotion or coupon code</li>
+<li>If you encounter it remove it</li>
+<li>Make sure primary action is at top level. Helpful to early return aka guard clause</li>
+</ul></li>
+<li><strong>Nested Code</strong>
+<ul>
+<li>Avoid else where possible</li>
+<li>Avoid nested code</li>
+</ul></li>
+<li><strong>Using objects</strong>
+<ul>
+<li>Pass objects of grouped date (data clump) if possible over simple types (int,string,etc.)
+<ul>
+<li>Use value objects basically a class with private props and getters no setters allows it to be immutable</li>
+</ul></li>
+<li>Allows for adding methods to abstract complex logic</li>
+<li>Options array are abused in PHP and do not have a specific structure makes it untidy hard to know all options</li>
+<li>Use enums to reduce options to allowed values.</li>
+</ul></li>
+<li><strong>Big blocks</strong>
+<ul>
+<li>Leverage framework when possible
+<ul>
+<li>Validation → form request</li>
+<li>Model look up → implicit model binding</li>
+</ul></li>
+<li>For top level methods such as a controller try to make as simple as possible</li>
+</ul></li>
+<li><strong>Naming</strong>
+<ul>
+<li>Two hardest things in programming naming, cache invalidation and off by 1 errors</li>
+<li>don't be a special snowflake use language conventions</li>
+<li>Foreach use plural and singular make it specific to context</li>
+<li>No need to over abbreviate</li>
+<li>Try to relay human aspects <code>$str_error</code> → <code>$error_message</code></li>
+<li>Start with technical name and allow time to come up with something better</li>
+<li>Use a thesaurus</li>
+</ul></li>
+<li>
+<p><strong>Removing comments</strong></p>
+<p><img src="/uploads/Screen_Shot_2019-03-06_at_9-87b13d24-c7bc-46e0-942a-0cb52028f0c8.33.23_AM.png" alt="" /></p>
+<ul>
+<li>Misleading comments are confusing</li>
+<li>Comments can be skipped over</li>
+<li>Attempt to improve the code over comments</li>
+<li>Doc Blocks ≠ Comments they server documentation purposes</li>
+<li>Look for inline comments that explain exactly what the code is doing such as <code>// date for yesterday</code></li>
+<li>Proximity rule take variables closer to where they are being used makes it easier to tie it together</li>
+<li>If comment is relaying why this are still important</li>
+</ul>
+</li>
+<li><strong>Reasonable returns</strong>
+<ul>
+<li>Return something other than <code>null</code></li>
+<li>Possibly return a mock or null object that behaves like the real object
+<ul>
+<li><code>User</code> → <code>GuestUser</code></li>
+</ul></li>
+</ul></li>
+<li><strong>Rule of three</strong>
+<ul>
+<li>Wait until ~3 duplications before abstracting to avoid over engineering</li>
+<li>Helps you find the correct solution</li>
+<li>Make sure names align.</li>
+</ul></li>
+<li><strong>Symetry</strong>
+<ul>
+<li>Naming and thinks like keeping methods with methods</li>
+<li>Keep object access level consistent</li>
+<li>Keep not checks the same</li>
+</ul></li>
+</ul>
+<h2>Realtime applications with Laravel</h2>
+<ul>
+<li>Marcel Pociot <a href="https://twitter.com/marcelpociot">@marcelpociot</a></li>
+<li>AJAX polling approach sending a request a second or so. Not best fit for realtime application such as chat</li>
+<li>AJAX long polling attempts to keep the request open as long as possible until it times out then client sends a request again. Better than sending a request a second but could be better.</li>
+<li>
+<p>Websockets permanent connection between client and server</p>
+<p><img src="/uploads/Screen_Shot_2019-03-06_at_10-deb3a3a1-6955-44bb-94ee-8bd344af3a73.10.05_AM.png" alt="" /></p>
+<ul>
+<li>Can be text or binary data</li>
+<li><a href="https://caniuse.com/#search=websockets">All major browsers support except for Opera mini</a></li>
+<li>Instant message sending</li>
+<li><a href="http://socketo.me/">Ratchet PHP websockets in PHP</a></li>
+<li><a href="https://github.com/tlaverdure/laravel-echo-server">Laravel echo server</a></li>
+<li><a href="https://github.com/beyondcode/laravel-websockets">Laravel WebSockets</a> <a href="https://pusher.com/">Pusher</a> replacement works with <a href="https://github.com/laravel/echo">Laravel Echo</a>. Does not rely on node.js
+<ul>
+<li>Pitfalls
+<ul>
+<li>Ulimit unix file limit default is 1000 concurrent connections</li>
+<li>Event Loop is limited to 1000 connections as well</li>
+<li><a href="https://docs.beyondco.de/laravel-websockets/1.0/faq/deploying.html">Fixes exist here</a></li>
+</ul></li>
+<li><a href="https://murze.be/introducing-laravel-websockets-an-easy-to-use-websocket-server-implemented-in-php">https://murze.be/introducing-laravel-websockets-an-easy-to-use-websocket-server-implemented-in-php</a></li>
+</ul></li>
+</ul>
+</li>
+</ul>
+<h2>What's New in React</h2>
+<ul>
+<li>Wes Bos <a href="https://twitter.com/wesbos">@wesbos</a> ‏</li>
+<li><strong>Slides:</strong> <a href="https://wesbos.github.io/Whats-New-In-React/#1">https://wesbos.github.io/Whats-New-In-React/#1</a></li>
+<li>Context API
+<ul>
+<li>React context allows you to pas data down multiple levels the need to pass through props at each level</li>
+<li>Prop drilling passing props down through multiple components</li>
+<li>Allows for injecting a consumer into a component one solution for global shared data</li>
+<li>It relies on a parent provider component</li>
+<li>Good for medium sized applications</li>
+</ul></li>
+<li>Fragements
+<ul>
+<li>Fixes extra <code>&lt;div&gt;</code>s since you can not have more than one html element in a component.</li>
+<li>Fixes descendent selectors since you do not need a wrapping <code>&lt;div&gt;</code></li>
+<li>Does Vue have a solution for this?
+<ul>
+<li>Not built in but <a href="https://github.com/y-nk/vue-fragment">Vue Fragments</a> exists</li>
+</ul></li>
+</ul></li>
+<li>Error boundaries
+<ul>
+<li>Handles not being able to <code>try</code>/<code>catch</code> in JSX</li>
+</ul></li>
+<li>Refs
+<ul>
+<li>Escape hatch for getting DOM elements. Seems to be like Vue.js <code>this.$refs</code></li>
+<li>Helpful for wrapping older plugins/code</li>
+</ul></li>
+<li>Portals
+<ul>
+<li>Useful for modals and what not</li>
+<li>Somewhat like a built in version of <a href="https://linusborg.github.io/portal-vue/#/">Portal Vue</a></li>
+<li>Can be used to handle tags out side of the React root element</li>
+</ul></li>
+<li>Suspense (Coming Soon)
+<ul>
+<li>Waiting for things to load before rendering</li>
+<li>Helps with code splitting, data fetching and images</li>
+<li>Decouples loading ui from components</li>
+<li>Minimizes loaders on faster connections</li>
+</ul></li>
+<li>Hooks
+<ul>
+<li>New way to write state and other things without classes</li>
+</ul></li>
+</ul>
+<h2>Exploring Laravel 5.8</h2>
+<ul>
+<li>Taylor Otwell <a href="https://twitter.com/taylorotwell">@taylorotwell</a></li>
+<li>hasOneThrough relationship
+<ul>
+<li>Basically handles accessing has one relationship has one relationship <code>$supplier→account→history</code> to <code>$supplier→accountHistory</code></li>
+</ul></li>
+<li>Auto discovering of model policies</li>
+<li>Supports hashing API tokens with sha256 for simple API authentication without using Laravel Passport. Basically for Bearer Token API instead of oAuth.</li>
+<li>Pivot models dispatch model events
+<ul>
+<li>Not new but custom pivot models are pretty cool</li>
+</ul></li>
+<li>Default scheduler timezone</li>
+<li>Artisan in code simplification can pass like you would on the command line</li>
+<li>Testing mock helpers cleans up mocking then replacing in the container</li>
+<li><code>orWhere()</code> higher order function helps remove callbacks on <code>orWhere</code> scopes.</li>
+<li><a href="https://laravel.com/docs/5.8/cache#atomic-locks">Atomic lock</a> process running longer than requested fixed</li>
+<li>Artisan serve adds port scanning to allow for multiple instances</li>
+<li>Improvements to Redis blocking pop allows pinging of Redis block time. Still allows queues to be processed quickly</li>
+</ul>
+<h2>Laravel, the Blockchain, and You!</h2>
+<ul>
+<li>Samantha Geitz <a href="https://twitter.com/SamanthaGeitz">@SamanthaGeitz</a></li>
+<li><strong>Slides:</strong> <a href="https://speakerdeck.com/samanthamichele7/laravel-the-blockchain-and-you">https://speakerdeck.com/samanthamichele7/laravel-the-blockchain-and-you</a></li>
+<li>Should i use blockchain probably not unless you are solving a specific problem</li>
+<li>Blockchain is decentralized multiple servers with entire copy of database</li>
+<li>Add new blocks that shows how the data should change</li>
+<li>
+<p>Somewhat like Git more in the way the changes are tracked</p>
+<p><img src="/uploads/Screen_Shot_2019-03-06_at_1-2ef938be-cde4-4d9b-809c-a5fa9124bed3.40.57_PM.png" alt="" /></p>
+<ul>
+<li>It is slow and comparatively expensive then a MySQL database</li>
+<li>If you cant do it on a smartphone from 1999 probably shouldn't do it</li>
+<li>Helps solve currency forging and other issues</li>
+<li>You can buy or &quot;mine&quot; them</li>
+<li>Needs a private key and public to access much like SSH Keys</li>
+<li>Mining incentivizes integrity of the network</li>
+<li><a href="https://www.ethereum.org/">Ethereum</a> is meant to build decentralized apps and built in JavaScript
+<ul>
+<li>Used to solve Xbox game publisher royalties
+<ul>
+<li>Went from ~45 days to almost immediately</li>
+<li>Reduced publishers cost 99% and cut Microsofts in half</li>
+</ul></li>
+<li><a href="https://www.webjet.com.au/">Webjet</a> a travel company
+<ul>
+<li>Problem is double booking/disputes about 5% annually</li>
+</ul></li>
+</ul></li>
+<li>Possible good use cases
+<ul>
+<li>Voting app</li>
+<li>DRM management of video/games</li>
+<li>Verifying identity of participants is important financial, legal, doctor</li>
+</ul></li>
+<li>Bad use cases
+<ul>
+<li>Most things</li>
+<li>Data is in constant flux</li>
+<li>If you want ability to add/edit records</li>
+<li>Speed/performance important</li>
+</ul></li>
+<li>Tools
+<ul>
+<li><a href="https://web3js.readthedocs.io/en/1.0/">web3.js</a> main for Etherum</li>
+<li>Nothing really for PHP</li>
+<li><a href="https://truffleframework.com/">Truffle Framework</a>
+<ul>
+<li><a href="https://truffleframework.com/ganache">Ganache</a></li>
+<li><a href="https://truffleframework.com/drizzle">Drizzle</a></li>
+</ul></li>
+<li><a href="https://coinpress.cc/">https://coinpress.cc/</a></li>
+</ul></li>
+</ul>
+</li>
+</ul>
+<h2>Databases in space</h2>
+<ul>
+<li>Matt Stauffer <a href="https://twitter.com/stauffermatt">@stauffermatt</a></li>
+<li><strong>Slides:</strong> <a href="https://speakerdeck.com/mattstauffer/databases-in-space">https://speakerdeck.com/mattstauffer/databases-in-space</a></li>
+<li>This is one that is really interesting and I may want to dig more in it in the future but now its more fun to just listen</li>
+<li>Example <a href="https://github.com/mattstauffer/alberts-avocado-toast">https://github.com/mattstauffer/alberts-avocado-toast</a></li>
+<li><a href="https://www.geocod.io/">Laravel Friends GeoCodio</a></li>
+<li><a href="https://developers.google.com/maps/documentation/">Google Maps Platform</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/spatial-type-overview.html">MySQL spatial types</a></li>
+<li><a href="https://scotch.io/tutorials/achieving-geo-search-with-laravel-scout-and-algolia">Algolia (scotch.io)</a></li>
+<li><a href="https://medium.com/@brice_hartmann/getting-started-with-geospatial-data-in-laravel-94502dc74d55">Intro Tutorials</a></li>
+<li><a href="https://github.com/grimzy/laravel-mysql-spatial">Laravel MySQL Spatial</a></li>
+<li><a href="https://github.com/njbarrett/laravel-postgis">Laravel Postgis</a></li>
+</ul>
+<h2>Practical Solutions to Common UI Design Problems</h2>
+<ul>
+<li>Steve Schoger <a href="https://twitter.com/steveschoger">@steveschoger</a></li>
+<li><strong>Slides:</strong></li>
+<li><a href="https://www.figma.com/">https://www.figma.com/</a> - In browser design tool</li>
+<li><a href="https://duotone.shapefactory.co/">https://duotone.shapefactory.co/</a> - Tool for transforming images</li>
+<li><a href="https://unsplash.com/">https://unsplash.com/</a> - Nice images</li>
+<li>Design inspiration
+<ul>
+<li><a href="https://land-book.com/">https://land-book.com/</a></li>
+<li><a href="https://www.siteinspire.com/">https://www.siteinspire.com/</a></li>
+<li><a href="https://dribbble.com/">https://dribbble.com/</a></li>
+</ul></li>
+<li>Don't use grey text on colored backgrounds</li>
+<li>Use perceived brightness</li>
+<li>Start with too much whitespace
+<ul>
+<li>Use input length as an affordance show how much is expected to be input</li>
+</ul></li>
+<li>Balance weight and contrast</li>
+<li>Supercharge the defaults</li>
+<li>Create depth with color</li>
+<li><code>font-feature-settings: "tnum";</code> behaves like a monospaced font to align characters</li>
+<li>This talk really needs to be watched</li>
+<li><a href="https://www.heropatterns.com/">https://www.heropatterns.com/</a></li>
+<li>Use good fonts</li>
+<li>
+<p>Interesting mobile table solution convert it to accordions. This would be semi-annoying in PHP/Blade but super easy in Vue.js</p>
+<p><img src="/uploads/Screen_Shot_2019-03-06_at_4-1916ca15-81cf-4ad6-8acd-ed14be54bee4.28.54_PM.png" alt="" /></p>
+</li>
+</ul>
+<h2>Tailwind CSS by Example</h2>
+<ul>
+<li>Adam Wathan <a href="https://twitter.com/adamwathan">@adamwathan</a></li>
+<li><strong>Slides:</strong></li>
+<li><a href="https://tailwindcss.com/docs/what-is-tailwind">https://tailwindcss.com/docs/what-is-tailwind</a></li>
+<li>Live coding not really much to note it really needs to be watched</li>
+</ul>    </div>
+
+    <ul class="list-reset inline-flex items-center flex-wrap md:mb-8 text-sm border-t border-grey-lighter pt-2">
+    <li class="mr-2 mb-2">
+        Share:
+    </li>
+
+    <li class="mr-2 mb-2">
+        <a
+            href="https://www.facebook.com/sharer/sharer.php?u=//danholloran.me/2016/12/17/sync-google-tasks-with-ifttt/"
+            rel="noopener"
+            title="Facebook"
+            class="flex items-center no-underline"
+            target="_blank"
+        >
+            <svg class="w-5 h-5 mr-1" viewBox="0 0 512 512"><path d="M211.9 197.4h-36.7v59.9h36.7V433.1h70.5V256.5h49.2l5.2-59.1h-54.4c0 0 0-22.1 0-33.7 0-13.9 2.8-19.5 16.3-19.5 10.9 0 38.2 0 38.2 0V82.9c0 0-40.2 0-48.8 0 -52.5 0-76.1 23.1-76.1 67.3C211.9 188.8 211.9 197.4 211.9 197.4z"></path></svg>
+
+            Facebook
+        </a>
+    </li>
+
+    <li class="mr-2 mb-2">
+        <a
+            href="https://twitter.com/intent/tweet?text=Sync%20Google%20Tasks%20With%20IFTTT&amp;url=//danholloran.me/2016/12/17/sync-google-tasks-with-ifttt/&amp;via=dholloran"
+            rel="noopener"
+            title="Twitter"
+            class="flex items-center no-underline"
+            target="_blank"
+        >
+            <svg class="w-5 h-5 mr-1" viewBox="0 0 512 512"><path d="M419.6 168.6c-11.7 5.2-24.2 8.7-37.4 10.2 13.4-8.1 23.8-20.8 28.6-36 -12.6 7.5-26.5 12.9-41.3 15.8 -11.9-12.6-28.8-20.6-47.5-20.6 -42 0-72.9 39.2-63.4 79.9 -54.1-2.7-102.1-28.6-134.2-68 -17 29.2-8.8 67.5 20.1 86.9 -10.7-0.3-20.7-3.3-29.5-8.1 -0.7 30.2 20.9 58.4 52.2 64.6 -9.2 2.5-19.2 3.1-29.4 1.1 8.3 25.9 32.3 44.7 60.8 45.2 -27.4 21.4-61.8 31-96.4 27 28.8 18.5 63 29.2 99.8 29.2 120.8 0 189.1-102.1 185-193.6C399.9 193.1 410.9 181.7 419.6 168.6z"></path></svg>
+
+            Twitter
+        </a>
+    </li>
+
+    <li class="mr-2 mb-2">
+        <a
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=//danholloran.me/2016/12/17/sync-google-tasks-with-ifttt/&amp;title=Sync%20Google%20Tasks%20With%20IFTTT&amp;summary=So%20I%20recently%20purchased%20an%20Amazon%20Echo%20and%20I%20wanted%20to%20be%20able%20to%20add%20todos%20to%20my%20list%20via%20my%20voice.%20However%20the%20built%20in%20task%20manager%20is%20extremely%20simple%20and%20I%20did%20not%20have%20any%20interest%20in%20the%20two%20options%20that%20can%20directly%20integrate%20with%20Echo.%20So%20I%20needed%20to%20find%20a%20better%20solution.&amp;source=//danholloran.me"
+            rel="noopener"
+            title="LinkedIn"
+            class="flex items-center no-underline"
+            target="_blank"
+        >
+            <svg class="w-5 h-5 mr-1" viewBox="0 0 512 512"><path d="M186.4 142.4c0 19-15.3 34.5-34.2 34.5 -18.9 0-34.2-15.4-34.2-34.5 0-19 15.3-34.5 34.2-34.5C171.1 107.9 186.4 123.4 186.4 142.4zM181.4 201.3h-57.8V388.1h57.8V201.3zM273.8 201.3h-55.4V388.1h55.4c0 0 0-69.3 0-98 0-26.3 12.1-41.9 35.2-41.9 21.3 0 31.5 15 31.5 41.9 0 26.9 0 98 0 98h57.5c0 0 0-68.2 0-118.3 0-50-28.3-74.2-68-74.2 -39.6 0-56.3 30.9-56.3 30.9v-25.2H273.8z"></path></svg>
+
+            LinkedIn
+        </a>
+    </li>
+
+    <li class="mr-2 mb-2">
+        <a
+            href="https://bufferapp.com/add?id=14b2d6de0d159823&amp;url=//danholloran.me/2016/12/17/sync-google-tasks-with-ifttt/&amp;text=Sync%20Google%20Tasks%20With%20IFTTT&amp;via=dholloran&amp;placement=button&amp;utm_source=https%3A%2F%2Fbuffer.com%2Fextras%2Fbutton&amp;utm_medium=buffer_button&amp;utm_campaign=buffer&amp;source=button"
+            rel="noopener"
+            title="Buffer"
+            class="flex items-center no-underline"
+            target="_blank"
+        >
+            <svg class="h-3 w-3 mr-1" x="0px" y="0px" viewBox="0 0 313.3 321.4" xml:space="preserve"><path class="layer layer1" d="M157.1,0c3.8,0,7.9,1.5,11.4,3.2c45.6,21.1,91.2,42.4,136.7,63.8c3.3,1.5,8,2.1,8.1,7c0.1,5-4.7,5.6-7.9,7.1
+            c-45.8,21.5-91.7,42.9-137.6,64.3c-7.4,3.4-14.8,3.5-22.2,0C99,123.6,52.3,101.9,5.8,80c-2.4-1.1-5.4-4-5.4-6c0-2,3.1-4.8,5.5-5.9
+            C52.4,46.2,99.1,24.4,145.8,2.8C149.1,1.2,154.5,0,157.1,0z"></path><path class="layer layer2" d="M156.6,235c-3.1,0-7.7-1.7-11.3-3.3c-46.5-21.6-93-43.3-139.4-65.1c-2.4-1.1-5.8-4.1-5.6-5.8c0.3-2.4,3.2-5,5.7-6.3
+            c7.5-4,15.3-7.3,23-10.9c7.9-3.7,15.7-3.6,23.6,0.1c30.4,14.3,61,28.4,91.4,42.7c8.6,4.1,16.8,4,25.4-0.1
+            c30.4-14.3,60.9-28.4,91.4-42.7c7.7-3.6,15.4-3.7,23.1-0.1c8.2,3.8,16.4,7.4,24.4,11.5c2.1,1.1,4.9,3.7,4.7,5.4
+            c-0.2,2.1-2.7,4.8-4.9,5.9c-46.8,22.1-93.7,44-140.7,65.8C164.2,233.5,159.9,235,156.6,235z"></path><path class="layer layer3" d="M156.8,321.4c-4.6,0-9.3-2.3-13.4-4.2c-45.2-20.9-90.3-42-135.4-63.1c-3.3-1.5-8-2.1-8-7.1c0-5,3.8-5.5,7-7.1
+            c13.9-6.5,14.9-6.5,21.8-9.8c8-3.8,16-3.7,24.1,0.1c29.9,14,59.8,27.7,89.6,41.9c9.6,4.6,18.5,4.7,28.2,0.1 c29.8-14.2,59.8-27.9,89.6-41.9c8.2-3.9,16.3-4,24.5,0c7.8,3.8,15.8,7.2,23.5,11.1c2.1,1.1,4.8,3.3,4.8,5.4
+            c-0.1,2.4-2.7,4.8-4.9,5.9c-32.2,15.3-64.5,30.3-96.8,45.4c-13.9,6.5-27.7,13.1-41.7,19.3C165.7,319.2,161.5,321.4,156.8,321.4z"></path></svg>
+
+
+            Buffer
+        </a>
+    </li>
+</ul>
+
+    <div class="flex">
+        
+                    <a href="https://danholloran.test/blog/2018/12/15/testing-mocked-email-in-word-press-with-php-unit" class="ml-auto button-small">Next &gt;</a>
+                
+    </div>
+</div>
+
+
+        <footer class="container py-8 flex md:items-center flex md:flex-row flex-col-reverse">
+            <div class="md:mr-4">
+                <ul class="list-reset flex">
+    <li class="mr-2">
+        <a class="flex items-center no-underline" href="https://github.com/dholloran" target="_blank" rel="noopener">
+            <svg class="w-5 h-5" viewBox="0 0 512 512"><path d="M256 70.7c-102.6 0-185.9 83.2-185.9 185.9 0 82.1 53.3 151.8 127.1 176.4 9.3 1.7 12.3-4 12.3-8.9V389.4c-51.7 11.3-62.5-21.9-62.5-21.9 -8.4-21.5-20.6-27.2-20.6-27.2 -16.9-11.5 1.3-11.3 1.3-11.3 18.7 1.3 28.5 19.2 28.5 19.2 16.6 28.4 43.5 20.2 54.1 15.4 1.7-12 6.5-20.2 11.8-24.9 -41.3-4.7-84.7-20.6-84.7-91.9 0-20.3 7.3-36.9 19.2-49.9 -1.9-4.7-8.3-23.6 1.8-49.2 0 0 15.6-5 51.1 19.1 14.8-4.1 30.7-6.2 46.5-6.3 15.8 0.1 31.7 2.1 46.6 6.3 35.5-24 51.1-19.1 51.1-19.1 10.1 25.6 3.8 44.5 1.8 49.2 11.9 13 19.1 29.6 19.1 49.9 0 71.4-43.5 87.1-84.9 91.7 6.7 5.8 12.8 17.1 12.8 34.4 0 24.9 0 44.9 0 51 0 4.9 3 10.7 12.4 8.9 73.8-24.6 127-94.3 127-176.4C441.9 153.9 358.6 70.7 256 70.7z"></path></svg>
+
+            Github
+        </a>
+    </li>
+
+    <li class="mr-2">
+        <a class="flex items-center no-underline" href="https://twitter.com/dholloran" target="_blank" rel="noopener">
+            <svg class="w-5 h-5" viewBox="0 0 512 512"><path d="M419.6 168.6c-11.7 5.2-24.2 8.7-37.4 10.2 13.4-8.1 23.8-20.8 28.6-36 -12.6 7.5-26.5 12.9-41.3 15.8 -11.9-12.6-28.8-20.6-47.5-20.6 -42 0-72.9 39.2-63.4 79.9 -54.1-2.7-102.1-28.6-134.2-68 -17 29.2-8.8 67.5 20.1 86.9 -10.7-0.3-20.7-3.3-29.5-8.1 -0.7 30.2 20.9 58.4 52.2 64.6 -9.2 2.5-19.2 3.1-29.4 1.1 8.3 25.9 32.3 44.7 60.8 45.2 -27.4 21.4-61.8 31-96.4 27 28.8 18.5 63 29.2 99.8 29.2 120.8 0 189.1-102.1 185-193.6C399.9 193.1 410.9 181.7 419.6 168.6z"></path></svg>
+
+            Twitter
+        </a>
+    </li>
+
+    <li class="mr-2">
+        <a class="flex items-center no-underline" href="https://linkedin.com/in/dholloran" target="_blank" rel="noopener">
+            <svg class="w-5 h-5" viewBox="0 0 512 512"><path d="M186.4 142.4c0 19-15.3 34.5-34.2 34.5 -18.9 0-34.2-15.4-34.2-34.5 0-19 15.3-34.5 34.2-34.5C171.1 107.9 186.4 123.4 186.4 142.4zM181.4 201.3h-57.8V388.1h57.8V201.3zM273.8 201.3h-55.4V388.1h55.4c0 0 0-69.3 0-98 0-26.3 12.1-41.9 35.2-41.9 21.3 0 31.5 15 31.5 41.9 0 26.9 0 98 0 98h57.5c0 0 0-68.2 0-118.3 0-50-28.3-74.2-68-74.2 -39.6 0-56.3 30.9-56.3 30.9v-25.2H273.8z"></path></svg>
+
+            LinkedIn
+        </a>
+    </li>
+
+    <li>
+        <a class="flex items-center no-underline" href="https://danholloran.test/feed.xml" target="_blank">
+            <svg class="w-5 h-5" viewBox="0 0 512 512"><path d="M201.8 347.2c0 20.3-16.5 36.8-36.8 36.8 -20.3 0-36.8-16.5-36.8-36.8s16.5-36.8 36.8-36.8C185.3 310.4 201.8 326.8 201.8 347.2zM128.2 204.7v54.5c68.5 0.7 124 56.3 124.7 124.7h54.5C306.7 285.3 226.9 205.4 128.2 204.7zM128.2 166.6c57.9 0.3 112.3 22.9 153.2 63.9 41 41 63.7 95.5 63.9 153.5h54.5c-0.3-149.9-121.7-271.4-271.6-271.9V166.6L128.2 166.6z"></path></svg>
+
+            RSS
+        </a>
+    </li>
+</ul>
+            </div>
+            <div class="md:ml-auto md:mb-0 mb-2">
+                My adventures on and off of the internetz.
+            </div>
+        </footer>
+    </body>
+</html>

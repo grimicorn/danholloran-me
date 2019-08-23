@@ -1,53 +1,40 @@
 let mix = require("laravel-mix");
 let build = require("./tasks/build.js");
-let tailwindcss = require("tailwindcss");
-let PurgecssPlugin = require("purgecss-webpack-plugin");
-let glob = require("glob-all");
+require("laravel-mix-purgecss");
+require("laravel-mix-alias");
 
-/**
- * Custom PurgeCSS Extractor
- * https://github.com/FullHuman/purgecss
- * https://github.com/FullHuman/purgecss-webpack-plugin
- */
-class TailwindExtractor {
-    static extract(content) {
-        return content.match(/[A-z0-9-:\/]+/g) || [];
-    }
-}
-
-// mix.disableSuccessNotifications();
-mix.setPublicPath("source/assets/");
+mix.disableSuccessNotifications();
+mix.setPublicPath("source/assets/build/");
 mix.webpackConfig({
     plugins: [
         build.jigsaw,
         build.browserSync(),
-        build.watch(["source/**/*.md", "source/**/*.php", "source/**/*.scss"])
+        build.watch([
+            "config.php",
+            "source/**/*.md",
+            "source/**/*.php",
+            "source/**/*.scss"
+        ])
     ]
 });
 
 mix.js("source/_assets/js/main.js", "js")
-    .copyDirectory(
-        "./node_modules/highlight.js/styles/",
-        "./source/assets/css/vendor/highlight.js/"
-    )
-    .sass("source/_assets/sass/main.scss", "css/main.css")
-    .version()
+    .alias({
+        "~": "/node_modules"
+    })
+    .sourceMaps()
+    .postCss("source/_assets/css/main.css", "css/main.css", [
+        require("postcss-import"),
+        require("tailwindcss"),
+        require("postcss-nested")
+    ])
+    .sourceMaps()
     .options({
-        processCssUrls: false,
-        postCss: [tailwindcss("./tailwind.js")]
-    });
-
-mix.webpackConfig({
-    plugins: [
-        new PurgecssPlugin({
-            paths: glob.sync([path.join(__dirname, "source/**/*.php")]),
-            extractors: [
-                {
-                    extractor: TailwindExtractor,
-                    extensions: ["html", "js", "php", "vue"],
-                    whitelistPatterns: [/alert-[-a-zA-Z0-9]+/]
-                }
-            ]
-        })
-    ]
-});
+        processCssUrls: false
+    })
+    .purgeCss({
+        extensions: ["html", "md", "js", "php", "vue"],
+        folders: ["source"],
+        whitelistPatterns: [/language/, /hljs/]
+    })
+    .version();

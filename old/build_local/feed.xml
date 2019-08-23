@@ -1,0 +1,874 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>DanHolloran</title>
+		<description>My adventures on and off of the internetz.</description>
+		<link>https://danholloran.test</link>
+		<atom:link href="https://danholloran.test/feed.xml" rel="self" type="application/rss+xml"/>
+		<pubDate>Sat, 09 Mar 2019 16:54:56 +0000</pubDate>
+		<lastBuildDate>Sat, 09 Mar 2019 16:54:56 +0000</lastBuildDate>
+					<item>
+				<title>Laracon Online 2019 Notes and Thoughts</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 7 Mar 2019.
+					<br><br><br>
+					These are my notes from Laracon 2019 was an interesting conference and a lot of fun. I think you may still be able to buy tickets to access the recordings at https://laracon.net/. It is nice being online not having to travel makes it easier to go.
+Getting started with event sourcing...
+					<br><br>
+					<a href="https://danholloran.test/blog/2019/03/07/laracon-online-2019-notes-and-thoughts">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Thu, 07 Mar 2019 07:26:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2019/03/07/laracon-online-2019-notes-and-thoughts</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2019/03/07/laracon-online-2019-notes-and-thoughts</guid>
+											</item>
+					<item>
+				<title>Testing mocked email in WordPress with PHPUnit</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 15 Dec 2018.
+					<br><br><br>
+					Before we get started this post assumes the following.
+    
+        
+            You have some understanding of PHPUnit and using it with WordPress...
+					<br><br>
+					<a href="https://danholloran.test/blog/2018/12/15/testing-mocked-email-in-word-press-with-php-unit">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sat, 15 Dec 2018 07:26:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2018/12/15/testing-mocked-email-in-word-press-with-php-unit</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2018/12/15/testing-mocked-email-in-word-press-with-php-unit</guid>
+											</item>
+					<item>
+				<title>Sync Google Tasks With IFTTT</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 17 Dec 2016.
+					<br><br><br>
+					So I recently purchased an Amazon Echo and I wanted to be able to add todos to my list via my voice. However the built in task manager is extremely simple and I did not have any interest in the two options that can directly integrate with Echo. So I...
+					<br><br>
+					<a href="https://danholloran.test/blog/2016/12/17/sync-google-tasks-with-ifttt">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sat, 17 Dec 2016 00:00:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2016/12/17/sync-google-tasks-with-ifttt</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2016/12/17/sync-google-tasks-with-ifttt</guid>
+											</item>
+					<item>
+				<title>Check Out Down Them All Extension for Firefox</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 8 Nov 2016.
+					<br><br><br>
+					Quick tip I figured I would share. If you ever need to download a larger amount of images and you do not have FTP access and you know the URLs. Down Them All extension for Firefox is great.
+All you have to do is list out all of the URLs on...
+					<br><br>
+					<a href="https://danholloran.test/blog/2016/11/08/check-out-down-them-all-extension-for-firefox">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Tue, 08 Nov 2016 18:18:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2016/11/08/check-out-down-them-all-extension-for-firefox</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2016/11/08/check-out-down-them-all-extension-for-firefox</guid>
+											</item>
+					<item>
+				<title>Introducing Press CLI: A Configurable WordPress Installer</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 30 Oct 2016.
+					<br><br><br>
+					So I have been wanting to build a WordPress installer for a while now. It is a lot of effort setting up multiple WordPress installs in the same basic configuration to start a project. I admit it I am extremely lazy but thats okay. I also wanted an excuse to...
+					<br><br>
+					<a href="https://danholloran.test/blog/2016/10/30/introducing-press-cli-a-configurable-wordpress-installer">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sun, 30 Oct 2016 00:00:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2016/10/30/introducing-press-cli-a-configurable-wordpress-installer</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2016/10/30/introducing-press-cli-a-configurable-wordpress-installer</guid>
+											</item>
+					<item>
+				<title>Setting Up Your Shell Configuration and OHMyZSH</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 3 Jul 2016.
+					<br><br><br>
+					A while ago I wrote  a post on Setting Up Your Shell. I wanted to follow up with more information about ZShell and OHMyZSH. Since both have really made using the terminal a lot easier and more enjoyable. So check out Setting Up Your Shell to get up to...
+					<br><br>
+					<a href="https://danholloran.test/blog/2016/07/03/setting-up-your-shell-configuration-and-ohmyzsh">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sun, 03 Jul 2016 11:36:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2016/07/03/setting-up-your-shell-configuration-and-ohmyzsh</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2016/07/03/setting-up-your-shell-configuration-and-ohmyzsh</guid>
+											</item>
+					<item>
+				<title>Setting up Mailhog on MAMP</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 26 Jun 2016.
+					<br><br><br>
+					Mailhog is a tool that allows all of your outgoing mail to be intercepted. This is great for your development environment since you may need to test things incrementally. You really do not want your clients or users receiving your test emails.
+I know a lot of the cool kids are...
+					<br><br>
+					<a href="https://danholloran.test/blog/2016/06/26/setting-up-mailhog-on-mamp">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sun, 26 Jun 2016 00:00:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2016/06/26/setting-up-mailhog-on-mamp</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2016/06/26/setting-up-mailhog-on-mamp</guid>
+											</item>
+					<item>
+				<title>Launchcode Mentorship</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 25 Jun 2016.
+					<br><br><br>
+					I was mentoring this month for Launchcode. it has been a pretty good experience so far it would have been a nice option when I was learning. Many people in the industry do not have a formal education background which is ok. I do not have a CS degree if...
+					<br><br>
+					<a href="https://danholloran.test/blog/2016/06/25/launchcode-mentorship">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sat, 25 Jun 2016 09:36:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2016/06/25/launchcode-mentorship</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2016/06/25/launchcode-mentorship</guid>
+											</item>
+					<item>
+				<title>Looking Into Statamic Flat File CMS</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 14 Jun 2016.
+					<br><br><br>
+					I still have not built anything with Statamic but it seems really promising. Even at $200 a license I believe it would be worth it. Well at least if you are working on a site for a business. I would like to use it for my personal site with the...
+					<br><br>
+					<a href="https://danholloran.test/blog/2016/06/14/looking-into-statamic-flat-file-cms">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Tue, 14 Jun 2016 10:47:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2016/06/14/looking-into-statamic-flat-file-cms</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2016/06/14/looking-into-statamic-flat-file-cms</guid>
+											</item>
+					<item>
+				<title>St Louis WordCamp 2016</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 16 May 2016.
+					<br><br><br>
+					WordCamp St. Louis was held this year again at Washington University St. Louis on May 14-15 2016. Over all it was a good time I always enjoy going to WordCamps. I figured I would post my notes here like I did last year just cause. I have added the slides...
+					<br><br>
+					<a href="https://danholloran.test/blog/2016/05/16/st-louis-wordcamp-2016">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Mon, 16 May 2016 00:00:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2016/05/16/st-louis-wordcamp-2016</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2016/05/16/st-louis-wordcamp-2016</guid>
+											</item>
+					<item>
+				<title>Laravel and WebSockets</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 25 Mar 2016.
+					<br><br><br>
+					Working with WebSockets and Larvel is extremely easy! If you are new to Laravel it has an event system that you can use to dispatch events for other parts of your PHP code to use. As well as Laravel supports Redis and Pusher for dispatching events via WebSockets. Pusher is...
+					<br><br>
+					<a href="https://danholloran.test/blog/2016/03/25/laravel-and-websockets">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Fri, 25 Mar 2016 00:00:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2016/03/25/laravel-and-websockets</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2016/03/25/laravel-and-websockets</guid>
+											</item>
+					<item>
+				<title>Laravel Forge, Digital Ocean and WebSockets</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 5 Mar 2016.
+					<br><br><br>
+					I recently posted an overview of how to setup Web Sockets using Laravel and Socket.io. I wanted to follow it up with a quick post on how to get the Web Sockets functioning correctly on a Digital Ocean server using Laravel Forge. I a going to assume that you have...
+					<br><br>
+					<a href="https://danholloran.test/blog/2016/03/05/laravel-forge-digital-ocean-and-websockets">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sat, 05 Mar 2016 00:00:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2016/03/05/laravel-forge-digital-ocean-and-websockets</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2016/03/05/laravel-forge-digital-ocean-and-websockets</guid>
+											</item>
+					<item>
+				<title>Why Does ExpressionEngine Save Templates in the Database?</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 16 Jan 2016.
+					<br><br><br>
+					This is a little bit of a rant and a large amount of it may be a result of my inexperience. This is in no way saying ExpressionEngine is bad and something like WordPress is better. I feel it is more a surprise from using CodeIgniter before and CodeIgniter is...
+					<br><br>
+					<a href="https://danholloran.test/blog/2016/01/16/why-does-expressionengine-save-templates-in-the-database">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sat, 16 Jan 2016 00:00:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2016/01/16/why-does-expressionengine-save-templates-in-the-database</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2016/01/16/why-does-expressionengine-save-templates-in-the-database</guid>
+											</item>
+					<item>
+				<title>Quickly Install Applications on Your Mac With Homebrew and Cask</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 12 Jan 2016.
+					<br><br><br>
+					I have been having some issues with my work Macbook and I needed to reinstall Mac OS X. I like to do a complete restore every so often any way since I like to hack and play with things so there is quite a bit of junk that accumulates. I...
+					<br><br>
+					<a href="https://danholloran.test/blog/2016/01/12/quickly-install-applications-on-your-mac-with-homebrew-and-cask">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Tue, 12 Jan 2016 00:00:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2016/01/12/quickly-install-applications-on-your-mac-with-homebrew-and-cask</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2016/01/12/quickly-install-applications-on-your-mac-with-homebrew-and-cask</guid>
+											</item>
+					<item>
+				<title>Vue.js Component Messaging Continued</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 8 Dec 2015.
+					<br><br><br>
+					So yesterday I posted about Vue.js component messaging. This is in a way a continuation so you will want to read that first &amp;amp;quot;Vue.js Component Messaging&amp;amp;quot;.
+I had suggested that firing an event off of a common element wether that is the body or the main Vue.js instance really does not...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/12/08/vues-js-component-messaging-continued">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Tue, 08 Dec 2015 18:16:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/12/08/vues-js-component-messaging-continued</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/12/08/vues-js-component-messaging-continued</guid>
+											</item>
+					<item>
+				<title>Vue.js Component Messaging</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 7 Dec 2015.
+					<br><br><br>
+					The other day I was working through how to abstract an alert list into its own component. Basically it is an ul where each alert is a li pretty simple. So using Vue.js, Browserify, and Vueify this is pretty simple but the problem was how do the other components add...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/12/07/vues-js-component-messaging">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Mon, 07 Dec 2015 18:16:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/12/07/vues-js-component-messaging</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/12/07/vues-js-component-messaging</guid>
+											</item>
+					<item>
+				<title>Why Would You Use a Fixed Header?</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 24 Dec 2015.
+					<br><br><br>
+					It seems like I receive a request for a fixed header fairly regularly more than I should. I don&amp;rsquo;t really understand why you would want to fix the header of your site. So I figured I would layout some of my opinions on the matter I may be wrong but...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/12/24/why-would-you-use-a-fixed-header">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Thu, 24 Dec 2015 00:00:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/12/24/why-would-you-use-a-fixed-header</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/12/24/why-would-you-use-a-fixed-header</guid>
+											</item>
+					<item>
+				<title>Experimenting With Laravel and Vue.js</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 5 Dec 2015.
+					<br><br><br>
+					So I&#039;ve been playing with Laravel and Vue.js which I have really started to like. It seems every time I have to write boring repetitive code there&#039;s already something that handles it for you.
+It&#039;s fairly refreshing coming from the WordPresss world were a lot of this is handled via plugins....
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/12/05/experimenting-with-laravel-and-vue-js">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sat, 05 Dec 2015 21:49:22 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/12/05/experimenting-with-laravel-and-vue-js</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/12/05/experimenting-with-laravel-and-vue-js</guid>
+											</item>
+					<item>
+				<title>Setting Up Your Shell</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 29 Sep 2015.
+					<br><br><br>
+					So you want to setup your shell thats awesome! This will be primarily relevant to Mac OS X since if your on Linux you should already be comfortable with the shell and if your on Windows I&#039;m sorry even though Windows 10 does look pretty cool. I will go through...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/09/29/setting-up-your-shell">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Tue, 29 Sep 2015 20:38:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/09/29/setting-up-your-shell</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/09/29/setting-up-your-shell</guid>
+											</item>
+					<item>
+				<title>Don&#039;t Fear The Shell</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 20 Sep 2015.
+					<br><br><br>
+					So, I have noticed a rather alarming aversion to the command line (CLi) for developers. If you really think about it the CLi is not much different from a normal text editor.
+Sure it can be somewhat intimidating when you open an application and you see bash-3.2$ what do I do...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/09/20/dont-fear-the-shell">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sun, 20 Sep 2015 19:36:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/09/20/dont-fear-the-shell</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/09/20/dont-fear-the-shell</guid>
+											</item>
+					<item>
+				<title>Installing Linters Atom</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 13 Sep 2015.
+					<br><br><br>
+					Atom is an awesome new editor built by Github it has some really good linter plugins. So we will go through the steps to get them setup and configured for Atom. The linter plugins all have some requirements you can check out Linting Your Code: Installing the Linters to get...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/09/13/installing-linters-atom">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sun, 13 Sep 2015 17:09:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/09/13/installing-linters-atom</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/09/13/installing-linters-atom</guid>
+											</item>
+					<item>
+				<title>Installing Linters Sublime Text 3</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 30 Aug 2015.
+					<br><br><br>
+					Sublime Text is one of my favorite editors I have ever used and it has excellent support for linting. This will cover Sublime Text 3 only since the plugin used SublimeLinter went through a major shift from Sublime text 2 to 3. The biggest difference is in ST2 the linters...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/08/30/installing-linters-sublime-text-3">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sun, 30 Aug 2015 19:06:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/08/30/installing-linters-sublime-text-3</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/08/30/installing-linters-sublime-text-3</guid>
+											</item>
+					<item>
+				<title>Linting Your Code: Installing the Linters</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 27 Aug 2015.
+					<br><br><br>
+					Linting is basically the act of running your code through a tool that catches syntax issues, common pitfalls, and helps enforce a general coding style among other things. This does not actually test the code like a unit test or integration test. How ever it helps stop you from shooting...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/08/27/linting-your-code-installing-the-linters">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Thu, 27 Aug 2015 20:47:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/08/27/linting-your-code-installing-the-linters</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/08/27/linting-your-code-installing-the-linters</guid>
+											</item>
+					<item>
+				<title>Base Environment Setup</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 26 Aug 2015.
+					<br><br><br>
+					I have a few posts in mind that require a few of the same steps so I figured I would catalog them here. These should be things every developer regardless of wether you are more of a front end or backend developer. They are extremely easy to get setup now...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/08/26/base-environment-setup">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Wed, 26 Aug 2015 20:52:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/08/26/base-environment-setup</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/08/26/base-environment-setup</guid>
+											</item>
+					<item>
+				<title>Has WP_Query Abstracted To Much?</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 18 Aug 2015.
+					<br><br><br>
+					I was working on a project recently where I ran into a situation where WP_Query, well actually it was WP_User_Query, just would not work. So I feel back to raw SQL through wpdb and to my astonishment PHPCS with WordPress coding standards discourages the use of wpdb. I know it...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/08/18/has-wp-query-abstracted-to-much">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Tue, 18 Aug 2015 19:53:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/08/18/has-wp-query-abstracted-to-much</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/08/18/has-wp-query-abstracted-to-much</guid>
+											</item>
+					<item>
+				<title>Setting Up a Jekyll Blog - Part 5</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 10 Aug 2015.
+					<br><br><br>
+					So now we have setup, tweaked, and styled our new Jekyll site. Now it is time for the whole world to see and admire our work, at least we hope they will. There is a large range of options in the Jekyll Documentation about Deployments but I am going to...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/08/10/setting-up-a-jekyll-blog-part-5">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Mon, 10 Aug 2015 21:08:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/08/10/setting-up-a-jekyll-blog-part-5</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/08/10/setting-up-a-jekyll-blog-part-5</guid>
+											</item>
+					<item>
+				<title>Setting Up a Jekyll Blog - Part 4</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 9 Aug 2015.
+					<br><br><br>
+					So now that we know how to get started with building the structure of our site we can start styling. Since Jekyll is based on Ruby it makes sense that the preprocessor of choice is Sass/SCSS. I personally use SCSS but you could technically us Less, Stylus, PostCSS or whatever...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/08/09/setting-up-a-jekyll-blog-part-4">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sun, 09 Aug 2015 14:34:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/08/09/setting-up-a-jekyll-blog-part-4</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/08/09/setting-up-a-jekyll-blog-part-4</guid>
+											</item>
+					<item>
+				<title>Using Trello to Manage Your Blog Posts</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 6 Aug 2015.
+					<br><br><br>
+					So I have been trying to get in the habit of writing more but to do that it helps to have a bank of ideas. So I do not have to sit down and try to find something to write about. I&#039;ve really liked using Trello to catalog my possible...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/08/06/using-trello-to-manage-your-blog-posts">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Thu, 06 Aug 2015 20:21:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/08/06/using-trello-to-manage-your-blog-posts</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/08/06/using-trello-to-manage-your-blog-posts</guid>
+											</item>
+					<item>
+				<title>Change URLs On Your WP Engine Install</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 4 Aug 2015.
+					<br><br><br>
+					We recently switched to WP Engine which is an excellent choice for WordPress hosting. Managed hosting I believe is the best way to host a WordPress site. However it does have some quirks compared to our old host.
+One is the way you have to update your site URL not only...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/08/04/change-urls-on-your-wp-engine-install">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Tue, 04 Aug 2015 18:18:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/08/04/change-urls-on-your-wp-engine-install</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/08/04/change-urls-on-your-wp-engine-install</guid>
+											</item>
+					<item>
+				<title>Is Apple Pay, Coin, etc. Helpful?</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 2 Aug 2015.
+					<br><br><br>
+					Are &amp;amp;quot;card consolidators&amp;amp;quot; like Apple Pay, Coin, etc. useful? I would say it depends on, it really depends on where you shop and if you are ok still bringing a backup card. I have been using both Apple Pay and Coin for the last few months interchangeably when I can....
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/08/02/is-apple-pay-coin-etc-helpful">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sun, 02 Aug 2015 19:36:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/08/02/is-apple-pay-coin-etc-helpful</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/08/02/is-apple-pay-coin-etc-helpful</guid>
+											</item>
+					<item>
+				<title>Setting Up a Jekyll Blog - Part 3</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 29 Jul 2015.
+					<br><br><br>
+					Jekyll + Liquid
+Jekyll uses a templating language named Liquid developed at Shopify. This gives you so extra abiliteis above that of plain old HTML. Such as conditionals, loops, access to variables, etc. which allows you to do things that traditionally required another language. You can find more information about Liquid...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/07/29/setting-up-a-jekyll-blog-part-3">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Wed, 29 Jul 2015 20:37:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/07/29/setting-up-a-jekyll-blog-part-3</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/07/29/setting-up-a-jekyll-blog-part-3</guid>
+											</item>
+					<item>
+				<title>Shortcode API You&#039;re Doing It Wrong</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 25 Jul 2015.
+					<br><br><br>
+					Few things first I am only using You&#039;re Doing It Wrong because WordPress core uses that internally so please do not take offense to it. Second for full disclosure I&#039;m not a big fan of shortcodes in the first place they are fairly temperamental for anything complicated. I think it...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/07/25/shortcode-api-youre-doing-it-wrong">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sat, 25 Jul 2015 08:30:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/07/25/shortcode-api-youre-doing-it-wrong</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/07/25/shortcode-api-youre-doing-it-wrong</guid>
+											</item>
+					<item>
+				<title>WordCamp USA City Chosen</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 23 Jul 2015.
+					<br><br><br>
+					So the WordCamp USA city has been chosen Philadelphia Matt Mullenweg announced it today. I was really hoping for Chicago since it is close and I really like it up there. However Philadelphia I am sure will be a great place to hold the first and second WordCamp USA! Not...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/07/23/wordcamp-usa-city-chosen">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Thu, 23 Jul 2015 21:36:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/07/23/wordcamp-usa-city-chosen</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/07/23/wordcamp-usa-city-chosen</guid>
+											</item>
+					<item>
+				<title>My 5ish Favorite Atom Plugins</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 19 Jul 2015.
+					<br><br><br>
+					So I have been migrating from using Sublime Text lately after using it exclusively for the past 3 or so years to Atom. So I figured I would document my current 5 or so favorite plugins. I am sure a lot of them have ended up on multiple top 5...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/07/19/my-5ish-favorite-atom-plugins">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sun, 19 Jul 2015 20:46:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/07/19/my-5ish-favorite-atom-plugins</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/07/19/my-5ish-favorite-atom-plugins</guid>
+											</item>
+					<item>
+				<title>WP Better Attachments v1.3.11 Released</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 18 Jul 2015.
+					<br><br><br>
+					WP Better Attachments version 1.3.11 has been relased to wordpress.org. If you have a question feel free to ask it on the support forums or open an issue on Github. You can find the list of changes below.
+
+Added use_caption_for_title to build_attachment_list function/shortcode. Props @mwarwick.
+Added a second add attachments button to...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/07/18/wp-better-attachments-released">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sat, 18 Jul 2015 13:55:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/07/18/wp-better-attachments-released</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/07/18/wp-better-attachments-released</guid>
+											</item>
+					<item>
+				<title>WPBA Thoughts and Road Map</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 18 Jul 2015.
+					<br><br><br>
+					Update (7/18/2015) Survey Responses
+Thank you to all who participated in the survey about WP Better Attachments Re-write. It did help to reinforce a few things I already thought. Primarialy the cropping portion probably would be best spun of as an add on. That would make it a little more easier...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/07/18/wpba-thoughts-and-road-map">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sat, 18 Jul 2015 11:36:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/07/18/wpba-thoughts-and-road-map</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/07/18/wpba-thoughts-and-road-map</guid>
+											</item>
+					<item>
+				<title>Check Out Ghost Inspector</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 18 Jul 2015.
+					<br><br><br>
+					I saw this cool tool the other day on Twitter Ghost Inspector  which allows your to record your actions or setup by drag/drop website regression testing. I&#039;ve done some work with Nightwatch.js which helps writing tests for Selenium which allows you test across all the major browsers.
+Honestly writing regression...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/07/18/check-out-ghost-inspector">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sat, 18 Jul 2015 09:00:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/07/18/check-out-ghost-inspector</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/07/18/check-out-ghost-inspector</guid>
+											</item>
+					<item>
+				<title>Setting Up a Jekyll Blog - Part 2</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 17 Jul 2015.
+					<br><br><br>
+					Adding Your First Post.
+So we are already to write our first post. To create a new post all you have to do is make a new file in the _posts directory and title it YEAR-MONTH-DAY-title.MARKUP. If you prefer to start all your posts as drafts you just need to create...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/07/17/setting-up-a-jekyll-blog-part-2">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Fri, 17 Jul 2015 15:38:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/07/17/setting-up-a-jekyll-blog-part-2</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/07/17/setting-up-a-jekyll-blog-part-2</guid>
+											</item>
+					<item>
+				<title>Setup Vhosts in MAMP</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 16 Jul 2015.
+					<br><br><br>
+					Setting up Vhosts in MAMP is really easy. VHost is short for Virtual Host which is basically just a way to access multiple &amp;amp;quot;sites&amp;amp;quot; on a server. Instead of changing MAMP to point at the site you want and then accessing it through http://localhost/ you can access it from a...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/07/16/setup-vhosts-in-mamp">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Thu, 16 Jul 2015 19:37:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/07/16/setup-vhosts-in-mamp</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/07/16/setup-vhosts-in-mamp</guid>
+											</item>
+					<item>
+				<title>Display PHP Errors in MAMP</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 15 Jul 2015.
+					<br><br><br>
+					Granted you never make any mistakes I am sure. However just in case you do you can  easily enable error reporting on MAMP to help catch the obvious ones. All you have to do is edit the php.ini in the MAMP directory /Applications/MAMP/conf/php{Version}/php.ini. If you&#039;re not sure what PHP...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/07/15/display-php-errors-in-mamp">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Wed, 15 Jul 2015 20:16:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/07/15/display-php-errors-in-mamp</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/07/15/display-php-errors-in-mamp</guid>
+											</item>
+					<item>
+				<title>Setting Up a Jekyll Blog - Part 1</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 14 Jul 2015.
+					<br><br><br>
+					I found Jeykll fairly easy to setup not quite 5 minute setup easy but not to bad. Honestly I spent most of the time reading the documentation which is simple and excelent. I did want to go through the steps of how to setup your own Jeykll blog. I am...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/07/14/setting-up-a-jekyll-blog-part-1">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Tue, 14 Jul 2015 20:21:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/07/14/setting-up-a-jekyll-blog-part-1</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/07/14/setting-up-a-jekyll-blog-part-1</guid>
+											</item>
+					<item>
+				<title>Moving From Sublime to Atom</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 12 Jul 2015.
+					<br><br><br>
+					I try to keep a semi-open mind when I see a new tool like Atom.  I had tried a few new editors such as Brackets which was really cool but still had some growing up to do.  I also tried PHPStorm I kind of miss using a full...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/07/12/moving-from-sublime-to-atom">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sun, 12 Jul 2015 20:00:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/07/12/moving-from-sublime-to-atom</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/07/12/moving-from-sublime-to-atom</guid>
+											</item>
+					<item>
+				<title>Moving From WordPress to Ghost to Jekyll</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 10 Jul 2015.
+					<br><br><br>
+					So I had previously moved my blog from WordPress to Ghost.  I really like the fact that ghost is a lot lighter and you can write your posts in markdown by default.  For hosting a blog I almost feel for a developer WordPress is overkill obviously for a...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/07/10/moving-from-wordpress-to-ghost-to-jekyll">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Fri, 10 Jul 2015 19:24:00 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/07/10/moving-from-wordpress-to-ghost-to-jekyll</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/07/10/moving-from-wordpress-to-ghost-to-jekyll</guid>
+											</item>
+					<item>
+				<title>Check Out Hyperpolygot</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 4 Apr 2015.
+					<br><br><br>
+					If you&#039;ve been curious how one programming languages syntax matches with another then you should check out Hyperpolygot.
+I was kind of amazed how close Javascript, PHP, Python, and Ruby are on a syntax level.  It really seems that at a high level it maters more about the community and...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/04/04/check-out-hyperpolygot">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sat, 04 Apr 2015 15:47:01 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/04/04/check-out-hyperpolygot</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/04/04/check-out-hyperpolygot</guid>
+											</item>
+					<item>
+				<title>Why I Decided to Use a Themeforest Theme</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 1 Apr 2015.
+					<br><br><br>
+					I usually get the itch to revamp my personal website every 6 months to a year.  I tend to spend a weekend hacking away at my theme and I get about 85% done before feeling stuck.  This in turn makes viewing the site a chore which in turn...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/04/01/why-i-decided-to-use-a-themeforest-theme">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Wed, 01 Apr 2015 01:26:14 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/04/01/why-i-decided-to-use-a-themeforest-theme</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/04/01/why-i-decided-to-use-a-themeforest-theme</guid>
+											</item>
+					<item>
+				<title>Easily Retrieve Browser Information</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 28 Mar 2015.
+					<br><br><br>
+					As we all know not all browsers like to behave the same.  Also many clients just click the Big Blue E and do not know what browser they use.  Such and such is broken in IE, Firefox, etc. Obviously with the rise of the ever green browsers this...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/03/28/easily-get-your-clients-browser-information">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sat, 28 Mar 2015 22:58:24 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/03/28/easily-get-your-clients-browser-information</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/03/28/easily-get-your-clients-browser-information</guid>
+											</item>
+					<item>
+				<title>What I Miss From WordPress &amp;amp; What Ghost Does Better</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 22 Mar 2015.
+					<br><br><br>
+					I started compiling this list when I first decided to switch from WordPress to Ghost for my personal blog.  Just a short list of what I do and do not miss from WordPres, might help if you are trying to make the decision on which to use.
+What I Miss
+
+Scheduled...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/03/22/what-i-miss-from-wordpress">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sun, 22 Mar 2015 23:51:05 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/03/22/what-i-miss-from-wordpress</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/03/22/what-i-miss-from-wordpress</guid>
+											</item>
+					<item>
+				<title>How I (Almost...) Setup My Ghost Pro Custom Domain Name</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 20 Mar 2015.
+					<br><br><br>
+					I was going to do a writeup about how I setup a Ghost Pro custom domain the details below almost worked.  I just love how DNS and the internetz works, you change something it changes something and everything works just nicely.  Then you go and check it the...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/03/20/setup-ghost-pro-custom-domain-name">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Fri, 20 Mar 2015 13:20:55 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/03/20/setup-ghost-pro-custom-domain-name</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/03/20/setup-ghost-pro-custom-domain-name</guid>
+											</item>
+					<item>
+				<title>St. Louis WordCamp 2015 Notes</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 15 Mar 2015.
+					<br><br><br>
+					In all WordCamp 2015 was definetly interesting. I thought that the Cain and Obeland in the Morning! &amp;amp;quot;show&amp;amp;quot; was pretty funny.  I think my favorite talk of the day was Atomic Design Principles, I&#039;ve read about it before and semi-practice it even though I could do something like that...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/03/15/st-louis-wordcamp-2015">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sun, 15 Mar 2015 13:16:54 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/03/15/st-louis-wordcamp-2015</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/03/15/st-louis-wordcamp-2015</guid>
+											</item>
+					<item>
+				<title>A minute with a Ghost...</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 12 Mar 2015.
+					<br><br><br>
+					I finally decided to take a look at Ghost, I primarily use WordPress in my day to day work and my blog has been on WordPress forever.  I was looking for a change WordPress has become a little to much for just simple blog writing.  I honestly love...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/03/12/a-minute-with-a-ghost">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Thu, 12 Mar 2015 23:20:04 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/03/12/a-minute-with-a-ghost</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/03/12/a-minute-with-a-ghost</guid>
+											</item>
+					<item>
+				<title>WP Multi File Uploader</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 10 Mar 2015.
+					<br><br><br>
+					Last week I released my first WordPress plugin on the WordPress plugin repository to my surprise it has been downloaded already over 70 times this week. The plugin allows a user to upload multiple files at the same time to a form on your WordPress site. As well as adds...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/03/10/new-plugin-wp-multi-file-uploader">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Tue, 10 Mar 2015 00:56:42 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/03/10/new-plugin-wp-multi-file-uploader</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/03/10/new-plugin-wp-multi-file-uploader</guid>
+											</item>
+					<item>
+				<title>WP Github Recent Commit Widget</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 10 Mar 2015.
+					<br><br><br>
+					I released my second plugin this week on the Wordpress repository, WP Github Recent Commit. It is a widget that allows you to display your most recent commits from the master branch of a public repository. Also it grabs a random Octocat from the Octodex, because who doesn&#039;t love Octocats!...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/03/10/wp-github-recent-commit-widget">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Tue, 10 Mar 2015 00:49:39 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/03/10/wp-github-recent-commit-widget</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/03/10/wp-github-recent-commit-widget</guid>
+											</item>
+					<item>
+				<title>Missing Content</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 10 Mar 2015.
+					<br><br><br>
+					Cache
+[missing-content cache_duration=&amp;amp;quot;always&amp;amp;quot;]
+[missing-content cache_duration=&amp;amp;quot;never&amp;amp;quot;]
+[missing-content paragraph_count=&amp;amp;quot;1&amp;amp;quot; cache_duration=&amp;amp;quot;24315342&amp;amp;quot;]
+Lipsum
+[missing-content]
+[missing-content paragraph_count=&amp;amp;quot;2&amp;amp;quot;]
+Bacon Ipsum
+[missing-content content_type=&amp;amp;quot;bacon&amp;amp;quot; paragraph_count=&amp;amp;quot;3&amp;amp;quot;]
+Hipster Ipsum
+[missing-content content_type=&amp;amp;quot;hipster&amp;amp;quot; paragraph_count=&amp;amp;quot;3&amp;amp;quot;]
+Blokk Font
+[missing-content content_type=&amp;amp;quot;blokk&amp;amp;quot; paragraph_count=&amp;amp;quot;3&amp;amp;quot;]
+Image
+[missing-content content_type=&amp;amp;quot;image&amp;amp;quot; width=&amp;amp;quot;150&amp;amp;quot; height=&amp;amp;quot;150&amp;amp;quot;]
+Random Content
+[missing-content content_type=&amp;amp;quot;image&amp;amp;quot; random=&amp;amp;quot;true&amp;amp;quot; min_width=&amp;amp;quot;150&amp;amp;quot; max_width=&amp;amp;quot;500&amp;amp;quot; min_height=&amp;amp;quot;150&amp;amp;quot; max_height=&amp;amp;quot;300&amp;amp;quot;]
+[missing-content random=&amp;amp;quot;true&amp;amp;quot; min_paragraph_count=&amp;amp;quot;1&amp;amp;quot; max_paragraph_count=&amp;amp;quot;5&amp;amp;quot;]...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/03/10/missing-content">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Tue, 10 Mar 2015 00:16:31 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/03/10/missing-content</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/03/10/missing-content</guid>
+											</item>
+					<item>
+				<title>WP Better Attachments</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 8 Mar 2015.
+					<br><br><br>
+					Description: WordPress plugin that allows you to add/edit/attach/un-attach/sort the files attached to your WordPress posts all from the post editor. Integrates seamlessly with WordPress using the default WordPress attachments type and no configuration needed to add WP Better Attachments to custom post types. You can now also have full control...
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/03/08/wp-better-attachments">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sun, 08 Mar 2015 17:00:54 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/03/08/wp-better-attachments</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/03/08/wp-better-attachments</guid>
+											</item>
+					<item>
+				<title>If you&#039;ve ever wondered...</title>
+				<description>
+					<![CDATA[
+					Originally posted on <a href="https://danholloran.test">https://danholloran.test</a> 7 Mar 2015.
+					<br><br><br>
+					This is what I do all day long....
+					<br><br>
+					<a href="https://danholloran.test/blog/2015/03/07/if-youve-ever-wondered">Continue reading...</a>
+					]]>
+				</description>
+				<pubDate>Sat, 07 Mar 2015 15:11:22 +0000</pubDate>
+				<link>https://danholloran.test/blog/2015/03/07/if-youve-ever-wondered</link>
+				<guid isPermaLink="true">https://danholloran.test/blog/2015/03/07/if-youve-ever-wondered</guid>
+											</item>
+			</channel>
+</rss>

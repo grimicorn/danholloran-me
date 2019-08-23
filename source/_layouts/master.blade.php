@@ -1,85 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        {{-- Global site tag (gtag.js) - Google Analytics --}}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-64998225-1"></script>
-        <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'UA-64998225-1');
-        </script>
-
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <link rel="stylesheet" href="{{ mix('/css/main.css') }}">
-        <link rel="stylesheet" href="/assets/css/vendor/highlight.js/github.css">
+        <meta name="description" content="{{ $page->meta_description ?? $page->siteDescription }}">
 
-
-        <title>{{ $page->siteTitle }}{{ $page->title ? ": {$page->title}" : '' }}</title>
-        <meta name="description" content="{{ $page->metaDescription() }}">
-
-        <link rel="alternate" type="application/rss+xml" title="{{ $page->siteTitle }}" href="{{ $page->baseUrl}}/feed.xml" />
-
-        <link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="{{ $page->baseUrl }}/favicon.ico">
-
-        {{-- Start Apple Icons --}}
-        <link rel="apple-touch-icon" sizes="60x60" href="{{ $page->baseUrl }}/images/icons/ios/icon-60.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="{{ $page->baseUrl }}/images/icons/ios/icon-60@2x.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="{{ $page->baseUrl }}/images/icons/ios/icon-60@3x.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="{{ $page->baseUrl }}/images/icons/ios/icon-72.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="{{ $page->baseUrl }}/images/icons/ios/icon-72@2x.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="{{ $page->baseUrl }}/images/icons/ios/icon-76.png">
-        <link rel="apple-touch-icon" sizes="156x156" href="{{ $page->baseUrl }}/images/icons/ios/icon-76@2x.png">
-        <link rel="apple-touch-icon" sizes="40x40" href="{{ $page->baseUrl }}/images/icons/ios/icon-small-40.png">
-        <link rel="apple-touch-icon" sizes="80x80" href="{{ $page->baseUrl }}/images/icons/ios/icon-small-40@2x.png">
-        <link rel="apple-touch-icon" sizes="40x40" href="{{ $page->baseUrl }}/images/icons/ios/icon-small-40@3x.png">
-        <link rel="apple-touch-icon" sizes="50x50" href="{{ $page->baseUrl }}/images/icons/ios/icon-small-50.png">
-        <link rel="apple-touch-icon" sizes="50x50" href="{{ $page->baseUrl }}/images/icons/ios/icon-small-50@2x.png">
-        {{-- End Apple Icons --}}
-
-        {{-- Start Open Graph --}}
-        <meta property="og:title" content="{{ $page->title ?? $page->siteTitle }}" />
-        <meta property="og:url" content="{{ $page->getUrl() }}" />
-        <meta property="og:image" content="{{ $page->featuredImageSrc("{$page->baseUrl}/images/logo.png") }}" />
-        <meta property="og:description" content="{{ $page->metaDescription() }}" />
+        <meta property="og:title" content="{{ $page->title ?  $page->title . ' | ' : '' }}{{ $page->siteName }}"/>
         <meta property="og:type" content="website" />
-        {{-- End Open Graph --}}
+        <meta property="og:url" content="{{ $page->getUrl() }}"/>
+        <meta property="og:description" content="{{ $page->siteDescription }}" />
 
-        {{-- Start Twitter Card --}}
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:site" content="@dholloran" />
-        <meta name="twitter:creator" content="@dholloran" />
-        <meta name="twitter:title" content="{{ $page->title ?? $page->siteTitle }}" />
-        <meta name="twitter:image" content="{{ $page->featuredImageSrc("{$page->baseUrl}/images/logo.png") }}" />
-        <meta name="twitter:description" content="{{ $page->metaDescription() }}" />
-        {{-- End Twitter Card --}}
+        <title>{{ $page->siteName }}{{ $page->title ? ' | ' . $page->title : '' }}</title>
 
-        <script src="{{ mix('/js/main.js') }}"></script>
+        <link rel="home" href="{{ $page->baseUrl }}">
+        <link rel="icon" href="/favicon.ico">
+        <link href="/blog/feed.atom" type="application/atom+xml" rel="alternate" title="{{ $page->siteName }} Atom Feed">
+
+        @stack('meta')
+
+        @if ($page->production)
+            <!-- Insert analytics code here -->
+        @endif
+
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
+        <link rel="stylesheet" href="{{ mix('css/main.css', 'assets/build') }}">
     </head>
-    <body class="font-sans leading-light bg-white text-grey-darkest">
-        <header
-            class="{{ $page->featuredImageSrc() ? 'py-4' : 'py-2 md:mb-8 mb-4 border border-grey-lighter' }}"
-        >
-            <div class="container">
-                <a
-                    class="text-xl bold text-grey-darkest no-underline"
-                    href="{{ $page->baseUrl }}"
-                >{{ $page->siteTitle }}</a>
+
+    <body class="flex flex-col justify-between min-h-screen bg-gray-100 text-gray-800 leading-normal font-sans">
+        <header class="flex items-center shadow bg-white border-b h-24 py-4" role="banner">
+            <div class="container flex items-center max-w-8xl mx-auto px-4 lg:px-8">
+                <div class="flex items-center">
+                    <a href="/" title="{{ $page->siteName }} home" class="inline-flex items-center">
+                        <img class="h-8 md:h-10 mr-3" src="/assets/img/logo.svg" alt="{{ $page->siteName }} logo" />
+
+                        <h1 class="text-lg md:text-2xl text-blue-800 font-semibold hover:text-blue-600 my-0">{{ $page->siteName }}</h1>
+                    </a>
+                </div>
+
+                <div id="vue-search" class="flex flex-1 justify-end items-center">
+                    <search></search>
+
+                    @include('_nav.menu')
+
+                    @include('_nav.menu-toggle')
+                </div>
             </div>
         </header>
 
-        @yield('body')
+        @include('_nav.menu-responsive')
 
-        <footer class="container py-8 flex md:items-center flex md:flex-row flex-col-reverse">
-            <div class="md:mr-4">
-                @include('_partials.social-links')
-            </div>
-            <div class="md:ml-auto md:mb-0 mb-2">
-                {{ $page->siteDescription }}
-            </div>
+        <main role="main" class="flex-auto w-full container max-w-4xl mx-auto py-16 px-6">
+            @yield('body')
+        </main>
+
+        <footer class="bg-white text-center text-sm mt-12 py-4" role="contentinfo">
+            <ul class="flex flex-col md:flex-row justify-center list-reset">
+                <li class="md:mr-2">
+                    &copy; <a href="https://tighten.co" title="Tighten website">Tighten</a> {{ date('Y') }}.
+                </li>
+
+                <li>
+                    Built with <a href="http://jigsaw.tighten.co" title="Jigsaw by Tighten">Jigsaw</a>
+                    and <a href="https://tailwindcss.com" title="Tailwind CSS, a utility-first CSS framework">Tailwind CSS</a>.
+                </li>
+            </ul>
         </footer>
+
+        <script src="{{ mix('js/main.js', 'assets/build') }}"></script>
+
+        @stack('scripts')
     </body>
 </html>
