@@ -13,7 +13,7 @@ return [
     // collections
     'collections' => [
         'posts' => [
-            'author' => 'Author Name', // Default author, if not provided in a post
+            'author' => 'Dan Holloran', // Default author, if not provided in a post
             'sort' => '-date',
             'path' => 'blog/{date|Y/m/d}/{filename}',
             'authorImageSrcSmall' => '//www.gravatar.com/avatar/' . md5("dtholloran@gmail.com") . '?s=36',

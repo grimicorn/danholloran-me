@@ -5,8 +5,6 @@ title: A minute with a Ghost...
 date: 2015-03-12
 categories: []
 ---
-
-
 I finally decided to take a look at [Ghost](https://ghost.org/), I primarily use [WordPress](https://wordpress.org/) in my day to day work and my blog has been on WordPress forever.  I was looking for a change WordPress has become a little to much for just simple blog writing.  I honestly love it as a CMS and for any one who wants as much control as possible WordPress, with out learning to code, it is the way to go.
 
 I have also looked into static site generators like [Jekell](http://jekyllrb.com/) but honestly I am way to lazy to to maintain it and yes I know its fairly simple.  I like how Ghost bridges the gap as well as gives me an excuse to play more with [Node](https://nodejs.org/) and [Handlebars.js](http://handlebarsjs.com/).
