@@ -4,15 +4,8 @@
             <a
                 title="{{ $page->siteName }} Blog"
                 href="/blog"
-                class="nav-menu-item hover:text-blue-800 {{ $page->isActive('/blog') ? 'active text-blue' : '' }}"
+                class="nav-menu-item hover:text-indigo-800 {{ $page->isActive('/blog') ? 'active text-indigo' : '' }}"
             >Blog</a>
-        </li>
-        <li class="pl-4">
-            <a
-                title="{{ $page->siteName }} Contact"
-                href="/contact"
-                class="nav-menu-item hover:text-blue-800 {{ $page->isActive('/contact') ? 'active text-blue-800' : '' }}"
-            >Contact</a>
         </li>
     </ul>
 </nav>

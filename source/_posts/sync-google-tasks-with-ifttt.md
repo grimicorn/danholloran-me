@@ -3,7 +3,7 @@ extends: _layouts.post
 section: content
 title:  Sync Google Tasks With IFTTT
 date: 2016-12-17
-categories: [Application]
+categories: [laravel]
 alert_message: This project is no longer online or maintained.
 hidden: true
 ---

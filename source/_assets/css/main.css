@@ -8,6 +8,6 @@
 
 @import './_base';
 @import './_navigation';
-@import './_mailchimp';
+/* @import './_mailchimp'; */
 
 @import './../../../node_modules/tailwindcss/utilities';
