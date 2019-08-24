@@ -17,7 +17,6 @@ return [
             'sort' => '-date',
             'path' => 'blog/{date|Y/m/d}/{filename}',
             'authorImageSrcSmall' => '//www.gravatar.com/avatar/' . md5("dtholloran@gmail.com") . '?s=36',
-            'authorImageSmallSize' => 36,
         ],
         'categories' => [
             'path' => '/blog/categories/{filename}',

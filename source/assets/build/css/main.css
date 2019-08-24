@@ -1084,8 +1084,8 @@ code.hljs {
 }
 
 code.hljs .hljs-comment,
-    code.hljs .hljs-keyword,
-    code.hljs .hljs-meta {
+  code.hljs .hljs-keyword,
+  code.hljs .hljs-meta {
     font-weight: 400;
     font-style: normal;
   }
@@ -1145,7 +1145,7 @@ hr {
 }
 
 li ul,
-    li ol {
+  li ol {
     margin-top: 0;
     margin-bottom: 0;
   }
@@ -1196,6 +1196,36 @@ pre code {
 ::selection {
   background-color: #4299e1;
   color: #fff;
+}
+
+.alert {
+  border-left-width: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.alert-info {
+  border-color: #4299e1;
+  color: #2a4365;
+  background-color: #ebf8ff;
+}
+
+.alert-danger {
+  border-color: #f56565;
+  color: #742a2a;
+  background-color: #fff5f5;
+}
+
+.alert-success {
+  border-color: #48bb78;
+  color: #22543d;
+  background-color: #f0fff4;
+}
+
+.alert-warning {
+  border-color: #ecc94b;
+  color: #744210;
+  background-color: #fffff0;
 }
 
 .nav-menu {
