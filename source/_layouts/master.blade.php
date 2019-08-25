@@ -18,7 +18,7 @@ $full_width = $page->getPath() === '';
 
         <link rel="home" href="{{ $page->baseUrl }}">
         <link rel="icon" href="/favicon.ico">
-        <link href="/blog/feed.atom" type="application/atom+xml" rel="alternate" title="{{ $page->siteName }} Atom Feed">
+        <link rel="alternate" type="application/rss+xml" title="DanHolloran" href="https://danholloran.me/feed.xml">
 
         @stack('meta')
 
@@ -31,7 +31,7 @@ $full_width = $page->getPath() === '';
     </head>
 
     <body>
-        <div class="flex flex-col justify-between min-h-screen bg-white text-gray-800 leading-normal font-sans antialiased">
+        <div id="app" class="flex flex-col justify-between min-h-screen bg-white text-gray-800 leading-normal font-sans antialiased">
             <header class="flex items-center h-24 py-4" role="banner">
                 <div class="container flex items-center max-w-8xl mx-auto px-4 lg:px-8">
                     <div class="flex items-center">
@@ -69,10 +69,10 @@ $full_width = $page->getPath() === '';
                     </li>
                 </ul>
             </footer>
-
-            <script src="{{ mix('js/main.js', 'assets/build') }}"></script>
-
-            @stack('scripts')
         </div>
+
+        <script src="{{ mix('js/main.js', 'assets/build') }}"></script>
+
+        @stack('scripts')
     </body>
 </html>

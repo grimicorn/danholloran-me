@@ -12,14 +12,14 @@
 				<title>{{ htmlentities($post->title) }}</title>
 				<description>
 					<![CDATA[
-					Originally posted on <a href="{{ $page->baseUrl }}">{{ $page->baseUrl }}</a> {{ $post->dateFormatted() }}.
+					Originally posted on <a href="{{ $page->baseUrl }}">{{ $page->baseUrl }}</a> {{ $post->getDate() }}.
 					<br><br><br>
-					{{ htmlentities($post->excerpt()) }}
+					{{ htmlentities($post->excerpt) }}
 					<br><br>
 					<a href="{{ $post->getUrl() }}">Continue reading...</a>
 					]]>
 				</description>
-				<pubDate>{{ $post->dateFormatted('r') }}</pubDate>
+				<pubDate>{{ $post->getDate('r') }}</pubDate>
 				<link>{{ $post->getUrl() }}</link>
 				<guid isPermaLink="true">{{ $post->getUrl() }}</guid>
 				@foreach($post->tags ?? [] as $tag)

@@ -19,6 +19,24 @@
             <li>
                 RSS feed /feed.xml (Maybe make link copy when clicked?)
             </li>
+            <li>
+                Auto post to medium
+            </li>
+            <li>
+                Auto post to Dev.to
+            </li>
+            <li>
+                Auto post to twitter
+            </li>
+            <li>
+                Twitter card
+            </li>
+            <li>
+                Shortcut icons
+            </li>
+            <li>
+                Styling/Responsive
+            </li>
         </ul>
     </div>
 
@@ -33,6 +51,7 @@
 
     <div class="bg-gray-100 py-10">
         <div class="container max-w-4xl mx-auto px-6">
+            <h2>Past projects I've worked on</h2>
             @todo Past projects 4-6?
             <ul>
                 <li>
@@ -45,156 +64,270 @@
                     Add description of what I did
                 </li>
             </ul>
+            <ul class="flex flex-wrap -mb-6">
+                <li class="w-1/3 mb-6">
+                    Firmexchange
+                </li>
+                <li class="w-1/3 mb-6">
+                    U-City Swim Club
+                </li>
+                <li class="w-1/3 mb-6">
+                    Imperial Sports
+                </li>
+                <li class="w-1/3 mb-6">
+                    True Fitness
+                </li>
+                <li class="w-1/3 mb-6">
+                    Styleportfolios?
+                </li>
+                <li class="w-1/3 mb-6">
+                    EHG
+                </li>
+                <li class="w-1/3 mb-6">
+                    National Sportsmanship Foundation
+                </li>
+                <li class="w-1/3 mb-6">
+                    Industrial Soap
+                </li>
+                <li class="w-1/3 mb-6">
+                    United Vanlines Map
+                    https://moversstudy.unitedvanlines.com/
+                </li>
+            </ul>
         </div>
     </div>
 
     <div class="container max-w-4xl mx-auto px-6 my-16">
         <h2>My Experience and Tools</h2>
-        <ul class="flex flex-wrap">
-            <li class="w-1/4 flex items-center justify-center h-48">
+        <ul class="flex flex-wrap -mx-1">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 <div class="h-24">
                     @include('_partials.logo-html')
                     <span class="sr-only">HTML</span>
                 </div>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 <div class="h-24">
                     @include('_partials.logo-css')
                     <span class="sr-only">CSS</span>
                 </div>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 <a href="https://www.php.net/" target="_blank">
                     @include('_partials.logo-php')
                     <span class="sr-only">PHP</span>
                 </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 <div class="h-24">
                     @include('_partials.logo-js')
                     <span class="sr-only">Javascript</span>
                 </div>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 <a href="https://laravel.com/" target="_blank" class="block">
                     @include('_partials.logo-laravel')
                     <span class="sr-only">Laravel</span>
                 </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 <a href="https://vuejs.org/" target="_blank" class="h-24 block" title="Vue.js">
                         @include('_partials.logo-vuejs')
                         <span class="sr-only">Vue.js</span>
                 </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 <a href="https://wordpress.org/" target="_blank" class="h-24 block">
                     @include('_partials.logo-wordpress')
                     <span class="sr-only">WordPress</span>
                 </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li  class="w-1/4 flex items-center justify-center py-6 px-4">
+                <a href="https://statamic.com/" target="_blank">
+                    @include('_partials.logo-statamic')
+                    <span class="sr-only">Statamic</span>
+                </a>
+            </li>
+            <li class="w-1/4 flex items-center justify-center py-6 px-1">
                 <a href="https://woocommerce.com/" target="_blank">
                     @include('_partials.logo-woocommerce')
                     <span class="sr-only">WooCommerce</span>
                 </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-1">
                 <a href="https://tailwindcss.com/" target="_blank">
                     @include('_partials.logo-tailwind')
                     <span class="sr-only">Tailwind.css</span>
                 </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 <a href="https://www.mysql.com/" target="blank" class="h-24 block">
                     @include('_partials.logo-mysql')
                     <span class="sr-only">MySql</span>
                 </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 <a href="https://www.postgresql.org/" target="blank" class="h-24 block">
                     @include('_partials.logo-postgresql')
                     <span class="sr-only">PostgreSQL</span>
                 </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
-                @todo Redis?
+            <li class="w-1/4 flex items-center justify-center py-6 px-1">
+                <a href="https://redis.io/" target="blank" class="block">
+                    @include('_partials.logo-redis')
+                    <span class="sr-only">Redis</span>
+                </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 <a href="https://getbootstrap.com/" target="_blank" class="h-24 block">
                     @include('_partials.logo-bootstrap')
                     <span class="sr-only">Bootstrap</span>
                 </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 <a href="https://sass-lang.com/" target="_blank" class="h-24">
                     @include('_partials.logo-sass')
                     <span class="sr-only">Sass</span>
                 </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 <a href="https://postcss.org/" target="_blank" class="h-24">
                     @include('_partials.logo-postcss')
                     <span class="sr-only">PostCSS</span>
                 </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 <a href="https://jquery.org/" target="_blank" class="block">
                     @include('_partials.logo-jquery')
                     <span class="sr-only">jQuery</span>
                 </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
-                @todo Webpack
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
+                <a href="https://webpack.js.org" target="blank" class="block">
+                    @include('_partials.logo-webpack')
+                    <span class="sr-only">Webpack</span>
+                </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
-                @todo Gulp
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
+                <a href="https://gulpjs.com/" target="blank" class="h-24 block">
+                    @include('_partials.logo-gulp')
+                    <span class="sr-only">Gulp</span>
+                </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
-                @todo Composer
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
+                <a href="https://getcomposer.org/" target="blank" class="h-24 block">
+                    @include('_partials.logo-composer')
+                    <span class="sr-only">Composer</span>
+                </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
-                @todo NPM
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
+                <a href="https://www.npmjs.com/" target="blank" class="h-24 block">
+                    @include('_partials.logo-npm')
+                    <span class="sr-only">NPM</span>
+                </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
-                @todo Git
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
+                <a href="https://git-scm.com/" target="blank" class="h-24 block">
+                    @include('_partials.logo-git')
+                    <span class="sr-only">Git</span>
+                </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 @todo PHPCS?
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 @todo ESLint?
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 @todo Stylelint?
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 @todo Prettier?
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
-                @todo sublime Text?
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
+                <a href="https://www.sublimetext.com/" target="blank" class="h-24 block">
+                    @include('_partials.logo-sublime-text')
+                    <span class="sr-only">Sublime Text</span>
+                </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
-                @todo VS Code?
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
+                <a href="https://code.visualstudio.com/" target="blank" class="h-24 block">
+                    @include('_partials.logo-vs-code')
+                    <span class="sr-only">Visual Studio Code</span>
+                </a>
             </li>
-            <li class="w-1/4 flex items-center justify-center h-48">
+            <li class="w-1/4 flex items-center justify-center py-6 px-4">
                 @todo iTerm?
+            </li>
+            <li>
+                @todo Digital Ocean?
+            </li>
+            <li>
+                @todo WP Engine?
+            </li>
+            <li>
+                @todo Flywheel?
             </li>
         </ul>
     </div>
 
     <div class="bg-gray-100 py-10">
         <div class="container max-w-4xl mx-auto px-6">
-            @todo History
+            <h2>My Work History</h2>
             <ul>
                 <li>
-                    Full Sail
+                    <h3 class="mb-0">Bachelors - Web Design & Development</h3>
+                    <h4 class="mt-0 mb-0">
+                        <a href="https://www.fullsail.edu/degrees/web-design-and-development-bachelor" target="_blank">Full Sail University</a>
+                    </h4>
+                    <span>? - March 2012</span>
+                    <p>
+                        This was a fast paced ~2 year bachelor program that was fully online. There I learned the fundementals web design, HTML, CSS, JavaScript, PHP and Actionscript.
+                    </p>
+                    <p>
+                        With each class being only about a month long it taught me how to get up to speed quickly on new topics. This was a good experience since it is much like the web industry fast paced and there is always something new to learn. One of the biggest take aways was to learn how to read documentation well. This will help you use any tool, language, framework, etc. not just the tools you are currently using.
+                    </p>
                 </li>
                 <li>
-                    Freeman Marketing
+                    <h3 class="mb-0">Web Developer</h3>
+                    <h4 class="mt-0 mb-0">
+                        <a href="http://www.freemanhelp.com/" target="_blank">Freeman Marketing</a>
+                    </h4>
+                    <span>May 2012 - November 2012</span>
+                    <p>
+                        @todo About Freeman
+                    </p>
+                    <p>
+                        I was responsible for converting Photoshop designs into WordPress marketing websites. Along with some content and SEO strategy. For part of the time I was also helping an intern web developer as well that was currently in school.
+                    </p>
                 </li>
                 <li>
-                    Matchbox Design Group
+                    <h3 class="mb-0">Mentor</h3>
+                    <h4 class="mt-0 mb-0">
+                        <a href="https://www.launchcode.org/" target="_blank">Launchcode</a>
+                    </h4>
+                    <span>May 2016 - June 2017</span>
+                    <p>
+                        @todo About MDG
+                    </p>
+                    <p>
+                        3 times
+                        @todo Responsibilities
+                    </p>
+                    <span></span>
+                </li>
+                <li>
+                    <h3 class="mb-0">Lead Developer (Full-Stack Developer)</h3>
+                    <h4 class="mt-0 mb-0">
+                        <a href="https://matchboxdesigngroup.com/" target="_blank">Matchbox Design Group</a>
+                    </h4>
+                    <span>November 2012 - Present</span>
+                    <p>
+                        @todo About MDG
+                    </p>
+                    <p>
+                        @todo Responsibilities
+                    </p>
                 </li>
             </ul>
             <div class="text-center">
@@ -213,6 +346,45 @@
             @todo Wire up to something... possibly https://fieldgoal.io/
             @include('_partials.contact-form')
         </div>
+    </div>
+
+    <div class="bg-gray-100 py-10">
+        <div class="container max-w-4xl mx-auto px-6">
+            <h2>My Favorite Podcasts</h2>
+            <ul class="flex flex-wrap -mb-6">
+                <li class="w-1/3 mb-6">
+                    Hardcore History
+                </li>
+                <li class="w-1/3 mb-6">
+                    No Plans to Merge
+                </li>
+                <li class="w-1/3 mb-6">
+                    Soft Skills Engineering
+                </li>
+                <li class="w-1/3 mb-6">
+                    Making Sense with Same Harris
+                </li>
+                <li class="w-1/3 mb-6">
+                    Fullstack Radio
+                </li>
+                <li class="w-1/3 mb-6">
+                    Laravel News Podcast
+                </li>
+                <li class="w-1/3 mb-6">
+                    Command Line heros
+                </li>
+                <li class="w-1/3 mb-6">
+                    Shoptalk Show
+                </li>
+                <li class="w-1/3 mb-6">
+                    Dads in Development
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container max-w-4xl mx-auto px-6 py-16">
+        @todo Latest Tweets maybe 4?
     </div>
 
     <div class="container max-w-4xl mx-auto px-6 pt-10">

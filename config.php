@@ -18,6 +18,10 @@ return [
             'path' => 'blog/{date|Y/m/d}/{filename}',
             'authorImageSrcSmall' => '//www.gravatar.com/avatar/' . md5("dtholloran@gmail.com") . '?s=36',
         ],
+        'projects' => [
+            'sort' => '-date',
+            'path' => 'projects/{filename}',
+        ],
         'categories' => [
             'path' => '/blog/categories/{filename}',
             'posts' => function ($page, $allPosts) {
@@ -29,8 +33,8 @@ return [
     ],
 
     // helpers
-    'getDate' => function ($page) {
-        return Datetime::createFromFormat('U', $page->date);
+    'getDate' => function ($page, $format = 'U') {
+        return Datetime::createFromFormat($format, $page->date);
     },
     'getExcerpt' => function ($page, $length = 255) {
         $content = $page->excerpt ?? $page->getContent();

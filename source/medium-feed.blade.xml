@@ -15,7 +15,7 @@
 					{{ $post->getContent() }}
 					]]>
 				</description>
-				<pubDate>{{ $post->dateFormatted('r') }}</pubDate>
+				<pubDate>{{ $post->getDate('r') }}</pubDate>
 				<link>{{ $post->getUrl() }}</link>
 				<guid isPermaLink="true">{{ $post->getUrl() }}</guid>
 				@foreach($post->tags ?? [] as $tag)

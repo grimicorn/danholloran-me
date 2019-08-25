@@ -1,11 +1,12 @@
 {
     "gitlens.gitExplorer.enabled": false,
     "search.exclude": {
+        "**/_tmp": true,
         "**/.git": true,
-        "**/node_modules": true,
-        "**/vendor/composer/autoload_*.php": true,
         "**/build_*": true,
-        "**/_tmp": true
+        "**/node_modules": true,
+        "**/source/assets": true,
+        "**/vendor/composer/autoload_*.php": true
     },
     "files.exclude": {
         "**/.git": true,
