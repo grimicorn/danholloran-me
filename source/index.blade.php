@@ -1,18 +1,6 @@
 @extends('_layouts.master')
 
 @section('body')
-    <div>
-        @todo General
-        <ul>
-            <li>
-                See how high of a Lighthouse score can be achieved
-            </li>
-            <li>
-                Blog categories
-            </li>
-        </ul>
-    </div>
-
     <div  class="flex md:items-center container max-w-4xl mx-auto px-6 mb-10 justify-center md:flex-row flex-row-reverse">
         <div>
             <h1 class="leading-tight mb-0">
@@ -59,18 +47,9 @@
                                 <a href="{{ $project->getUrl() }}">
                                     <h3 class="mb-0 text-lg">{{ $project->title }}</h3>
                                 </a>
-                                @if($project->production_url)
-                                    <a
-                                        href="{{ $project->production_url }}"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="text-sm"
-                                    >{{ $project->production_url }}</a>
-                                @elseif($project->public === false)
-                                    <span class="text-sm text-gray-700">Not Public</span>
-                                @else
-                                    <span class="text-sm text-gray-700">No Longer Online</span>
-                                @endif
+                                @include('_partials.production-url', [
+                                    'page' => $project,
+                                ])
                                 <p>
                                     {!! $project->getExcerpt(50) !!}
                                 </p>
@@ -244,6 +223,7 @@
     <div class="bg-gray-100 py-10">
         <div class="container max-w-4xl mx-auto px-6" v-cloak>
             <h2>History</h2>
+            @todo Convert to collection
             <agile
                 class="mb-6"
                 :options="{
@@ -300,7 +280,7 @@
                     </h4>
                     <span>November 2009 - March 2012</span>
                     <p>
-                        This was a fast paced ~2 year bachelor program that was fully online. There I learned the fundementals web design, HTML, CSS, JavaScript, PHP and Actionscript.
+                        This was a fast paced ~2 year bachelor program that was fully online. There I learned the fundementals of web design, HTML, CSS, JavaScript, PHP and Actionscript.
                     </p>
                     <p>
                         With each class being only about a month long it taught me how to get up to speed quickly on new topics. This was a good experience since it is much like the web industry fast paced and there is always something new to learn. One of the biggest take aways was to learn how to read documentation well. This will help you use any tool, language, framework, etc. not just the tools you are currently using.

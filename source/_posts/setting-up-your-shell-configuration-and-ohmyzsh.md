@@ -33,7 +33,7 @@ export PATH=${PATH}:~/.composer/vendor/bin
 ## Installing and Configuring OHMyZSH
 [OHMyZSH](https://github.com/robbyrussell/oh-my-zsh) is a great companion for ZShell. It allows for a large amount of configuration of your shell with plugins and themes. It comes preset with a large amount of plugins and themes. ss well as allowing you to edit and create your own so you can customize your sehll to your hearts content  You can find the [install instructions here](https://github.com/robbyrussell/oh-my-zsh#basic-installation). You can find the full [documentation here](http://ohmyz.sh/) and below is a screenshot of my shell while I am writing this post.
 
-![Example screenshot of my shell](/uploads/setting-up-your-shell-configuration-and-ohmyzsh-shell-example.png)
+![Example screenshot of my shell](/assets/img/setting-up-your-shell-configuration-and-ohmyzsh-shell-example.png)
 
 
 ## OHMyZSH Plugins

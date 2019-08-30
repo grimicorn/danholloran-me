@@ -64,7 +64,7 @@ These are my notes from Laracon 2019 was an interesting conference and a lot of 
     - Use a thesaurus
 - **Removing comments**
 
-    ![](/uploads/Screen_Shot_2019-03-06_at_9-87b13d24-c7bc-46e0-942a-0cb52028f0c8.33.23_AM.png)
+    ![](/assets/img/Screen_Shot_2019-03-06_at_9-87b13d24-c7bc-46e0-942a-0cb52028f0c8.33.23_AM.png)
 
     - Misleading comments are confusing
     - Comments can be skipped over
@@ -93,7 +93,7 @@ These are my notes from Laracon 2019 was an interesting conference and a lot of 
 - AJAX long polling attempts to keep the request open as long as possible until it times out then client sends a request again. Better than sending a request a second but could be better.
 - Websockets permanent connection between client and server
 
-    ![](/uploads/Screen_Shot_2019-03-06_at_10-deb3a3a1-6955-44bb-94ee-8bd344af3a73.10.05_AM.png)
+    ![](/assets/img/Screen_Shot_2019-03-06_at_10-deb3a3a1-6955-44bb-94ee-8bd344af3a73.10.05_AM.png)
 
     - Can be text or binary data
     - [All major browsers support except for Opera mini](https://caniuse.com/#search=websockets)
@@ -165,7 +165,7 @@ These are my notes from Laracon 2019 was an interesting conference and a lot of 
 - Add new blocks that shows how the data should change
 - Somewhat like Git more in the way the changes are tracked
 
-    ![](/uploads/Screen_Shot_2019-03-06_at_1-2ef938be-cde4-4d9b-809c-a5fa9124bed3.40.57_PM.png)
+    ![](/assets/img/Screen_Shot_2019-03-06_at_1-2ef938be-cde4-4d9b-809c-a5fa9124bed3.40.57_PM.png)
 
     - It is slow and comparatively expensive then a MySQL database
     - If you cant do it on a smartphone from 1999 probably shouldn't do it
@@ -234,7 +234,7 @@ These are my notes from Laracon 2019 was an interesting conference and a lot of 
 - Use good fonts
 - Interesting mobile table solution convert it to accordions. This would be semi-annoying in PHP/Blade but super easy in Vue.js
 
-    ![](/uploads/Screen_Shot_2019-03-06_at_4-1916ca15-81cf-4ad6-8acd-ed14be54bee4.28.54_PM.png)
+    ![](/assets/img/Screen_Shot_2019-03-06_at_4-1916ca15-81cf-4ad6-8acd-ed14be54bee4.28.54_PM.png)
 
 ## Tailwind CSS by Example
 

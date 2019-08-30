@@ -12,9 +12,10 @@
         <img src="{{ $page->cover_image }}" alt="{{ $page->title }} cover image" class="mb-2">
     @endif
 
-    <h1 class="leading-none mb-2">{{ $page->title }}</h1>
 
-    @if($page->author)
+    @if($page->getCollection() === 'posts')
+        <h1 class="leading-none mb-2">{{ $page->title }}</h1>
+
         <p class="text-gray-700 text-xl md:mt-0 flex items-center">
             <img
                 src="{{ $page->authorImageSrcSmall }}"
@@ -25,6 +26,16 @@
             >
             {{ $page->author }}  •  {{ date('F j, Y', $page->date) }}
         </p>
+    @endif
+
+    @if ($page->getCollection() === 'projects')
+        <h1 class="leading-none mb-1">{{ $page->title }}</h1>
+
+        <div class="mb-4">
+            @include('_partials.production-url', [
+            'page' => $page,
+        ])
+        </div>
     @endif
 
     @include('_partials.categories', [

@@ -4,18 +4,6 @@ $full_width = $page->getPath() === '';
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
-        {{-- Start - Global site tag (gtag.js) - Google Analytics --}}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-64998225-1"></script>
-        <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'UA-64998225-1');
-        </script>
-        {{-- End - Global site tag (gtag.js) - Google Analytics --}}
-
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -51,11 +39,21 @@ $full_width = $page->getPath() === '';
         @stack('meta')
 
         @if ($page->production)
-            <!-- Insert analytics code here -->
+            <link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+            {{-- Start - Global site tag (gtag.js) - Google Analytics --}}
+            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-64998225-1"></script>
+            <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-64998225-1');
+            </script>
+            {{-- End - Global site tag (gtag.js) - Google Analytics --}}
         @endif
 
         <link rel="preload" href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet" as="style" onload="this.rel='stylesheet'">
-        <link rel="preload" href="{{ mix('css/main.css', 'assets/build') }}"  as="style" onload="this.rel='stylesheet'">
+        <link rel="stylesheet" href="{{ mix('css/main.css', 'assets/build') }}">
     </head>
 
     <body>

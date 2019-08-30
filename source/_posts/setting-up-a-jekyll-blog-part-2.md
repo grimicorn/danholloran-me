@@ -24,7 +24,7 @@ title: My First Jekyll Blog Post
 
 
 By default Jekyll supports [Markdown](http://daringfireball.net/projects/markdown/syntax) but you can add formatters for [many different formats](http://jekyllrb.com/docs/plugins/#converters-1). You can also access media assets in a folder such as assets using the &#123;&#123; site.url &#125;&#125; /assets/screenshot.jpg variable in the post.
-`![My helpful screenshot](/uploads/screenshot.jpg)`
+`![My helpful screenshot](/assets/img/screenshot.jpg)`
 
 ### Building Your Blog.
 There are a couple options depending on if you are planning on hosting through [Github Pages](https://pages.github.com/) or somewhere else. Either way there is a build command that just builds the required files for the blog. Then there is a server command that builds the site and then servers it up on http://127.0.0.1:4000/ while watching for changes. Both the build and server command have a --drafts flag that will also build/serve your drafts as your latest posts. Which makes it easy for writing your draft posts just make sure not to deploy the sites directory right after building with the --drafts flag.

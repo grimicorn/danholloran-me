@@ -7,4 +7,4 @@ categories: []
 ---
 
 **This is what I do all day long.**
-![](/uploads/VhlQKh.jpg)
+![](/assets/img/VhlQKh.jpg)
