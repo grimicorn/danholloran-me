@@ -42,23 +42,43 @@ h6 {
 }
 
 h1 {
-  @apply font-extrabold text-5xl;
+  @apply font-extrabold text-3xl;
+
+  @screen md {
+    @apply text-5xl;
+  }
 }
 
 h2 {
-  @apply font-bold text-4xl;
+  @apply font-bold text-2xl;
+
+  @screen md {
+    @apply text-4xl;
+  }
 }
 
 h3 {
-  @apply font-bold text-3xl;
+  @apply font-bold text-xl;
+
+  @screen md {
+    @apply text-3xl;
+  }
 }
 
 h4 {
-  @apply font-normal text-2xl;
+  @apply font-normal text-lg;
+
+  @screen md {
+    @apply text-2xl;
+  }
 }
 
 h5 {
-  @apply font-normal text-xl;
+  @apply font-normal text-lg;
+
+  @screen md {
+    @apply text-xl;
+  }
 }
 
 h6 {
@@ -132,30 +152,44 @@ svg {
   outline: 1px solid red;
 }
 
-.button {
-  @apply font-semibold px-8 py-4 rounded inline-block cursor-pointer;
+.button,
+.button-small {
+  @apply font-semibold rounded inline-block cursor-pointer text-center leading-tight shadow;
+}
 
-  &:disabled {
-    @apply opacity-75 pointer-events-none;
-  }
+.button {
+  @apply px-8 py-4;
+}
+
+.button-small {
+  @apply px-4 py-2;
+}
+
+.button:disabled,
+.button-small:disabled {
+  @apply opacity-75 pointer-events-none;
 }
 
 .button-primary {
-  @apply bg-indigo-800 border-2 border-indigo-800 button text-white;
+  @apply bg-indigo-800 text-white;
 
   &:hover,
   &:focus,
   &:active {
-    @apply bg-white text-indigo-800;
+    @apply bg-indigo-600 text-white;
   }
 }
 
 .button-primary-inverted {
-  @apply bg-white border-2 border-white button text-indigo-800;
+  @apply bg-white text-indigo-800;
 
   &:hover,
   &:focus,
   &:active {
-    @apply bg-indigo-800 text-white;
+    @apply bg-indigo-500 text-white;
   }
+}
+
+[v-cloak] {
+  opacity: 0;
 }

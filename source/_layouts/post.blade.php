@@ -14,28 +14,22 @@
 
     <h1 class="leading-none mb-2">{{ $page->title }}</h1>
 
-    <p class="text-gray-700 text-xl md:mt-0 flex items-center">
-        <img
-            src="{{ $page->authorImageSrcSmall }}"
-            alt="{{ $page->author }} Avatar"
-            class="rounded-full mr-2"
-            width="36"
-            height="36"
-        >
-        {{ $page->author }}  •  {{ date('F j, Y', $page->date) }}
-    </p>
-
-    @if ($page->categories)
-        <div class="mb-6">
-            @foreach ($page->categories as $i => $category)
-                <a
-                    href="{{ '/blog/categories/' . $category }}"
-                    title="View posts in {{ $category }}"
-                    class="inline-block bg-gray-300 hover:bg-indigo-200 leading-loose tracking-wide text-gray-800 uppercase text-xs font-semibold rounded mr-4 px-3 pt-px"
-                >{{ $category }}</a>
-            @endforeach
-        </div>
+    @if($page->author)
+        <p class="text-gray-700 text-xl md:mt-0 flex items-center">
+            <img
+                src="{{ $page->authorImageSrcSmall }}"
+                alt="{{ $page->author }} Avatar"
+                class="rounded-full mr-2"
+                width="36"
+                height="36"
+            >
+            {{ $page->author }}  •  {{ date('F j, Y', $page->date) }}
+        </p>
     @endif
+
+    @include('_partials.categories', [
+        'page' => $page
+    ])
 
     @component('_partials.alert')
         {{ $page->alert_message ?? null }}

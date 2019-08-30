@@ -35,6 +35,7 @@
         "stylelint-order": "^3.0.1",
         "tailwindcss": "^1.0.4",
         "vue": "^2.5.21",
+        "vue-agile": "^1.0.11",
         "vue-template-compiler": "^2.5.21",
         "yargs": "^4.6.0"
     }

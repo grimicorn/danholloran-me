@@ -4,15 +4,43 @@ $full_width = $page->getPath() === '';
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+        {{-- Start - Global site tag (gtag.js) - Google Analytics --}}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-64998225-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-64998225-1');
+        </script>
+        {{-- End - Global site tag (gtag.js) - Google Analytics --}}
+
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="description" content="{{ $page->meta_description ?? $page->siteDescription }}">
 
+        {{-- Start Open Graph --}}
         <meta property="og:title" content="{{ $page->title ?  $page->title . ' | ' : '' }}{{ $page->siteName }}"/>
         <meta property="og:type" content="website" />
         <meta property="og:url" content="{{ $page->getUrl() }}"/>
         <meta property="og:description" content="{{ $page->siteDescription }}" />
+        @if($page->cover_image)
+            <meta property="og:image" content="{{ $page->cover_image }}" />
+        @endif
+        {{-- End Open Graph --}}
+
+        {{-- Start Twitter Card --}}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@dholloran" />
+        <meta name="twitter:creator" content="@dholloran" />
+        <meta name="twitter:title" content="{{ $page->title ?? $page->siteTitle }}" />
+        @if($page->cover_image)
+            <meta name="twitter:image" content="{{ $page->cover_image }}" />
+        @endif
+        <meta name="twitter:description" content="{{ $page->meta_description ?? $page->siteDescription }}" />
+        {{-- End Twitter Card --}}
 
         <title>{{ $page->siteName }}{{ $page->title ? ' | ' . $page->title : '' }}</title>
 
@@ -27,7 +55,7 @@ $full_width = $page->getPath() === '';
         @endif
 
         <link rel="preload" href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap" rel="stylesheet" as="style" onload="this.rel='stylesheet'">
-        <link rel="preload" href="{{ mix('css/main.css', 'assets/build') }}" as="style" onload="this.rel='stylesheet'">
+        <link rel="preload" href="{{ mix('css/main.css', 'assets/build') }}"  as="style" onload="this.rel='stylesheet'">
     </head>
 
     <body>
@@ -64,8 +92,8 @@ $full_width = $page->getPath() === '';
                     </li>
 
                     <li>
-                        Built with <a href="http://jigsaw.tighten.co" title="Jigsaw by Tighten">Jigsaw</a>
-                        and <a href="https://tailwindcss.com" title="Tailwind CSS, a utility-first CSS framework">Tailwind CSS</a>.
+                        Built with <a href="http://jigsaw.tighten.co" title="Jigsaw by Tighten" target="_blank" rel="noopener noreferrer">Jigsaw</a>, <a href="https://vuejs.org/" target="_blank"  rel="noopener noreferrer">Vue.js</a>
+                        and <a href="https://tailwindcss.com" title="Tailwind CSS, a utility-first CSS framework" target="_blank" rel="noopener noreferrer">Tailwind CSS</a>.
                     </li>
                 </ul>
             </footer>

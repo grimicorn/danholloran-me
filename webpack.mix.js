@@ -30,7 +30,8 @@ mix.js("source/_assets/js/main.js", "js")
     ])
     .sourceMaps()
     .options({
-        processCssUrls: false
+        processCssUrls: false,
+        extractVueStyles: true
     })
     .purgeCss({
         extensions: ["html", "md", "js", "php", "vue"],

@@ -6,7 +6,7 @@
     >
       <label
         for="search"
-        class="hidden"
+        class="sr-only"
       >Search</label>
 
       <input

@@ -3,7 +3,15 @@ window.fuse = require("fuse.js");
 window.Vue = require("vue");
 
 import Search from "./components/Search.vue";
+import ScrollTo from "./components/ScrollTo.vue";
 import hljs from "highlight.js/lib/highlight";
+import VueAgile from "vue-agile";
+
+/**
+ * Vue Agile (Carousel)
+ * @see https://github.com/lukaszflorczak/vue-agile
+ */
+Vue.use(VueAgile);
 
 // Syntax highlighting
 hljs.registerLanguage("bash", require("highlight.js/lib/languages/bash"));
@@ -30,6 +38,7 @@ Vue.config.productionTip = false;
 
 new Vue({
     components: {
-        Search
+        Search,
+        ScrollTo
     }
 }).$mount("#app");

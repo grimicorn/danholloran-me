@@ -8,6 +8,7 @@
 
 @import './_base';
 @import './_navigation';
+@import './_agile-slider';
 /* @import './_mailchimp'; */
 
 @import './../../../node_modules/tailwindcss/utilities';
