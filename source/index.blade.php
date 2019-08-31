@@ -30,7 +30,9 @@
                 </li>
             </ul>
             <ul class="flex flex-wrap -mb-6 -mx-4">
-                @foreach ($projects as $project)
+                @foreach ($projects->reject(function($project) {
+                    return (bool) $project->draft ?? false;
+                }) as $project)
                     <li class="md:w-1/2 mb-6 px-4">
                         <div class="bg-white rounded-lg overflow-hidden h-full w-full shadow flex flex-col">
                             <a href="{{ $project->getUrl() }}" class="block">
@@ -43,16 +45,18 @@
                                 >
                             </a>
                             <div class="px-6 py-6 mb-auto">
+                                <h3 class="mb-0 text-lg">
+                                    <a class="text-gray-900" href="{{ $project->getUrl() }}">
+                                        {{ $project->title }}
+                                    </a>
+                                </h3>
 
-                                <a href="{{ $project->getUrl() }}">
-                                    <h3 class="mb-0 text-lg">{{ $project->title }}</h3>
-                                </a>
-                                @include('_partials.production-url', [
-                                    'page' => $project,
-                                ])
-                                <p>
-                                    {!! $project->getExcerpt(50) !!}
-                                </p>
+                                <div class="mb-4">
+                                    @include('_partials.production-url', [
+                                        'page' => $project,
+                                    ])
+                                </div>
+
                                 @include('_partials.categories', [
                                     'page' => $project,
                                     'wrap_class' => 'mb-0',
@@ -61,7 +65,7 @@
                             <a
                                 href="{{ $project->getUrl() }}"
                                 class="button button-primary w-full rounded-t-none shadow-none text-sm"
-                            >Read About {{ $project->title }}</a>
+                            >About {{ $project->title }}</a>
 
                         </div>
                     </li>
