@@ -58,7 +58,6 @@
                                 href="{{ $project->getUrl() }}"
                                 class="button button-primary w-full rounded-t-none shadow-none text-sm"
                             >About {{ $project->title }}</a>
-
                         </div>
                     </li>
                 @endforeach
@@ -75,14 +74,14 @@
             <li class="md:w-1/4 sm:w-1/3 w-1/2 flex items-center justify-center py-6 px-4">
                 @if($item->url ?? null)
                     <a href="{{ $item->url }}" target="blank" class="max-h-24 flex" rel="noopener noreferrer">
-                        <div class="debug">
+                        <div>
                             {!! $item->getContent() !!}
                         </div>
                         <span class="sr-only">{{ $item->title }}</span>
                     </a>
                 @else
                     <div class="max-h-24 flex">
-                        <div class="debug">
+                        <div>
                             {!! $item->getContent() !!}
                         </div>
                         <span class="sr-only">{{ $item->title }}</span>
