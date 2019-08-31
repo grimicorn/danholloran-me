@@ -22,6 +22,12 @@ return [
             'sort' => '-date',
             'path' => 'projects/{filename}',
         ],
+        'history' => [
+            'sort' => 'sort_order',
+        ],
+        'experience' => [
+            'sort' => 'sort_order',
+        ],
         'categories' => [
             'path' => '/blog/categories/{filename}',
             'posts' => function ($page, $allPosts) {
