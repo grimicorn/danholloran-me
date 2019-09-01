@@ -55,7 +55,7 @@
         <div class="px-8 w-2/3 py-12">
             <div class="border-b-2 mb-8 pb-4">
                 <h2 class="leading-none mb-6 text-gray-700 text-2xl">Experience</h2>
-                @foreach ($history->reject(function($item) {
+                @foreach ($experience->reject(function($item) {
                     return (bool) $item->draft ?? false;
                 }) as $item)
                     <div class="mb-4">

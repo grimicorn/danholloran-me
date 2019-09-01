@@ -22,7 +22,7 @@ return [
             'sort' => '-date',
             'path' => 'projects/{filename}',
         ],
-        'history' => [
+        'experience' => [
             'sort' => 'sort_order',
         ],
         'skills' => [

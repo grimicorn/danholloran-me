@@ -5,9 +5,11 @@
         <div>
             <h1 class="leading-tight mb-0">
                 Hi, I'm Dan
-                <span class="leading-tight mt-0 mb-0 text-indigo-500 block">@todo Subtitle</span>
+                <span class="leading-tight mt-0 mb-0 text-indigo-500 block">Full Stack Developer</span>
             </h1>
-            <p class="mb-6">@todo Who am I?</p>
+            <p class="mb-6">
+                @todo Who am I? This is oddly the hardest part about this...who really am I and what do I want to portray here idk I really am not good at this part but I am good at learning anf building websites and getting stuff done and learning new things and I think this will take more thinking and maybe another really random writing seesion like this
+            </p>
             <scroll-to data-selector="#contact">
                 Get In Touch
             </scroll-to>
@@ -94,14 +96,14 @@
 
     <div class="bg-gray-100 py-10">
         <div class="container max-w-4xl mx-auto px-6" v-cloak>
-            <h2>History</h2>
+            <h2>Experience</h2>
             <agile
                 class="mb-6"
                 :options="{
                     fade: true,
                 }"
             >
-                @foreach ($history->reject(function($item) {
+                @foreach ($experience->reject(function($item) {
                     return (bool) $item->draft ?? false;
                 }) as $item)
                     <div class="slide">
@@ -138,7 +140,6 @@
     <div id="contact" class="bg-indigo-800 text-white py-10">
         <div class="container max-w-4xl mx-auto px-6">
             <h2 class="text-white">Get in touch</h2>
-            @todo Wire up to something... possibly https://fieldgoal.io/
             @include('_partials.contact-form')
         </div>
     </div>
