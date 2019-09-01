@@ -9,6 +9,9 @@
 @import './_base';
 @import './_navigation';
 @import './_agile-slider';
+@import './_resume.css';
 /* @import './_mailchimp'; */
 
 @import './../../../node_modules/tailwindcss/utilities';
+
+@import './_print.css';

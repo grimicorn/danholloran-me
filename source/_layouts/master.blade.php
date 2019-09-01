@@ -1,5 +1,5 @@
 @php
-$full_width = $page->getPath() === '';
+$full_width = in_array($page->getPath(), ['', '/resume']);
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -58,7 +58,7 @@ $full_width = $page->getPath() === '';
 
     <body>
         <div id="app" class="flex flex-col justify-between min-h-screen bg-white text-gray-800 leading-normal font-sans antialiased">
-            <header class="flex items-center h-24 py-4" role="banner">
+            <header class="flex items-center h-24 py-4 print-hidden" role="banner">
                 <div class="container flex items-center max-w-8xl mx-auto px-4 lg:px-8">
                     <div class="flex items-center">
                         <a href="/" title="{{ $page->siteName }} home" class="inline-flex items-center">
@@ -78,12 +78,11 @@ $full_width = $page->getPath() === '';
             </header>
 
             {{-- @include('_nav.menu-responsive') --}}
-
-            <main role="main" class="flex-auto w-full {{ $full_width ? '' : 'container max-w-4xl mx-auto px-6' }} py-16">
+            <main role="main" class="main flex-auto w-full {{ $full_width ? '' : 'container max-w-4xl mx-auto px-6' }} py-16">
                 @yield('body')
             </main>
 
-            <footer class="bg-white text-center text-sm mt-12 py-4" role="contentinfo">
+            <footer class="bg-white text-center text-sm mt-12 py-4 print-hidden" role="contentinfo">
                 <ul class="flex flex-col md:flex-row justify-center list-reset">
                     <li class="md:mr-2">
                         &copy; Dan Holloran {{ date('Y') }}.

@@ -66,9 +66,9 @@
     </div>
 
     <div class="container max-w-4xl mx-auto px-6 my-16">
-        <h2>Experience</h2>
+        <h2>Skills &amp; Tools</h2>
         <ul class="flex flex-wrap -mx-1">
-            @foreach ($experience->reject(function($item) {
+            @foreach ($skills->reject(function($item) {
                     return (bool) $item->draft ?? false;
                 }) as $item)
             <li class="md:w-1/4 sm:w-1/3 w-1/2 flex items-center justify-center py-6 px-4">
@@ -95,7 +95,6 @@
     <div class="bg-gray-100 py-10">
         <div class="container max-w-4xl mx-auto px-6" v-cloak>
             <h2>History</h2>
-            @todo Write out history
             <agile
                 class="mb-6"
                 :options="{
@@ -122,11 +121,16 @@
 
             <div class="text-center">
                 <a
-                    href="#resume"
-                    class="button button-primary"
+                    href="/files/danholloran-resume.pdf"
+                    class="button button-primary inline-flex"
                     target="_blank"
                     rel="noopener noreferrer"
-                >@todo My Resume</a>
+                >
+                    My Resume
+                    <span class="ml-2 h-5">
+                        @include('_partials.icon-download-outline')
+                    </span>
+                 </a>
             </div>
         </div>
     </div>

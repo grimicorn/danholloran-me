@@ -1,0 +1,9 @@
+@media print {
+  .print-hidden {
+    display: none !important;
+  }
+
+  .main {
+    @apply p-0;
+  }
+}

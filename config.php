@@ -25,7 +25,7 @@ return [
         'history' => [
             'sort' => 'sort_order',
         ],
-        'experience' => [
+        'skills' => [
             'sort' => 'sort_order',
         ],
         'categories' => [

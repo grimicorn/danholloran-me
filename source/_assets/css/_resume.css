@@ -1,0 +1,5 @@
+.resume {
+  p {
+    @apply my-2;
+  }
+}
