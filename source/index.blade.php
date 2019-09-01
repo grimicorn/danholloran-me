@@ -8,7 +8,7 @@
                 <span class="leading-tight mt-0 mb-0 text-indigo-500 block">Full Stack Developer</span>
             </h1>
             <p class="mb-6">
-                @todo Who am I? This is oddly the hardest part about this...who really am I and what do I want to portray here idk I really am not good at this part but I am good at learning anf building websites and getting stuff done and learning new things and I think this will take more thinking and maybe another really random writing seesion like this
+                @todo Who am I? This is oddly the hardest part about this...who really am I and what do I want to portray here idk I really am not good at this part but I am good at learning and building websites and getting stuff done and learning new things and I think this will take more thinking and maybe another really random writing seesion like this
             </p>
             <scroll-to data-selector="#contact">
                 Get In Touch
