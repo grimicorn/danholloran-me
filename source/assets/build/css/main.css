@@ -13223,16 +13223,6 @@ svg {
   }
 }
 
-/* .faux-print {
-  .print-hidden {
-    display: none !important;
-  }
-
-  .main {
-    @apply p-0;
-  }
-} */
-
 @media (min-width: 640px) {
   .sm\:sr-only {
     position: absolute;

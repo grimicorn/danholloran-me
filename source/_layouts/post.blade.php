@@ -9,9 +9,14 @@
 
 @section('body')
     @if ($page->cover_image)
-        <img src="{{ $page->cover_image }}" alt="{{ $page->title }} cover image" class="mb-2">
+        <img
+            src="{{ $page->cover_image }}"
+            alt="{{ $page->title }} image"
+            class="mb-2"
+            width="850"
+            height="405"
+        >
     @endif
-
 
     @if($page->getCollection() === 'posts')
         <h1 class="leading-none mb-2">{{ $page->title }}</h1>

@@ -3,27 +3,25 @@
 @section('body')
     <div  class="flex md:items-center container max-w-4xl mx-auto px-6 mb-10 justify-center md:flex-row flex-row-reverse">
         <div>
-            <h1 class="leading-tight mb-0">
-                Hi, I'm Dan
-                <span class="leading-tight mt-0 mb-0 text-indigo-500 block">Full Stack Developer</span>
+            <h1>
+                Hello, I'm <span class="text-indigo-500">Dan Holloran</span>. I'm a Full Stack Developer.
             </h1>
-            <p class="mb-6">
-                @todo Who am I? This is oddly the hardest part about this...who really am I and what do I want to portray here idk I really am not good at this part but I am good at learning and building websites and getting stuff done and learning new things and I think this will take more thinking and maybe another really random writing seesion like this
-            </p>
-            <scroll-to data-selector="#contact">
-                Get In Touch
-            </scroll-to>
         </div>
         <img
-            loading="lazy" src="/assets/img/about.png"
-        alt="About image"
-        class="rounded-full h-24 w-24 bg-contain md:h-64 md:w-64 md:my-6 md:ml-10 mr-4 md:mr-0">
+            loading="lazy"
+            src="/assets/img/about.png"
+            {{-- src="{{ '//www.gravatar.com/avatar/' . md5("dtholloran@gmail.com") . '?s=36' }}" --}}
+            width="256"
+            height="256"
+            alt="About image"
+            class="rounded-full h-24 w-24 bg-contain md:h-64 md:w-64 md:my-6 md:ml-10 mr-4 md:mr-0"
+        >
     </div>
 
     <div class="bg-gray-100 py-10">
         <div class="container max-w-4xl mx-auto px-6">
             <h2>Projects</h2>
-            <ul class="flex flex-wrap -mb-6 -mx-4">
+            <ul class="flex flex-wrap -mb-6 -mx-4 justify-center">
                 @foreach ($projects->reject(function($project) {
                     return (bool) $project->draft ?? false;
                 }) as $project)
