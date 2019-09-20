@@ -13,5 +13,6 @@
 /* @import './_mailchimp'; */
 
 @import './../../../node_modules/tailwindcss/utilities';
+@import './_utilities.css';
 
 @import './_print.css';

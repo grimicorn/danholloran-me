@@ -90,6 +90,11 @@
             </li>
             @endforeach
         </ul>
+        <div class="text-center pt-8">
+            <a href="/badges/" class="button button-primary inline-flex">
+                    Development Merit Badges
+            </a>
+        </div>
     </div>
 
     <div class="bg-gray-100 py-10">

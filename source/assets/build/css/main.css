@@ -13213,6 +13213,11 @@ svg {
   transition: all .5s ease-out;
 }
 
+.img-grayscale {
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+}
+
 @media print {
   .print-hidden {
     display: none !important;
