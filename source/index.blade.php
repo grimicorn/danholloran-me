@@ -42,11 +42,15 @@
                                         {{ $project->title }}
                                     </a>
                                 </h3>
-
                                 <div class="mb-4">
                                     @include('_partials.production-url', [
                                         'page' => $project,
                                     ])
+                                    @if($project->built_at)
+                                        <span class="text-xs block">
+                                            Built @ <strong>{{ $project->built_at }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
 
                                 @include('_partials.categories', [
