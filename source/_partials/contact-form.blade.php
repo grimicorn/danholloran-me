@@ -1,4 +1,4 @@
-<form action="https://fieldgoal.io/f/P3Ypl4" method="POST">
+<form action="https://www.form-data.com/_functions/submit/y78ub85epkgeue1kldmuqf" method="POST">
     <div class="flex flex-wrap mb-6 -mx-3">
         <div class="w-full md:w-1/2 mb-6 md:mb-0 px-3">
             <label class="block mb-2 text-sm font-semibold" for="contact-name">
