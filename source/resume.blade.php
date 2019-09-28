@@ -4,7 +4,7 @@
     <div class="bg-gray-200 pb-8">
         <div class="container mx-auto max-w-6xl justify-end flex print-hidden px-8 py-4 -mt-8">
             <a
-                href="/files/danholloran-resume.pdf"
+                href="/files/danholloran-resume.pdf?v=2"
                 class="button button-primary inline-flex"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -56,7 +56,7 @@
             <div class="px-8 w-2/3 py-12">
                 <div class="border-b-2 mb-8 pb-4">
                     <h2 class="leading-none mb-6 text-gray-700 text-2xl">Experience</h2>
-                    @foreach ($experience->reject(function($item) {
+                    @foreach ($experience->whereNotIn('category', ['education'])->reject(function($item) {
                         return (bool) $item->draft ?? false;
                     }) as $item)
                         <div class="mb-4">
@@ -68,6 +68,20 @@
                             <div>
                                 {!! $item->getContent() !!}
                             </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="border-b-2 mb-8 pb-4">
+                    <h2 class="leading-none mb-6 text-gray-700 text-2xl">Education</h2>
+                    @foreach ($experience->whereIn('category', 'education')->reject(function($item) {
+                        return (bool) $item->draft ?? false;
+                    }) as $item)
+                        <div class="mb-4">
+                            <h3 class="text-xl mb-1">{{ $item->title }}</h3>
+                            <h4 class="text-indigo-500 mb-0 mt-0 text-lg">
+                                <a href="{{ $item->company_url }}" target="_blank" rel="noopener noreferrer">{{ $item->company }}</a>
+                            </h4>
+                            <span class="text-gray-700">{{ $item->start }} - {{ $item->end }}</span>
                         </div>
                     @endforeach
                 </div>
@@ -85,6 +99,9 @@
                                         <a class="text-gray-900" href="{{ $project->getUrl() }}">
                                             {{ $project->title }}
                                         </a>
+                                        <span class="font-normal text-gray-600 text-sm block">
+                                            Launched: {{ $project->getDate()->format('F Y') }}
+                                        </span>
                                     </h3>
 
                                     <div class="mb-4">

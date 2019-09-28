@@ -8,6 +8,7 @@ company_url: https://www.fullsail.edu/degrees/web-design-and-development-bachelo
 start: November 2009
 end: March 2012
 draft: false
+category: education
 ---
 This was a fast-paced ~2-year bachelor program that was fully online. There I learned the fundamentals of web design, HTML, CSS, JavaScript, PHP and ActionScript.
 

@@ -130,7 +130,7 @@
 
             <div class="text-center">
                 <a
-                    href="/files/danholloran-resume.pdf"
+                    href="/files/danholloran-resume.pdf?v=2"
                     class="button button-primary inline-flex"
                     target="_blank"
                     rel="noopener noreferrer"
