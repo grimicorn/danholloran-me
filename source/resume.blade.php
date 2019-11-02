@@ -4,7 +4,7 @@
     <div class="bg-gray-200 pb-8">
         <div class="container mx-auto max-w-6xl justify-end flex print-hidden px-8 py-4 -mt-8">
             <a
-                href="/files/danholloran-resume.pdf?v=2"
+                href="/files/danholloran-resume.pdf?v=3"
                 class="button button-primary inline-flex"
                 target="_blank"
                 rel="noopener noreferrer"
