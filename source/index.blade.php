@@ -9,7 +9,7 @@
         </div>
         <img
             loading="lazy"
-            src="/assets/img/about.png"
+            src="/assets/img/about.jpg"
             {{-- src="{{ '//www.gravatar.com/avatar/' . md5("dtholloran@gmail.com") . '?s=36' }}" --}}
             width="256"
             height="256"
