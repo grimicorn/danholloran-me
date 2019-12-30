@@ -70,5 +70,5 @@
 
     <h2>Slides</h2>
 
-    <iframe src="//slides.com/danholloran-ample/deck/embed" width="576" height="420" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    <iframe src="https://slides.com/danholloran-ample/deck-fc0863/embed" width="576" height="420" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 @endsection
