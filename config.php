@@ -22,6 +22,9 @@ return [
             'sort' => '-date',
             'path' => 'projects/{filename}',
         ],
+        'pages' => [
+            'path' => '/'
+        ],
         'experience' => [
             'sort' => 'sort_order',
         ],

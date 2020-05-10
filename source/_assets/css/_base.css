@@ -3,7 +3,7 @@ body {
 }
 
 a {
-  @apply font-semibold no-underline text-indigo-600;
+  @apply font-semibold text-indigo-600 no-underline;
 
   &:hover {
     @apply text-indigo-800;
@@ -11,20 +11,20 @@ a {
 }
 
 blockquote {
-  @apply border-indigo-400 border-l-4 font-normal italic my-8 pl-6 text-gray-800 text-lg;
+  @apply pl-6 my-8 text-lg italic font-normal text-gray-800 border-l-4 border-indigo-400;
 }
 
 code {
-  @apply bg-gray-300 px-2 py-px rounded text-sm;
+  @apply px-2 py-px text-sm bg-gray-300 rounded;
 }
 
 code.hljs {
-  @apply bg-transparent p-0;
+  @apply p-0 bg-transparent;
 
   .hljs-comment,
   .hljs-keyword,
   .hljs-meta {
-    @apply font-normal not-italic;
+    @apply not-italic font-normal;
   }
 }
 
@@ -34,7 +34,7 @@ h3,
 h4,
 h5,
 h6 {
-  @apply leading-tight mb-4 mt-8 text-gray-900;
+  @apply mt-8 mb-4 leading-tight text-gray-900;
 
   &:first-child {
     @apply mt-0;
@@ -42,7 +42,7 @@ h6 {
 }
 
 h1 {
-  @apply font-extrabold text-3xl;
+  @apply text-3xl font-extrabold;
 
   @screen md {
     @apply text-5xl;
@@ -50,7 +50,7 @@ h1 {
 }
 
 h2 {
-  @apply font-bold text-2xl;
+  @apply text-2xl font-bold;
 
   @screen md {
     @apply text-4xl;
@@ -58,7 +58,7 @@ h2 {
 }
 
 h3 {
-  @apply font-bold text-xl;
+  @apply text-xl font-bold;
 
   @screen md {
     @apply text-3xl;
@@ -66,7 +66,7 @@ h3 {
 }
 
 h4 {
-  @apply font-normal text-lg;
+  @apply text-lg font-normal;
 
   @screen md {
     @apply text-2xl;
@@ -74,7 +74,7 @@ h4 {
 }
 
 h5 {
-  @apply font-normal text-lg;
+  @apply text-lg font-normal;
 
   @screen md {
     @apply text-xl;
@@ -82,11 +82,11 @@ h5 {
 }
 
 h6 {
-  @apply font-light text-lg;
+  @apply text-lg font-light;
 }
 
 hr {
-  @apply border-b border-indigo-200 my-12 rounded-full;
+  @apply my-12 border-b border-indigo-200 rounded-full;
 }
 
 li {
@@ -110,7 +110,7 @@ p {
 }
 
 pre {
-  @apply bg-gray-200 leading-loose my-6 overflow-x-auto p-4 rounded shadow text-base;
+  @apply p-4 my-6 overflow-x-auto text-base leading-loose bg-gray-200 rounded shadow;
 
   code {
     @apply bg-transparent;
@@ -120,31 +120,31 @@ pre {
 }
 
 svg {
-  @apply max-w-full max-h-full w-auto h-auto;
+  @apply w-auto h-auto max-w-full max-h-full;
 }
 
 ::selection {
-  @apply bg-indigo-500 text-white;
+  @apply text-white bg-indigo-500;
 }
 
 .alert {
-  @apply border-l-4 p-4 mb-4;
+  @apply p-4 mb-4 border-l-4;
 }
 
 .alert-info {
-  @apply border-indigo-500 text-indigo-900 bg-indigo-100;
+  @apply text-indigo-900 bg-indigo-100 border-indigo-500;
 }
 
 .alert-danger {
-  @apply border-red-500 text-red-900 bg-red-100;
+  @apply text-red-900 bg-red-100 border-red-500;
 }
 
 .alert-success {
-  @apply border-green-500 text-green-900 bg-green-100;
+  @apply text-green-900 bg-green-100 border-green-500;
 }
 
 .alert-warning {
-  @apply border-yellow-500 text-yellow-900 bg-yellow-100;
+  @apply text-yellow-900 bg-yellow-100 border-yellow-500;
 }
 
 .debug,
@@ -154,7 +154,7 @@ svg {
 
 .button,
 .button-small {
-  @apply font-semibold rounded inline-block cursor-pointer text-center leading-tight shadow;
+  @apply inline-block font-semibold leading-tight text-center rounded shadow cursor-pointer;
 }
 
 .button {
@@ -171,25 +171,44 @@ svg {
 }
 
 .button-primary {
-  @apply bg-indigo-800 text-white;
+  @apply text-white bg-indigo-800;
 
   &:hover,
   &:focus,
   &:active {
-    @apply bg-indigo-600 text-white;
+    @apply text-white bg-indigo-600;
   }
 }
 
 .button-primary-inverted {
-  @apply bg-white text-indigo-800;
+  @apply text-indigo-800 bg-white;
 
   &:hover,
   &:focus,
   &:active {
-    @apply bg-indigo-500 text-white;
+    @apply text-white bg-indigo-500;
   }
 }
 
 [v-cloak] {
   opacity: 0;
+}
+
+.content {
+  ul,
+  ol {
+    @apply ml-5;
+
+    li {
+      @apply mb-2;
+    }
+  }
+
+  ul {
+    @apply list-disc;
+  }
+
+  ol {
+    @apply list-decimal;
+  }
 }

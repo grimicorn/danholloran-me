@@ -18,14 +18,18 @@
         >
     @endif
 
-    @if($page->getCollection() === 'posts')
-        <h1 class="leading-none mb-2">{{ $page->title }}</h1>
+    @if($page->getCollection() === 'pages')
+        <h1 class="mb-8 leading-none">{{ $page->title }}</h1>
+    @endif
 
-        <p class="text-gray-700 text-xl md:mt-0 flex items-center">
+    @if($page->getCollection() === 'posts')
+        <h1 class="mb-2 leading-none">{{ $page->title }}</h1>
+
+        <p class="flex items-center text-xl text-gray-700 md:mt-0">
             <img
                 src="{{ $page->authorImageSrcSmall }}"
                 alt="{{ $page->author }} Avatar"
-                class="rounded-full mr-2"
+                class="mr-2 rounded-full"
                 width="36"
                 height="36"
             >
@@ -34,7 +38,7 @@
     @endif
 
     @if ($page->getCollection() === 'projects')
-        <h1 class="leading-none mb-1">{{ $page->title }}</h1>
+        <h1 class="mb-1 leading-none">{{ $page->title }}</h1>
 
         <div class="mb-4">
             @include('_partials.production-url', [
@@ -51,7 +55,7 @@
         {{ $page->alert_message ?? null }}
     @endcomponent
 
-    <div class="border-b border-indigo-200 mb-10 pb-4" v-pre>
+    <div class="pb-4 mb-10 border-b border-indigo-200 content" v-pre>
         @yield('content')
     </div>
 
