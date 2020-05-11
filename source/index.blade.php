@@ -139,17 +139,17 @@
 </div>
 
 {{-- Featured Pages --}}
-<div class="container flex flex-wrap max-w-4xl px-6 py-10 mx-auto">
+{{-- <div class="container flex flex-wrap max-w-4xl px-6 py-10 mx-auto">
     @foreach ($pages->where('featured', true)->whereNotNull('cover_image') as $featuredPage)
     <a href="{{ $featuredPage->getUrl() }}" class="relative block h-64 md:w-1/2">
-        <h3
-            class="absolute inset-0 flex items-center justify-center m-0 text-white bg-indigo-400 bg-opacity-75 hover:bg-indigo-700 hover:bg-opacity-75">
-            {{ $featuredPage->title }}</h3>
-        <img loading="lazy" src="{{ $featuredPage->cover_image }}" alt="{{ $featuredPage->title }} image"
-            class="object-cover w-full h-full max-h-full">
-    </a>
-    @endforeach
-</div>
+<h3
+    class="absolute inset-0 flex items-center justify-center m-0 text-white bg-indigo-400 bg-opacity-75 hover:bg-indigo-700 hover:bg-opacity-75">
+    {{ $featuredPage->title }}</h3>
+<img loading="lazy" src="{{ $featuredPage->cover_image }}" alt="{{ $featuredPage->title }} image"
+    class="object-cover w-full h-full max-h-full">
+</a>
+@endforeach
+</div> --}}
 
 {{-- Podcasts --}}
 <div class="py-10 bg-gray-100">
