@@ -1,5 +1,13 @@
 module.exports = {
     theme: {
+        purge: {
+            content: ["./source"],
+
+            options: {
+                extensions: ["html", "md", "js", "php", "vue"],
+                whitelistPatterns: [/language/, /hljs/]
+            }
+        },
         extend: {
             fontFamily: {
                 sans: ["Inter"],

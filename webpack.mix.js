@@ -1,6 +1,5 @@
 let mix = require("laravel-mix");
 let build = require("./tasks/build.js");
-require("laravel-mix-purgecss");
 require("laravel-mix-alias");
 
 mix.disableSuccessNotifications();
@@ -32,10 +31,5 @@ mix.js("source/_assets/js/main.js", "js")
     .options({
         processCssUrls: false,
         extractVueStyles: true
-    })
-    .purgeCss({
-        extensions: ["html", "md", "js", "php", "vue"],
-        folders: ["source"],
-        whitelistPatterns: [/language/, /hljs/]
     })
     .version();
