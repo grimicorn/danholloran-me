@@ -6,10 +6,6 @@ cover_image: /assets/img/uses-desk.jpg
 featured: true
 sort_order: 1
 ---
-![IPad](/assets/img/uses-ipad.jpg)
-![Keyboard and Mouse](/assets/img/uses-keyboard-mouse.jpg)
-![Macbook 15](/assets/img/uses-laptop-15.jpg)
-![Macbook 13](/assets/img/uses-macbook-13.jpeg)
 
 - @todo Intro
 - @todo short explanations?
@@ -21,12 +17,15 @@ sort_order: 1
 ## Hardware
 
 - MacBook 15" (Work) and MacBook 13" (Home)
-- [Keychron k1](https://www.keychron.com/products/keychron-k1-wireless-mechanical-keyboard?variant=31253556625497)
-- [Logitech MX Master 2S](https://www.amazon.com/Logitech-Master-Wireless-Mouse-Rechargeable/dp/B071YZJ1G1)
+  ![Macbook 15](/assets/img/uses-laptop-15.jpg)
+  ![Macbook 13](/assets/img/uses-macbook-13.jpeg)
+- [Keychron K1 Keyboard](https://www.keychron.com/products/keychron-k1-wireless-mechanical-keyboard?variant=31253556625497) & [Logitech MX Master 2S Mouse](https://www.amazon.com/Logitech-Master-Wireless-Mouse-Rechargeable/dp/B071YZJ1G1)
+  ![Keyboard and Mouse](/assets/img/uses-keyboard-mouse.jpg)
 - [Dell S Series 32" QHD Monitor](https://www.amazon.com/gp/product/B07JVQ8M3Q)
 - [Logitech Z207 Bluetooth Computer Speakers](https://www.logitech.com/en-us/product/z207-stereo-speakers-bluetooth)
 - [Logitech C930e Webcam](https://www.amazon.com/gp/product/B00CRJWW2G/)
 - [iPad 10.2](https://www.apple.com/ipad-10.2/)
+  ![IPad](/assets/img/uses-ipad.jpg)
 - [Apple Pencil (1st generation)](https://www.apple.com/apple-pencil/)
 - [Smart Keyboard](https://www.apple.com/ipad-keyboards/)
 - [AirPods (2nd generation)](https://www.apple.com/airpods-2nd-generation/)
