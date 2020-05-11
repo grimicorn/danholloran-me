@@ -1,8 +1,10 @@
 ---
 extends: _layouts.post
-title: "Every Day Carry (EDC)"
+title: My EDC
 cover_image: /assets/img/edc-5-9-2020.jpg
 section: content
+featured: true
+sort_order: 2
 ---
 
 1. [Bath & Body Works Ocean PocketBac](https://www.bathandbodyworks.com/p/ocean-pocketbac-5-pack-hand-sanitizer-026007425.html)

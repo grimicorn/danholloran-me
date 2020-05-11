@@ -1,8 +1,10 @@
 ---
 extends: _layouts.post
-title: "Uses"
+title: My Setup
 section: content
 cover_image: /assets/img/uses-desk.jpg
+featured: true
+sort_order: 1
 ---
 ![IPad](/assets/img/uses-ipad.jpg)
 ![Keyboard and Mouse](/assets/img/uses-keyboard-mouse.jpg)

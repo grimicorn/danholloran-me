@@ -23,7 +23,8 @@ return [
             'path' => 'projects/{filename}',
         ],
         'pages' => [
-            'path' => '/'
+            'path' => '/',
+            'sort' => 'sort_order',
         ],
         'experience' => [
             'sort' => 'sort_order',
