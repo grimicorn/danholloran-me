@@ -8,15 +8,7 @@
 @endpush
 
 @section('body')
-    @if ($page->cover_image)
-        <img
-            src="{{ $page->cover_image }}"
-            alt="{{ $page->title }} image"
-            class="mb-2"
-            width="850"
-            height="405"
-        >
-    @endif
+    @include('_partials.cover-image', ['page' => $page])
 
     @if($page->getCollection() === 'pages')
         <h1 class="mb-8 leading-none">{{ $page->title }}</h1>
