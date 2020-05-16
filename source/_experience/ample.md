@@ -11,4 +11,4 @@ draft: false
 ---
 Ample is a digital agency in Cincinnati, OH. I am working remotely as a Full Stack developer.
 
-@todo Fill out as my role develops...
+I am currently building sites on the [Jamstack](https://jamstack.org/), primarily using [Gatsby](https://www.gatsbyjs.org/). I also help mentor other developers and help with architectural decisions.
