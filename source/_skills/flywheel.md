@@ -2,7 +2,7 @@
 extends: _layouts.post
 section: content
 title: Flywheel
-sort_order: 25
+sort_order: 26
 draft: false
 url: https://getflywheel.com/
 ---
