@@ -119,7 +119,7 @@
         </agile>
 
         <div class="text-center">
-            <a href="/files/danholloran-resume.pdf?v=3" class="inline-flex button button-primary" target="_blank"
+            <a href="{{ $page->resumeUrl }}" class="inline-flex button button-primary" target="_blank"
                 rel="noopener noreferrer">
                 My Resume
                 <span class="h-5 ml-2">

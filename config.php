@@ -9,7 +9,7 @@ return [
     'siteName' => 'DanHolloran',
     'siteDescription' => 'My adventures on and off of the internetz.',
     'siteAuthor' => 'Dan Holloran',
-
+    'resumeUrl' => '/files/danholloran-resume.pdf?v=4',
     // collections
     'collections' => [
         'posts' => [
