@@ -1,20 +1,6 @@
-/build_local/
-/build_staging/
-/build_production/
-/node_modules/
-/vendor/
 .DS_Store
-/source/assets/build/mix-manifest.json
-/source/assets/build/js/main.js
-/source/assets/build/css/main.css
-/source/.cache
-/cache
-/source/assets/build/js/main.js.map
-.envrc
-
-# Local Netlify folder
+.vitepress/cache
+.vitepress/dist
 .netlify
-/package-lock.json
-/source/assets/build/css/main.css.map
-/source/assets/build/js/main.js.LICENSE.txt
-/build_development
+package-lock.json
+node_modules
