@@ -1,6 +1,4 @@
-.DS_Store
 .vitepress/cache
 .vitepress/dist
-.netlify
-package-lock.json
+.DS_Store
 node_modules
