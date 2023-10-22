@@ -4,7 +4,7 @@ module.exports = {
   content: [
     "./src/**/*.{html,js,vue}",
     "./.vitepress/theme/**/*.{html,js,vue}",
-    "./data/**/*.md",
+    "./content/**/*.md",
   ],
   theme: {
     extend: {
