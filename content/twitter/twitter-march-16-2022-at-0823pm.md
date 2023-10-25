@@ -1,0 +1,16 @@
+---
+created_at: '2022-09-04T15:42:00.000-05:00'
+slug: twitter-march-16-2022-at-0823pm
+text: https://t.co/duKDkLrDL2
+title: 'Twitter: March 16, 2022 at 08:23PM'
+type: twitter
+url: https://twitter.com/DHolloran/status/1504267123736170500
+username: DHolloran
+
+---
+<blockquote class="twitter-tweet">
+  <p lang="" dir="ltr">https://t.co/duKDkLrDL2</p>
+  &mdash; Dan Holloran (@DHolloran)
+  <a href="https://twitter.com/DHolloran/status/1504267123736170500">Mar 17, 2022</a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
