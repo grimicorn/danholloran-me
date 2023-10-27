@@ -1,7 +1,6 @@
 ---
 image_url:
-  src: /assets/img/skills/woocommerce.svg
+  src: /images/skills/woocommerce.svg
 title: WooCommerce
 url: https://woocommerce.com/
-
 ---

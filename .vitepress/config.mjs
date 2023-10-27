@@ -10,6 +10,7 @@ export default defineConfig({
     "Full Stack Developer and Photographer based in St. Louis. I love traveling and enjoy mentoring others. Let's create something amazing together!",
   cleanUrls: true,
   appearance: usePreferredDark,
+  ignoreDeadLinks: true, // @todo Fix links
   head: [
     [
       "meta",

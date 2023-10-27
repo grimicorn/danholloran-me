@@ -1,7 +1,6 @@
 ---
 image_url:
-  src: /assets/img/skills/mysql.svg
+  src: /images/skills/mysql.svg
 title: MySQL
 url: https://www.mysql.com/
-
 ---

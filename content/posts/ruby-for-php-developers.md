@@ -1,10 +1,10 @@
 ---
-created_at: '2022-09-04T15:42:00.000-05:00'
-image_url: /assets/img/ruby-for-php-developers.jpg
+created_at: "2022-09-04T15:42:00.000-05:00"
+image_url: /images/ruby-for-php-developers.jpg
 tags: []
 title: Ruby for PHP Developers
-
 ---
+
 - Inspired by [React for Vue Developers](https://sebastiandedeyne.com/react-for-vue-developers/)
 - This post assumes you are comfortable with programming concepts in general (especially with PHP) and is only intended to show some of the syntax differences between the 2 languages.
 - The examples below are not the only options I know Ruby has some terser options and I am sure more options since I have only scratched the surface primarily using Ruby with Jekyll.
@@ -12,12 +12,12 @@ title: Ruby for PHP Developers
 
 ## Todo
 
-- [ ]  Explanation for anything that is not 1 to 1 or maybe close but not 100% the same
-- [x]  All PHP Examples
-- [ ]  All Ruby examples
-- [ ]  Testing
-- [ ]  Debugging
-- [ ]  Resources
+- [ ] Explanation for anything that is not 1 to 1 or maybe close but not 100% the same
+- [x] All PHP Examples
+- [ ] All Ruby examples
+- [ ] Testing
+- [ ] Debugging
+- [ ] Resources
 
 ### Comments
 

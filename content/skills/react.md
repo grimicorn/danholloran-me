@@ -1,7 +1,6 @@
 ---
 image_url:
-  src: /assets/img/skills/react.svg
+  src: /images/skills/react.svg
 title: React
 url: https://reactjs.org/
-
 ---

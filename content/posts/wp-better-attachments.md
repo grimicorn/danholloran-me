@@ -1,29 +1,30 @@
 ---
 alert_message: This project is no longer maintained.
-created_at: '2022-09-04T15:42:00.000-05:00'
+created_at: "2022-09-04T15:42:00.000-05:00"
 tags: []
 title: WP Better Attachments
-
 ---
+
 **Description:** WordPress plugin that allows you to add/edit/attach/un-attach/sort the files attached to your WordPress posts all from the post editor. Integrates seamlessly with WordPress using the default WordPress attachments type and no configuration needed to add WP Better Attachments to custom post types. You can now also have full control over cropping of the different attachment image sizes through the media editor.
 
 **Plugin Home Page:** [http://wordpress.org/extend/plugins/wp-better-attachments/](http://wordpress.org/extend/plugins/wp-better-attachments/)
 
 #### Thanks to these projects:
 
-*   [WP Settings API Bootstrap](https://github.com/DerekMarcinyshyn/wp-settings-api-bootstrap)
-*   [FlexSlider 2](http://www.woothemes.com/flexslider/2/)
-*   [Img Area Select](http://odyniec.net/projects/imgareaselect/)
+- [WP Settings API Bootstrap](https://github.com/DerekMarcinyshyn/wp-settings-api-bootstrap)
+- [FlexSlider 2](http://www.woothemes.com/flexslider/2/)
+- [Img Area Select](http://odyniec.net/projects/imgareaselect/)
 
-*If your project is included and I do not have you added please let me know, thank you.*
+_If your project is included and I do not have you added please let me know, thank you._
 
 If you have any issues please submit an [issue](https://github.com/DHolloran/wp-better-attachments/issues/new) or fix it/submit a pull request I will try to handle it ASAP. You an also contact me at [DTHolloran@gmail.com](mailto:dtholloran@gmail.com).
 
 <!-- [![Click here to lend your support to: WP Better Attachments and make a donation at www.pledgie.com !](http://www.pledgie.com/campaigns/20476.png?skin_name=chrome)](http://www.pledgie.com/campaigns/20476) -->
 
-* * *
+---
 
 ### WPBA Attachments Exist
+
 ```
 /** @returns boolean */
 wpba_attachments_exist(array(
@@ -41,11 +42,12 @@ wpba_get_attachments(array(
     'show_post_thumbnail' => true
 ));
 ```
-* * *
+
+---
 
 ### WPBA Attachment List
 
-![WPBA Attachment List](/assets/img/screenshot-6.png)
+![WPBA Attachment List](/images/screenshot-6.png)
 
 #### Shortcode
 
@@ -71,6 +73,7 @@ wpba_get_attachments(array(
  link_class="wpba-link pull-left"
  icon_class="wpba-icon pull-left"]
 ```
+
 #### Function
 
 ```
@@ -79,10 +82,10 @@ wpba_attachment_list( array(
     'show_icon'            => false,
     'file_type_categories' => array( 'image', 'file', 'audio', 'video' ),
     'file_extensions'      => get_allowed_mime_types(), // array()
-    'image_icon'           => 'plugin_url/assets/img/image-icon.png',
-    'file_icon'            => 'plugin_url/assets/img/file-icon.png',
-    'audio_icon'           => 'plugin_url/assets/img/audio-icon.png',
-    'video_icon'           => 'plugin_url/assets/img/video-icon.png',
+    'image_icon'           => 'plugin_url/images/image-icon.png',
+    'file_icon'            => 'plugin_url/images/file-icon.png',
+    'audio_icon'           => 'plugin_url/images/audio-icon.png',
+    'video_icon'           => 'plugin_url/images/video-icon.png',
     'icon_size'            => array( 16, 20 ),
     'use_attachment_page'  => true,
     'open_new_window'      => true,
@@ -101,23 +104,23 @@ wpba_attachment_list( array(
 
 ### WPBA Post Editor Button
 
-![WPBA Post Editor Button](/assets/img/screenshot-1.png)
+![WPBA Post Editor Button](/images/screenshot-1.png)
 
 ### WPBA Meta Box
 
-![WPBA Meta Box](/assets/img/screenshot-2.png)
+![WPBA Meta Box](/images/screenshot-2.png)
 
 ### WPBA Unattach Media Library Link
 
-![WPBA Unattach Media Library Link](/assets/img/screenshot-3.png)
+![WPBA Unattach Media Library Link](/images/screenshot-3.png)
 
 ### WPBA Attachment Editor
 
-![WPBA Attachment Editor](/assets/img/screenshot-4.png)
+![WPBA Attachment Editor](/images/screenshot-4.png)
 
 ### WPBA Crop Editor
 
-![WPBA Crop Editor](/assets/img/screenshot-5.png)
+![WPBA Crop Editor](/images/screenshot-5.png)
 
 ## Getting Started
 

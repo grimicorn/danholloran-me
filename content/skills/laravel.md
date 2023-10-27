@@ -1,7 +1,6 @@
 ---
 image_url:
-  src: /assets/img/skills/laravel.svg
+  src: /images/skills/laravel.svg
 title: Laravel
 url: https://laravel.com/
-
 ---

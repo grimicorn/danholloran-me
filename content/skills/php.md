@@ -1,7 +1,6 @@
 ---
 image_url:
-  src: /assets/img/skills/php.svg
+  src: /images/skills/php.svg
 title: PHP
 url: https://www.php.net/
-
 ---

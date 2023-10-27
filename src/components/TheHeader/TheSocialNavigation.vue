@@ -3,18 +3,18 @@ import { inject } from "vue";
 
 const socialNavigationItems = inject("socialNavigationItems");
 </script>
+``
 
 <template>
-  <nav class="flex">
+  <nav class="flex h-full">
     <a
       :href="item.link"
       v-for="item in socialNavigationItems"
       :key="item.link"
       :title="item.label"
       target="_blank"
-      class="mr-2 last:mr-0 h-8 w-8 rounded-full bg-white text-black flex items-center justify-center dark:bg-black dark:text-white"
+      class="last:mr-0 h-6 w-8 flex rounded-full items-center justify-center no-fancy-hover text-white hover:!text-pink-500"
     >
-      @todo Make each icons color the brand color
       <component
         v-if="item.icon"
         :is="item.icon"

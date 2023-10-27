@@ -113,12 +113,12 @@ provide("getNavigationItemClasses", getNavigationItemClasses);
 </script>
 
 <template>
-  <div class="text-white pt-4 pb-8 relative">
+  <div class="text-white pt-4 pb-4 relative">
     <div class="container z-10 relative flex justify-between items-center">
       <div>
         <a
           href="/"
-          class="no-fancy-hover text-white no-underline group text-2xl"
+          class="no-fancy-hover text-white no-underline group text-2xl hover:bg-2xl"
           :class="getNavigationItemClasses('/')"
         >
           <span class="font-bold">Dan</span>
@@ -127,7 +127,7 @@ provide("getNavigationItemClasses", getNavigationItemClasses);
       </div>
 
       <div v-if="isLargeScreen">
-        <div class="flex justify-between mb-4">
+        <div class="flex justify-between mb-4 items-center">
           <TheAppearanceToggle />
           <TheSocialNavigation />
         </div>

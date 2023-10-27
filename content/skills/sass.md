@@ -1,7 +1,6 @@
 ---
 image_url:
-  src: /assets/img/skills/sass.svg
+  src: /images/skills/sass.svg
 title: Sass
 url: https://sass-lang.com/
-
 ---

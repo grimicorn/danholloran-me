@@ -1,7 +1,6 @@
 ---
 image_url:
-  src: /assets/img/skills/gitlab.svg
+  src: /images/skills/gitlab.svg
 title: Gitlab
 url: https://gitlab.com/
-
 ---

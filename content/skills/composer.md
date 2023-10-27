@@ -1,7 +1,6 @@
 ---
 image_url:
-  src: /assets/img/skills/composer.svg
+  src: /images/skills/composer.svg
 title: Composer
 url: https://getcomposer.org/
-
 ---

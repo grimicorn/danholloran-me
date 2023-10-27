@@ -1,7 +1,6 @@
 ---
 image_url:
-  src: /assets/img/skills/wpengine.svg
+  src: /images/skills/wpengine.svg
 title: WP Engine
 url: https://wpengine.com/
-
 ---

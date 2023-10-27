@@ -1,7 +1,6 @@
 ---
 image_url:
-  src: /assets/img/skills/bootstrap.svg
+  src: /images/skills/bootstrap.svg
 title: Bootstrap
 url: https://getbootstrap.com/
-
 ---

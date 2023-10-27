@@ -1,7 +1,6 @@
 ---
 image_url:
-  src: /assets/img/skills/postgresql.svg
+  src: /images/skills/postgresql.svg
 title: PostgreSQL
 url: https://www.postgresql.org/
-
 ---

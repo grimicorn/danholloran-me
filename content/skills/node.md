@@ -1,7 +1,6 @@
 ---
 image_url:
-  src: /assets/img/skills/node.svg
+  src: /images/skills/node.svg
 title: node.js
 url: https://nodejs.org/
-
 ---
