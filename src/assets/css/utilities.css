@@ -14,3 +14,8 @@
   @apply bg-gradient bg-clip-text text-pink-500;
   -webkit-text-fill-color: rgba(0, 0, 0, 0);
 }
+
+.border-pink {
+  @apply relative;
+  @apply after:content-[''] after:absolute after:h-1 after:w-full after:bg-pink-500 after:bottom-0 after:left-0;
+}

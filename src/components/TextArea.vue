@@ -1,7 +1,7 @@
 <script setup>
 import BaseInput, { propsDefinition } from "@/components/BaseInput.vue";
 import { ref, watch } from "vue";
-import { debounce } from "lodash";
+import debounce from "lodash.debounce";
 
 const props = defineProps({
   ...propsDefinition,
@@ -39,7 +39,7 @@ watch(value, updateModelValue);
         :placeholder="label"
         :class="inputClass"
         v-bind="inputAttributes"
-        class="w-full rounded-xl px-6 py-6 leading-tight font-bold resize-y"
+        class="w-full rounded-xl px-6 py-6 leading-tight font-bold resize-y text-black"
       />
     </template>
   </BaseInput>

@@ -1,14 +1,29 @@
-.button {
-  @apply py-6 px-8 rounded-xl leading-none uppercase font-bold text-2xl;
+.button,
+a.button,
+button.button {
+  @apply py-6 px-8 rounded-xl leading-none uppercase font-bold text-2xl border-[3px] relative overflow-hidden inline-flex justify-center items-center no-fancy-hover;
+
+  &:disabled {
+    @apply pointer-events-none opacity-50;
+  }
 }
 
 .button-outline-light {
-  @apply button border-[3px] border-white text-white;
+  @apply button border-white text-white;
+
+  &:before {
+    @apply absolute top-0 left-0 bottom-0 right-0 bg-white  -z-10 opacity-0 transition-opacity;
+    content: '';
+  }
 
   &.active,
   &:focus,
   &:active,
   &:hover {
-    @apply bg-pink-500 border-pink-500;
+    @apply text-gradient;
+
+    &:before {
+      @apply opacity-100;
+    }
   }
 }
