@@ -1,5 +1,5 @@
 <script setup>
-import TheFooter from "@/components/TheFooter/TheFooter.vue";
+import TheFooter from "@/components/TheFooter.vue";
 import TheHeader from "@/components/TheHeader/TheHeader.vue";
 // import { useData } from 'vitepress'
 </script>

@@ -4,15 +4,6 @@ body,
   @apply h-full;
 }
 
-.container {
-  @apply mx-auto px-6;
-}
-
-.text-gradient {
-  @apply bg-gradient bg-clip-text text-pink-500;
-  -webkit-text-fill-color: rgba(0, 0, 0, 0);
-}
-
 a {
   @apply text-blue-500 underline;
 

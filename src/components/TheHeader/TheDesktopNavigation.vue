@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from "vue";
 
-const navigationItems = inject("navigationItems");
+const primaryNavigationItems = inject("primaryNavigationItems");
 const getNavigationItemClasses = inject("getNavigationItemClasses");
 </script>
 
@@ -9,7 +9,7 @@ const getNavigationItemClasses = inject("getNavigationItemClasses");
   <nav class="-mx-4 flex">
     <a
       :href="item.link"
-      v-for="item in navigationItems"
+      v-for="item in primaryNavigationItems"
       :key="item.link"
       class="text-white no-fancy-hover text-lg mx-4 no-underline flex items-center"
       :class="getNavigationItemClasses(item.link)"
