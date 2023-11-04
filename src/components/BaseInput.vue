@@ -166,7 +166,7 @@ export const propsDefinition = {
     ref="$wrapper"
   >
     <div
-      class="w-full"
+      class="w-full relative"
       :class="{
         'flex items-center': inline,
       }"
@@ -174,14 +174,15 @@ export const propsDefinition = {
       <label
         :for="name"
         :class="{
-          'sr-only': !labelVisible && !inline,
+          'sr-only': !labelVisible && !value && !inline,
+          'text-white absolute top-0 z-10 -mt-2 ml-6': !labelVisible && !!value,
           block: labelVisible && !inline,
           'text-danger-500': !!errorMessage,
           'mr-6': inline,
           'mb-2': !inline,
         }"
         v-text="label"
-        class="font-bold"
+        class="font-bold text-lg leading-none"
       ></label>
 
       <div class="w-full flex">

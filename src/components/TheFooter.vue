@@ -3,12 +3,14 @@ import useNavigation from "@/composables/useNavigation.js";
 import useConfetti from "@/composables/useConfetti.js";
 import TextInput from "@/components/TextInput.vue";
 import TextArea from "@/components/TextArea.vue";
-import { ref } from "vue";
-import { ArrowPathIcon } from "@heroicons/vue/24/outline";
+import BaseAlert from "@/components/BaseAlert.vue";
+import { ref, onBeforeUnmount, onMounted } from "vue";
+import { ArrowPathIcon, ArrowDownIcon } from "@heroicons/vue/24/outline";
 
 const { socialNavigationItems } = useNavigation();
 const { unicornFireworks } = useConfetti();
 
+// == Submit ==============================
 const isSubmitting = ref(false);
 const submittedSuccessfully = ref(null);
 const handleSubmit = async ($e) => {
@@ -27,21 +29,60 @@ const handleSubmit = async ($e) => {
     });
     submittedSuccessfully.value = true;
     unicornFireworks();
+    clearHash();
   } catch (error) {
     submittedSuccessfully.value = false;
   } finally {
     isSubmitting.value = false;
   }
 };
+const handleDangerAlertDismiss = () => {
+  submittedSuccessfully.value = null;
+};
+
+// == Hash Change ==============================
+const $form = ref(null);
+const clearHash = () => {
+  history.replaceState(
+    "",
+    document.title,
+    window.location.pathname + window.location.search,
+  );
+};
+const handleHashChange = () => {
+  const hash = window.location.hash;
+  if (hash !== "#contact") {
+    return;
+  }
+
+  $form.value.scrollIntoView({ behavior: "smooth" });
+};
+onMounted(() => {
+  handleHashChange();
+  addEventListener("hashchange", handleHashChange);
+});
+
+onBeforeUnmount(() => {
+  removeEventListener("hashchange", handleHashChange);
+});
 </script>
 
 <template>
   <div class="relative">
     <div class="container z-10 relative py-6 lg:py-12 lg:w-3/5">
       <h1 class="text-white">Contact Me</h1>
-      @todo Handle errors
+      <BaseAlert
+        type="danger"
+        class="mb-12"
+        :dismissible="true"
+        v-if="submittedSuccessfully === false"
+        @dismissed="handleDangerAlertDismiss"
+      >
+        Something went wrong please try again
+      </BaseAlert>
       <div class="relative">
         <form
+          ref="$form"
           class="-mx-6 text-bold lg:flex lg:flex-wrap justify-center mb-12"
           name="contact"
           method="POST"
@@ -59,7 +100,7 @@ const handleSubmit = async ($e) => {
             label="Name*"
             required
             class="lg:w-1/2 px-6 mb-10"
-            value="John Doe"
+            :disabled="isSubmitting"
           />
           <TextInput
             name="email"
@@ -68,7 +109,7 @@ const handleSubmit = async ($e) => {
             type="email"
             required
             class="lg:w-1/2 px-6 mb-10"
-            value="johndoe@gmail.com"
+            :disabled="isSubmitting"
           />
           <TextArea
             name="message"
@@ -76,7 +117,7 @@ const handleSubmit = async ($e) => {
             label="Message*"
             required
             class="w-full px-6 mb-6"
-            value="Message"
+            :disabled="isSubmitting"
           />
 
           <div class="w-full px-6 flex justify-center">
@@ -103,14 +144,17 @@ const handleSubmit = async ($e) => {
         >
           <strong class="text-5xl mb-6">Thanks!</strong>
           <p class="font-serif text-3xl mb-6">🦄 Unicorn party time! 🦄</p>
-          <p>
+          <p class="text-xl">
             P.S. I'll get back to you ASAP. (Maybe sooner if it's possible...)
           </p>
-          <p>P.P.S. While you're here, might as well follow me.</p>
+          <p class="text-xl">
+            P.P.S. While you're here, might as well follow me.
+            <ArrowDownIcon class="h-[1em] w-auto animate-bounce inline" />
+          </p>
         </div>
       </div>
 
-      <nav class="flex items-center pb-8 flex-wrap -mb-8 justify-center mb-12">
+      <nav class="flex items-center pb-8 flex-wrap -mb-8 justify-center">
         <a
           :href="item.link"
           target="_blank"

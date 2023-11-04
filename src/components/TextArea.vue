@@ -39,7 +39,7 @@ watch(value, updateModelValue);
         :placeholder="label"
         :class="inputClass"
         v-bind="inputAttributes"
-        class="w-full rounded-xl px-6 py-6 leading-tight font-bold resize-y text-black"
+        class="w-full rounded-xl px-6 py-6 leading-tight font-bold resize-y text-black dark:text-white dark:bg-black"
       />
     </template>
   </BaseInput>

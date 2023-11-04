@@ -6,6 +6,11 @@ import {
   MegaphoneIcon,
   EnvelopeIcon,
 } from "@heroicons/vue/24/outline";
+import {
+  CameraIcon as CameraIconSolid,
+  MegaphoneIcon as MegaphoneIconSolid,
+  EnvelopeIcon as EnvelopeIconSolid,
+} from "@heroicons/vue/24/solid";
 import GithubIcon from "@/assets/images/github-icon.svg";
 import LinkedinIcon from "@/assets/images/linkedin-icon.svg";
 import SpotifyIcon from "@/assets/images/spotify-icon.svg";
@@ -15,11 +20,16 @@ import YoutubeIcon from "@/assets/images/youtube-icon.svg";
 
 const useNavigation = () => {
   const primaryNavigationItems = computed(() => {
+    const isPostsActive = isActiveNavigationItem("/posts");
+    const isProjectsActive = isActiveNavigationItem("/projects");
+    const isPhotosActive = isActiveNavigationItem("/photos");
+    const isContactActive = isActiveNavigationItem("/contact");
+
     return [
       {
         label: "Posts",
         link: "/posts",
-        icon: MegaphoneIcon,
+        icon: isPostsActive ? MegaphoneIconSolid : MegaphoneIcon,
       },
       {
         label: "Projects",
@@ -29,15 +39,16 @@ const useNavigation = () => {
       {
         label: "Photos",
         link: "/photos",
-        icon: CameraIcon,
+        icon: isPhotosActive ? CameraIconSolid : CameraIcon,
       },
       {
         label: "Contact",
-        link: "/contact",
-        icon: EnvelopeIcon,
+        link: "#contact",
+        icon: isContactActive ? EnvelopeIconSolid : EnvelopeIcon,
       },
     ];
   });
+
   const socialNavigationItems = computed(() => {
     return [
       {
