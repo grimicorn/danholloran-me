@@ -1,7 +1,7 @@
 html,
 body,
 #app {
-  @apply min-h-full;
+  @apply min-h-full h-full w-full;
 }
 
 /* ==============================
