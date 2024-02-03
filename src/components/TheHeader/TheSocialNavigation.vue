@@ -1,5 +1,8 @@
 <script setup>
 import { inject } from "vue";
+import { useData } from "vitepress";
+
+const { frontmatter } = useData();
 
 const socialNavigationItems = inject("socialNavigationItems");
 </script>
@@ -14,7 +17,10 @@ const socialNavigationItems = inject("socialNavigationItems");
         :key="item.link"
         :title="item.label"
         target="_blank"
-        class="last:mr-0 h-[1em] lg:mr-4 mr-8 mb-8 flex rounded-full items-center justify-center no-fancy-hover text-white hover:!text-pink-500"
+        class="last:mr-0 h-[1em] lg:mr-4 mr-8 mb-8 flex rounded-full items-center justify-center plain"
+        :class="{
+          '!text-white hover:!text-pink-500': frontmatter.is_home,
+        }"
       >
         <component
           v-if="item.icon"

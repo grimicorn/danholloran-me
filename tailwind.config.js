@@ -8,6 +8,7 @@ module.exports = {
     "./src/**/*.{html,js,vue}",
     "./.vitepress/theme/**/*.{html,js,vue}",
     "./content/**/*.md",
+    "./*.md",
   ],
   theme: {
     extend: {

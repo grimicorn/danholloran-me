@@ -26,21 +26,21 @@ const useNavigation = () => {
     const isContactActive = isActiveNavigationItem("/contact");
 
     return [
-      {
-        label: "Posts",
-        link: "/posts",
-        icon: isPostsActive ? MegaphoneIconSolid : MegaphoneIcon,
-      },
-      {
-        label: "Projects",
-        link: "/projects",
-        icon: CodeBracketIcon,
-      },
-      {
-        label: "Photos",
-        link: "/photos",
-        icon: isPhotosActive ? CameraIconSolid : CameraIcon,
-      },
+      // {
+      //   label: "Posts",
+      //   link: "/posts",
+      //   icon: isPostsActive ? MegaphoneIconSolid : MegaphoneIcon,
+      // },
+      // {
+      //   label: "Projects",
+      //   link: "/projects",
+      //   icon: CodeBracketIcon,
+      // },
+      // {
+      //   label: "Photos",
+      //   link: "/photos",
+      //   icon: isPhotosActive ? CameraIconSolid : CameraIcon,
+      // },
       {
         label: "Contact",
         link: "#contact",

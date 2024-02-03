@@ -6,13 +6,9 @@ import TheDesktopNavigation from "@/components/TheHeader/TheDesktopNavigation.vu
 import TheAppearanceToggle from "@/components/TheHeader/TheAppearanceToggle.vue";
 import TheSocialNavigation from "@/components/TheHeader/TheSocialNavigation.vue";
 import useNavigation from "@/composables/useNavigation.js";
+import { useData } from "vitepress";
 
-defineProps({
-  overlaysHero: {
-    type: Boolean,
-    default: false,
-  },
-});
+const { frontmatter } = useData();
 
 // == Media Query ==============================
 const isLargeScreen = useMediaQuery("(min-width: 1024px)");
@@ -29,8 +25,9 @@ const navigationItemClasses = `pb-1 relative after:content-[''] after:absolute a
 const getNavigationItemClasses = (link) => {
   return [
     navigationItemClasses,
+    !!frontmatter.value.is_home ? "!text-white" : "",
     isActiveNavigationItem(link)
-      ? "after:block font-bold"
+      ? "after:block active"
       : "after:hidden hover:after:block",
   ];
 };
@@ -45,7 +42,7 @@ provide("getNavigationItemClasses", getNavigationItemClasses);
       <div>
         <a
           href="/"
-          class="no-fancy-hover text-white no-underline group text-2xl hover:bg-2xl"
+          class="plain no-underline group text-2xl hover:bg-2xl"
           :class="getNavigationItemClasses('/')"
         >
           <span class="font-bold">Dan</span>
@@ -55,16 +52,12 @@ provide("getNavigationItemClasses", getNavigationItemClasses);
 
       <div v-if="isLargeScreen">
         <div class="flex justify-between mb-4 items-center">
-          <TheAppearanceToggle />
+          <TheAppearanceToggle class="mr-12" />
           <TheSocialNavigation />
         </div>
         <TheDesktopNavigation />
       </div>
       <TheMobileNavigation v-else />
     </div>
-    <div
-      v-if="!overlaysHero"
-      class="bg-gradient absolute top-0 bottom-0 left-0 right-0 z-0"
-    ></div>
   </div>
 </template>

@@ -1,5 +1,10 @@
 ---
 title: Home
+is_home: true
 ---
 
-Home page content
+<script setup>
+  import HomeView from '@/views/HomeView.vue';
+</script>
+
+<HomeView />

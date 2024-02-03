@@ -1,7 +1,7 @@
 .button,
 a.button,
 button.button {
-  @apply py-6 px-8 rounded-xl leading-none uppercase font-bold text-2xl border-[3px] relative overflow-hidden inline-flex justify-center items-center no-fancy-hover transition-all duration-300 no-underline;
+  @apply py-6 px-8 rounded-xl leading-none uppercase font-bold text-2xl border-[3px] relative overflow-hidden inline-flex justify-center items-center plain transition-all duration-300 no-underline;
 
   svg {
     @apply h-[1em] w-auto mr-2;

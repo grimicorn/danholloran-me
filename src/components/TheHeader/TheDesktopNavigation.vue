@@ -6,12 +6,12 @@ const getNavigationItemClasses = inject("getNavigationItemClasses");
 </script>
 
 <template>
-  <nav class="-mx-4 flex">
+  <nav class="-mx-4 flex justify-end">
     <a
       :href="item.link"
       v-for="item in primaryNavigationItems"
       :key="item.link"
-      class="text-white no-fancy-hover text-lg mx-4 no-underline flex items-center"
+      class="plain text-lg mx-4 no-underline flex items-center"
       :class="getNavigationItemClasses(item.link)"
     >
       <component

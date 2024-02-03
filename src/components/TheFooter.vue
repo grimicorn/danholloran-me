@@ -42,6 +42,7 @@ const handleDangerAlertDismiss = () => {
 
 // == Hash Change ==============================
 const $form = ref(null);
+const $name = ref(null);
 const clearHash = () => {
   history.replaceState(
     "",
@@ -49,6 +50,7 @@ const clearHash = () => {
     window.location.pathname + window.location.search,
   );
 };
+
 const handleHashChange = () => {
   const hash = window.location.hash;
   if (hash !== "#contact") {
@@ -56,6 +58,7 @@ const handleHashChange = () => {
   }
 
   $form.value.scrollIntoView({ behavior: "smooth" });
+  $form.value.elements[0].focus();
 };
 onMounted(() => {
   handleHashChange();
@@ -92,9 +95,8 @@ onBeforeUnmount(() => {
             'opacity-0': submittedSuccessfully,
           }"
         >
-          <input type="hidden" name="form-name" value="contact" />
-
           <TextInput
+            ref="$name"
             name="name"
             placeholder="Name*"
             label="Name*"
@@ -119,6 +121,8 @@ onBeforeUnmount(() => {
             class="w-full px-6 mb-6"
             :disabled="isSubmitting"
           />
+
+          <input type="hidden" name="form-name" value="contact" />
 
           <div class="w-full px-6 flex justify-center">
             <button
@@ -159,7 +163,8 @@ onBeforeUnmount(() => {
           :href="item.link"
           target="_blank"
           v-for="item in socialNavigationItems"
-          class="flex items-center text-white no-fancy-hover group lg:mr-6 mr-8 last:mr-0 mb-8"
+          class="flex items-center !text-white plain group lg:mr-6 mr-8 last:mr-0 mb-8"
+          :key="item.link"
         >
           <component
             :is="item.icon"
@@ -171,7 +176,7 @@ onBeforeUnmount(() => {
       </nav>
 
       <div class="flex justify-center text-white w-full">
-        &copy Dan Holloran, {{ new Date().getFullYear() }} | Made with
+        &copy; Dan Holloran, {{ new Date().getFullYear() }} | Made with
         <strong class="text-pink-500 mx-1 shadow-sm animate-pulse">♥</strong>
         in St. Louis, MO
       </div>

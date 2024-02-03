@@ -40,7 +40,7 @@ const getNavigationItemClasses = inject("getNavigationItemClasses");
             :href="item.link"
             v-for="item in primaryNavigationItems"
             :key="item.link"
-            class="text-white no-fancy-hover no-underline flex items-center last:mb-0 text-4xl font-bold mb-4"
+            class="text-white plain no-underline flex items-center last:mb-0 text-4xl font-bold mb-4"
             :class="getNavigationItemClasses(item.link)"
           >
             <component

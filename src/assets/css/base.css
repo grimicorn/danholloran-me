@@ -1,7 +1,7 @@
 html,
 body,
 #app {
-  @apply h-full;
+  @apply min-h-full;
 }
 
 /* ==============================
@@ -13,15 +13,20 @@ a {
   &:hover,
   &:active,
   &:focus {
-    @apply text-gradient cursor-pointer  no-underline;
+    @apply text-gradient cursor-pointer no-underline;
     -webkit-text-fill-color: rgba(0, 0, 0, 0);
   }
 
-  &.no-fancy-hover {
+  &.plain {
+    @apply dark:text-white text-black;
+
     &:hover,
     &:active,
-    &:focus {
-      @apply text-inherit;
+    &:focus,
+    &.active {
+      @apply text-inherit !bg-transparent lg:dark:text-white lg:text-black text-white;
+      background-image: none;
+      background-clip: inherit;
       -webkit-text-fill-color: inherit;
     }
   }
@@ -37,6 +42,10 @@ h4,
 h5,
 h6 {
   @apply font-bold mb-6 pb-2 mt-0 border-pink;
+
+  &.plain {
+    @apply after:hidden;
+  }
 }
 
 h1 {

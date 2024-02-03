@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from "vue";
-import { MoonIcon, SunIcon } from "@heroicons/vue/24/outline";
+import { SunIcon } from "@heroicons/vue/24/outline";
+import { MoonIcon } from "@heroicons/vue/24/solid";
 import { useDark } from "@vueuse/core";
 
 const isDark = useDark();
@@ -21,10 +22,10 @@ const label = computed(() => (isDark.value ? "Dark" : "Light"));
     @click="handleClick"
   >
     <span
-      class="h-6 w-6 rounded-full mx-0 absolute top-0 transition-all flex items-center justify-center"
+      class="h-6 w-6 rounded-full mx-0 absolute top-0 transition-all flex items-center justify-center border"
       :class="{
-        'right-0 bg-gray-900 text-gray-300': isDark,
-        'left-0 bg-white text-gray-600': !isDark,
+        'right-0 bg-gray-900 text-pink-400 border-pink-400': isDark,
+        'left-0 bg-white text-pink-600 border-pink-600': !isDark,
       }"
     >
       <component :is="isDark ? MoonIcon : SunIcon" class="h-4 w-4" />
