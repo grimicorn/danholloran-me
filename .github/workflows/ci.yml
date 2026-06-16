@@ -35,12 +35,12 @@ jobs:
 
       - name: Lint
         run: |
-          prettier --check .
-          eslint .
+          npx prettier --check .
+          npx eslint .
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            fallow audit --base "${{ github.event.pull_request.base.sha }}"
+            npx fallow audit --base "${{ github.event.pull_request.base.sha }}"
           else
-            fallow audit --base "${{ github.event.before }}"
+            npx fallow audit --base "${{ github.event.before }}"
           fi
 
       - name: Test
