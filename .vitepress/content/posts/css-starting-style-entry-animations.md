@@ -1,7 +1,7 @@
 ---
 date: "2026-06-15T07:09:11.000+00:00"
 tags: ["css", "animation", "web-apis"]
-draft: true
+draft: false
 title: "CSS @starting-style: Animate Elements as They Enter the DOM"
 image: "/images/posts/css-starting-style-entry-animations.jpg"
 topic: "development"
