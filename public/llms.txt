@@ -1,0 +1,49 @@
+# Dan Holloran
+
+> Personal blog and portfolio for Dan Holloran — a senior full-stack developer and photographer based in Reno, NV. The site covers front-end and full-stack web development (Vue, React, TypeScript, CSS, build tooling, and more), Obsidian and productivity workflows, and travel photography from national parks and beyond.
+
+Dan has 10+ years of experience building performant, scalable web applications and leading engineering teams, with deep expertise in Vue.js, React, Laravel, and modern JavaScript tooling. The blog mixes technical deep-dives, career reflections, and dispatches from the road.
+
+## Main Pages
+
+- [Home](https://danholloran.me/): Landing page and overview.
+- [Blog](https://danholloran.me/posts): Index of all posts — technical articles, career reflections, and travel photography.
+- [Resume](https://danholloran.me/resume): Professional experience, skills, and projects.
+
+## Recent Development Articles
+
+- [CSS User Preference Media Queries](https://danholloran.me/posts/css-user-preference-media-queries): Build accessible experiences without JavaScript.
+- [Vue 3.6 Vapor Mode](https://danholloran.me/posts/vue-3-6-vapor-mode-opt-out-of-the-virtual-dom): Opt out of the virtual DOM.
+- [CSS if()](https://danholloran.me/posts/css-if-function-inline-conditionals): Inline conditionals for smarter styling.
+- [Tailwind CSS v4](https://danholloran.me/posts/tailwind-css-v4-theme-directive-config): Ditch the config file, embrace @theme.
+- [JavaScript's using Keyword](https://danholloran.me/posts/javascript-using-explicit-resource-management-es2026): Automatic resource cleanup in ES2026.
+- [Astro Actions](https://danholloran.me/posts/astro-actions-type-safe-server-functions-without-the-boilerplate): Type-safe server functions without the boilerplate.
+- [Vite 8 + Rolldown](https://danholloran.me/posts/vite-8-rolldown-rust-powered-builds): Rust-powered builds that are 10–30x faster.
+- [TypeScript 7.0](https://danholloran.me/posts/typescript-7-go-compiler-10x-faster): The Go compiler that makes TS 10x faster.
+- [React Compiler v1.0](https://danholloran.me/posts/react-compiler-v1-automatic-memoization-without-the-headache): Automatic memoization without the headache.
+- [Svelte 5 Runes](https://danholloran.me/posts/svelte-5-runes-reactive-state-that-actually-makes-sense): Reactive state that actually makes sense.
+- [Biome](https://danholloran.me/posts/biome-the-fast-eslint-and-prettier-replacement): The fast all-in-one ESLint and Prettier replacement.
+- [JavaScript Temporal API](https://danholloran.me/posts/javascript-temporal-api-dates-are-finally-fixed): Dates are finally fixed.
+
+## Obsidian & Productivity
+
+- [Obsidian Properties and Frontmatter](https://danholloran.me/posts/obsidian-properties-and-frontmatter-a-practical-guide): A practical guide to metadata.
+- [The PARA Method in Obsidian](https://danholloran.me/posts/the-para-method-in-obsidian-a-practical-guide): A practical guide to organizing your vault.
+- [Using Dataview for Project Tracking](https://danholloran.me/posts/using-dataview-for-project-tracking-in-obsidian): Track projects in Obsidian.
+- [Templater for Obsidian](https://danholloran.me/posts/templater-plugin-stop-writing-the-same-thing-twice): Stop writing the same thing twice.
+
+## Travel & Photography
+
+Dan documents visits to U.S. national parks, waterfalls, and scenic landscapes. A few highlights:
+
+- [Visiting Yosemite National Park](https://danholloran.me/posts/travel-yosemite-national-park)
+- [Crater Lake: The Deepest Blue You've Ever Seen](https://danholloran.me/posts/travel-crater-lake-national-park)
+- [Glacier National Park: The Crown of the Continent](https://danholloran.me/posts/travel-glacier-national-park)
+- [Zion National Park: Standing at the Bottom of the Sky](https://danholloran.me/posts/travel-zion-national-park)
+
+## Optional
+
+- [RSS Feed](https://danholloran.me/feed.xml): Full chronological feed of all posts.
+- [Sitemap](https://danholloran.me/sitemap.xml): Complete list of all pages on the site.
+- [GitHub](https://github.com/grimicorn): Open-source projects and code.
+- [LinkedIn](https://linkedin.com/in/dan-holloran/): Professional profile.
