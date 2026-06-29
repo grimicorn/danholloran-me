@@ -19,10 +19,10 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@tailwindcss/vite": "^4.3.0",
-    "@typescript-eslint/parser": "^8.59.2",
+    "@typescript-eslint/parser": "^8.62.0",
     "@vitejs/plugin-vue": "^6.0.6",
     "@vitest/ui": "^4.1.5",
-    "@vue/test-utils": "^2.4.10",
+    "@vue/test-utils": "^2.4.11",
     "eslint": "^10.3.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-vue": "^10.9.1",
@@ -33,7 +33,7 @@
     "plist": "^5.0.0",
     "prettier": "^3.9.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
-    "tailwindcss": "^4.3.0",
+    "tailwindcss": "^4.3.2",
     "typescript": "^6.0.3",
     "vitepress": "^1.6.4",
     "vitest": "^4.1.5"
