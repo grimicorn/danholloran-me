@@ -1,10 +1,10 @@
 ---
-date: '2026-07-09T02:08:31.000-05:00'
-tags: ['css', 'web-apis', 'accessibility']
+date: "2026-07-09T02:08:31.000-05:00"
+tags: ["css", "web-apis", "accessibility"]
 draft: false
 title: "CSS light-dark(): Stop Duplicating Your Dark Mode Colors"
-image: '/images/posts/css-light-dark-stop-duplicating-your-dark-mode-colors.jpg'
-topic: 'development'
+image: "/images/posts/css-light-dark-stop-duplicating-your-dark-mode-colors.jpg"
+topic: "development"
 description: "The CSS light-dark() function collapses your two dark-mode palettes into a single declaration. Here is how it works, the color-scheme gotcha that trips everyone up, and how to wire up a manual theme toggle."
 ---
 
@@ -69,9 +69,15 @@ Reach for the variable form when a color is reused across many rules or you need
 `color-scheme` also gives you a manual toggle without touching every color. Because the property inherits, you can force a subtree into one theme by setting it on a container. A common pattern is a `data-theme` attribute on `:root` that a toggle button flips:
 
 ```css
-:root { color-scheme: light dark; }
-:root[data-theme="light"] { color-scheme: light; }
-:root[data-theme="dark"]  { color-scheme: dark; }
+:root {
+  color-scheme: light dark;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
 ```
 
 Now the same `light-dark()` values respond to a user's explicit choice and fall back to their OS preference when no attribute is set. You store the choice, set the attribute, and every `light-dark()` on the page updates at once.
