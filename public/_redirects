@@ -1,2 +1,4 @@
 https://danholloran.netlify.app/* https://danholloran.me/:splat 301!
 /blog/* /posts/:splat 301!
+/location-checker https://bert-location-checker.netlify.app/ 200
+/location-checker/* https://bert-location-checker.netlify.app/:splat 200
