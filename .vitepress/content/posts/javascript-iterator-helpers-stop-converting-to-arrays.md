@@ -1,10 +1,10 @@
 ---
-date: '2026-07-23T02:07:35.000-05:00'
-tags: ['javascript', 'web-apis', 'performance']
+date: "2026-07-23T02:07:35.000-05:00"
+tags: ["javascript", "web-apis", "performance"]
 draft: false
 title: "JavaScript Iterator Helpers: Stop Converting to Arrays First"
-image: '/images/posts/javascript-iterator-helpers-stop-converting-to-arrays.jpg'
-topic: 'development'
+image: "/images/posts/javascript-iterator-helpers-stop-converting-to-arrays.jpg"
+topic: "development"
 description: "Iterator helpers bring map, filter, take, and drop to any iterator without spreading into an array first. They went Baseline in 2025, and they change how you handle Maps, Sets, and generators."
 ---
 
@@ -21,7 +21,7 @@ So the opening example loses the spread entirely:
 ```js
 const activeAdmins = users
   .values()
-  .filter((u) => u.role === 'admin')
+  .filter((u) => u.role === "admin")
   .filter((u) => u.active)
   .take(10)
   .toArray();
@@ -61,8 +61,8 @@ function* readLines(file) {
   /* yields one line at a time */
 }
 
-const errorCount = Iterator.from(readLines('app.log'))
-  .filter((line) => line.includes('ERROR'))
+const errorCount = Iterator.from(readLines("app.log"))
+  .filter((line) => line.includes("ERROR"))
   .reduce((count) => count + 1, 0);
 ```
 
