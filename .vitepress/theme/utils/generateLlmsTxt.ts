@@ -22,6 +22,18 @@ interface PostMeta {
   slug: string;
 }
 
+// Sort key for newest-first ordering. Posts with no date, or a date that
+// fails to parse, sort to the end rather than corrupting the comparator with
+// NaN (an invalid Date's getTime() is NaN, and Array.prototype.sort's order
+// is unspecified once the comparator can return NaN).
+function postSortTime(post: PostMeta): number {
+  if (!post.date) {
+    return -Infinity;
+  }
+  const time = new Date(post.date).getTime();
+  return Number.isNaN(time) ? -Infinity : time;
+}
+
 function loadPosts(): PostMeta[] {
   return (
     readdirSync(POSTS_DIR)
@@ -34,11 +46,7 @@ function loadPosts(): PostMeta[] {
       })
       .filter((p) => !p.draft)
       // Newest first; undated posts (e.g. some travel entries) sort to the end.
-      .sort((a, b) => {
-        const aTime = a.date ? new Date(a.date).getTime() : -Infinity;
-        const bTime = b.date ? new Date(b.date).getTime() : -Infinity;
-        return bTime - aTime;
-      })
+      .sort((a, b) => postSortTime(b) - postSortTime(a))
   );
 }
 

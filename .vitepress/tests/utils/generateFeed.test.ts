@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { xml2js, type ElementCompact } from "xml-js";
 
 vi.mock("fs", () => {
   const readdirSync = vi.fn();
@@ -33,51 +34,35 @@ function mockPostFiles(
   }
 }
 
-function parseFeedXml(xml: string): Document {
-  return new DOMParser().parseFromString(xml, "text/xml");
+// xml-js's `xml2js` throws on real malformed XML (a bare `&` or `<` outside
+// an entity/tag, mismatched tags) rather than silently repairing it the way
+// a browser-grade DOM parser would, which is what makes it a meaningful
+// "does this actually parse" check for RSS output the build writes straight
+// to disk.
+function parseFeedXml(xml: string): ElementCompact {
+  return xml2js(xml, { compact: true }) as ElementCompact;
 }
 
-// happy-dom's DOMParser cannot parse `<![CDATA[...]]>` sections at all (it
-// treats "<![CDATA[" as an invalid start tag), so strip them before checking
-// document structure. CDATA content is raw character data by definition, so
-// nothing is lost from a structural well-formedness check by ignoring it.
-function stripCdataSections(xml: string): string {
-  return xml.replace(/<!\[CDATA\[[\s\S]*?\]\]>/g, "");
+function feedItems(xml: string): ElementCompact[] {
+  const items = parseFeedXml(xml).rss.channel.item ?? [];
+  return Array.isArray(items) ? items : [items];
 }
 
-// Verifies the feed both parses as valid XML and contains no bare `&`
-// outside of CDATA sections — happy-dom's parser silently repairs a bare
-// `&` into `&amp;` instead of erroring, so that specific regression needs
-// its own check rather than relying on parsererror detection alone.
-function assertWellFormedXml(xml: string): void {
-  const structuralXml = stripCdataSections(xml);
-  const doc = new DOMParser().parseFromString(structuralXml, "text/xml");
-  expect(doc.querySelector("parsererror")).toBeNull();
-
-  const bareAmpersandPattern =
-    /&(?!amp;|lt;|gt;|quot;|apos;|#\d+;|#x[0-9a-fA-F]+;)/;
-  expect(bareAmpersandPattern.test(structuralXml)).toBe(false);
+// A CDATA-wrapped node's text lives under `_cdata`; a plain text node under
+// `_text`. The "feed" library uses CDATA for any item title/description.
+function nodeText(node: ElementCompact | undefined): string {
+  if (!node) {
+    return "";
+  }
+  return (node._cdata ?? node._text ?? "").toString();
 }
 
-// The "feed" library always wraps item titles in a CDATA section, which
-// happy-dom's DOMParser can't read back out as text (see above), so titles
-// are extracted from the raw XML string instead of via the DOM.
 function itemTitles(xml: string): string[] {
-  const itemBlocks = xml.match(/<item>[\s\S]*?<\/item>/g) ?? [];
-  return itemBlocks.map((block) => {
-    const cdataMatch = block.match(
-      /<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>/,
-    );
-    if (cdataMatch) {
-      return cdataMatch[1];
-    }
-    const plainMatch = block.match(/<title>([\s\S]*?)<\/title>/);
-    return plainMatch ? plainMatch[1] : "";
-  });
+  return feedItems(xml).map((item) => nodeText(item.title));
 }
 
 beforeEach(() => {
-  vi.clearAllMocks();
+  vi.resetAllMocks();
   mockReadFileSync.mockReturnValue("" as any);
 });
 
@@ -88,7 +73,7 @@ describe("generateFeed", () => {
     const xml = generateFeed();
 
     expect(xml.startsWith(XML_DECLARATION)).toBe(true);
-    assertWellFormedXml(xml);
+    expect(() => parseFeedXml(xml)).not.toThrow();
   });
 
   it("returns a valid feed with no items when there are no posts", () => {
@@ -96,8 +81,8 @@ describe("generateFeed", () => {
 
     const xml = generateFeed();
 
-    assertWellFormedXml(xml);
-    expect(parseFeedXml(xml).querySelectorAll("item")).toHaveLength(0);
+    expect(() => parseFeedXml(xml)).not.toThrow();
+    expect(feedItems(xml)).toHaveLength(0);
   });
 
   it("excludes index.md and non-markdown files from the feed", () => {
@@ -114,6 +99,10 @@ describe("generateFeed", () => {
     generateFeed();
 
     expect(mockParseFrontmatter).toHaveBeenCalledTimes(1);
+    expect(mockReadFileSync).toHaveBeenCalledWith(
+      expect.stringContaining("real-post.md"),
+      "utf-8",
+    );
   });
 
   it("filters out draft posts", () => {
@@ -135,6 +124,21 @@ describe("generateFeed", () => {
     );
 
     expect(itemTitles(generateFeed())).toEqual(["Dated"]);
+  });
+
+  it("filters out posts with an unparseable date", () => {
+    mockPostFiles(
+      ["bad-date.md", "dated.md"],
+      [
+        { title: "Bad Date", date: "not-a-real-date" },
+        { title: "Dated", date: "2024-01-01" },
+      ],
+    );
+
+    const xml = generateFeed();
+
+    expect(itemTitles(xml)).toEqual(["Dated"]);
+    expect(xml).not.toContain("Invalid Date");
   });
 
   it("sorts posts newest first", () => {
@@ -171,18 +175,35 @@ describe("generateFeed", () => {
 
     const xml = generateFeed();
 
-    assertWellFormedXml(xml);
+    expect(() => parseFeedXml(xml)).not.toThrow();
     expect(itemTitles(xml)).toEqual([specialTitle]);
+  });
+
+  it("includes the frontmatter description as the item description", () => {
+    mockPostFiles(
+      ["described.md"],
+      [
+        {
+          title: "Described",
+          date: "2024-01-01",
+          description: "A summary & a title",
+        },
+      ],
+    );
+
+    const xml = generateFeed();
+
+    expect(nodeText(feedItems(xml)[0].description)).toBe("A summary & a title");
   });
 
   it("builds absolute URLs for post links and guids from the slug", () => {
     mockPostFiles(["my-cool-post.md"], [{ title: "Cool", date: "2024-01-01" }]);
 
-    const doc = parseFeedXml(stripCdataSections(generateFeed()));
+    const item = feedItems(generateFeed())[0];
     const expectedUrl = `${SITE_URL}/posts/my-cool-post`;
 
-    expect(doc.querySelector("item > link")?.textContent).toBe(expectedUrl);
-    expect(doc.querySelector("item > guid")?.textContent).toBe(expectedUrl);
+    expect(nodeText(item.link)).toBe(expectedUrl);
+    expect(nodeText(item.guid)).toBe(expectedUrl);
   });
 
   it("does not crash and omits the title element when frontmatter has no title", () => {
@@ -190,7 +211,7 @@ describe("generateFeed", () => {
 
     const xml = generateFeed();
 
-    assertWellFormedXml(xml);
-    expect(parseFeedXml(xml).querySelector("item > title")).toBeNull();
+    expect(() => parseFeedXml(xml)).not.toThrow();
+    expect(feedItems(xml)[0].title).toBeUndefined();
   });
 });

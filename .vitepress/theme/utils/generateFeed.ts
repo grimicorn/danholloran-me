@@ -30,7 +30,9 @@ export function generateFeed(): string {
       const slug = file.replace(/\.md$/, "");
       return { ...data, slug } as Record<string, any>;
     })
-    .filter((p) => !p.draft && p.date)
+    .filter(
+      (p) => !p.draft && p.date && !Number.isNaN(new Date(p.date).getTime()),
+    )
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   for (const post of posts) {

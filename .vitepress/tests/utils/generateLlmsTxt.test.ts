@@ -31,21 +31,21 @@ function mockPostFiles(
   }
 }
 
-// Extracts the `- [title](url)...` list items under a `## <heading>` section,
-// stopping at the next `##` heading or end of document.
+// Extracts the `- [title](url)...` list items under a `## <heading>`
+// section, stopping at the next `## ` heading or end of document. Splits on
+// the literal heading marker rather than building a heading into a RegExp,
+// so a heading containing a regex metacharacter can't misbehave.
 function sectionItems(output: string, heading: string): string[] {
-  const sectionPattern = new RegExp(
-    `## ${heading}\\n\\n([\\s\\S]*?)(?=\\n## |$)`,
-  );
-  const match = output.match(sectionPattern);
-  if (!match) {
+  const sections = output.split("\n## ");
+  const section = sections.find((part) => part.startsWith(`${heading}\n`));
+  if (!section) {
     return [];
   }
-  return match[1].split("\n").filter((line) => line.startsWith("- ["));
+  return section.split("\n").filter((line) => line.startsWith("- ["));
 }
 
 beforeEach(() => {
-  vi.clearAllMocks();
+  vi.resetAllMocks();
   mockReadFileSync.mockReturnValue("" as any);
 });
 
@@ -117,6 +117,18 @@ describe("generateLlmsTxt", () => {
     expect(output).not.toContain("## Travel & Photography");
   });
 
+  it("drops posts whose topic matches none of the known sections", () => {
+    mockPostFiles(
+      ["odd.md"],
+      [{ title: "Odd One Out", date: "2024-01-01", topic: "cooking" }],
+    );
+
+    const output = generateLlmsTxt();
+
+    expect(output).not.toContain("Odd One Out");
+    expect(output).not.toContain("## Cooking");
+  });
+
   it("sorts posts within a topic section newest first", () => {
     mockPostFiles(
       ["oldest.md", "newest.md", "middle.md"],
@@ -150,6 +162,23 @@ describe("generateLlmsTxt", () => {
     expect(sectionItems(output, "Travel & Photography")).toEqual([
       `- [Dated](${SITE_URL}/posts/dated)`,
       `- [Undated](${SITE_URL}/posts/undated)`,
+    ]);
+  });
+
+  it("sorts posts with an unparseable date to the end, like undated posts", () => {
+    mockPostFiles(
+      ["bad-date.md", "dated.md"],
+      [
+        { title: "Bad Date", date: "not-a-real-date", topic: "travel" },
+        { title: "Dated", date: "2024-01-01", topic: "travel" },
+      ],
+    );
+
+    const output = generateLlmsTxt();
+
+    expect(sectionItems(output, "Travel & Photography")).toEqual([
+      `- [Dated](${SITE_URL}/posts/dated)`,
+      `- [Bad Date](${SITE_URL}/posts/bad-date)`,
     ]);
   });
 
@@ -221,6 +250,10 @@ describe("generateLlmsTxt", () => {
     generateLlmsTxt();
 
     expect(mockParseFrontmatter).toHaveBeenCalledTimes(1);
+    expect(mockReadFileSync).toHaveBeenCalledWith(
+      expect.stringContaining("real-post.md"),
+      "utf-8",
+    );
   });
 
   it("does not crash on a post with no frontmatter fields at all", () => {
