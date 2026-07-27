@@ -5,6 +5,9 @@ import { SITE_URL, CURRENT_LOCATION } from "./constants";
 
 const POSTS_DIR = join(process.cwd(), ".vitepress/content/posts");
 
+/** The year Dan's professional experience is counted from. */
+export const CAREER_START_YEAR = 2012;
+
 /** Display names and ordering for the `topic` frontmatter field. */
 const TOPIC_SECTIONS: { topic: string; heading: string }[] = [
   { topic: "development", heading: "Development" },
@@ -23,15 +26,17 @@ interface PostMeta {
 }
 
 // Sort key for newest-first ordering. Posts with no date, or a date that
-// fails to parse, sort to the end rather than corrupting the comparator with
-// NaN (an invalid Date's getTime() is NaN, and Array.prototype.sort's order
-// is unspecified once the comparator can return NaN).
+// fails to parse, sort to the end. A finite sentinel (rather than -Infinity)
+// keeps `postSortTime(b) - postSortTime(a)` a real number for any pair of
+// posts, including two undated ones.
+const UNDATED_SORT_TIME = Number.MIN_SAFE_INTEGER;
+
 function postSortTime(post: PostMeta): number {
   if (!post.date) {
-    return -Infinity;
+    return UNDATED_SORT_TIME;
   }
   const time = new Date(post.date).getTime();
-  return Number.isNaN(time) ? -Infinity : time;
+  return Number.isNaN(time) ? UNDATED_SORT_TIME : time;
 }
 
 function loadPosts(): PostMeta[] {
@@ -63,7 +68,7 @@ function postLine(post: PostMeta): string {
  */
 export function generateLlmsTxt(): string {
   const posts = loadPosts();
-  const yearsExperience = new Date().getFullYear() - 2012;
+  const yearsExperience = new Date().getFullYear() - CAREER_START_YEAR;
   const place = CURRENT_LOCATION;
 
   const lines: string[] = [

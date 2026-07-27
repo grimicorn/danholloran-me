@@ -12,7 +12,10 @@ vi.mock("../../theme/utils/frontmatter", () => ({
 
 import { readdirSync, readFileSync } from "fs";
 import { parseFrontmatter } from "../../theme/utils/frontmatter";
-import { generateLlmsTxt } from "../../theme/utils/generateLlmsTxt";
+import {
+  generateLlmsTxt,
+  CAREER_START_YEAR,
+} from "../../theme/utils/generateLlmsTxt";
 import { SITE_URL } from "../../theme/utils/constants";
 
 const mockReaddirSync = vi.mocked(readdirSync);
@@ -62,7 +65,11 @@ describe("generateLlmsTxt", () => {
     expect(output).toContain(
       `- [RSS Feed](${SITE_URL}/feed.xml): Full chronological feed of all posts.`,
     );
-    expect(output).toMatch(/Dan has \d+\+ years of experience/);
+    const expectedYearsExperience =
+      new Date().getFullYear() - CAREER_START_YEAR;
+    expect(output).toContain(
+      `Dan has ${expectedYearsExperience}+ years of experience`,
+    );
   });
 
   it("produces no topic sections when there are no posts", () => {
@@ -178,6 +185,23 @@ describe("generateLlmsTxt", () => {
 
     expect(sectionItems(output, "Travel & Photography")).toEqual([
       `- [Dated](${SITE_URL}/posts/dated)`,
+      `- [Bad Date](${SITE_URL}/posts/bad-date)`,
+    ]);
+  });
+
+  it("preserves input order among a mix of undated and unparseable-date posts", () => {
+    mockPostFiles(
+      ["undated.md", "bad-date.md"],
+      [
+        { title: "Undated", topic: "travel" },
+        { title: "Bad Date", date: "not-a-real-date", topic: "travel" },
+      ],
+    );
+
+    const output = generateLlmsTxt();
+
+    expect(sectionItems(output, "Travel & Photography")).toEqual([
+      `- [Undated](${SITE_URL}/posts/undated)`,
       `- [Bad Date](${SITE_URL}/posts/bad-date)`,
     ]);
   });

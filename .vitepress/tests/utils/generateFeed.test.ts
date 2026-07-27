@@ -49,10 +49,18 @@ function feedItems(xml: string): ElementCompact[] {
 }
 
 // A CDATA-wrapped node's text lives under `_cdata`; a plain text node under
-// `_text`. The "feed" library uses CDATA for any item title/description.
+// `_text`. The "feed" library uses CDATA for any item title/description. When
+// the source text itself contains "]]>", the library splits it across
+// multiple adjacent CDATA sections (the only legal way to embed that
+// sequence in one), which xml-js then reports as an array under `_cdata` —
+// join it back into the original string rather than letting it fall through
+// to Array.prototype.toString's comma-separated join.
 function nodeText(node: ElementCompact | undefined): string {
   if (!node) {
     return "";
+  }
+  if (Array.isArray(node._cdata)) {
+    return node._cdata.join("");
   }
   return (node._cdata ?? node._text ?? "").toString();
 }
@@ -177,6 +185,26 @@ describe("generateFeed", () => {
 
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(itemTitles(xml)).toEqual([specialTitle]);
+  });
+
+  it("does not let a CDATA-terminator sequence in the title break the document", () => {
+    const title = "Nested ]]> sequence & <em>markup</em>";
+    mockPostFiles(["cdata-terminator.md"], [{ title, date: "2024-01-01" }]);
+
+    const xml = generateFeed();
+
+    expect(() => parseFeedXml(xml)).not.toThrow();
+    expect(itemTitles(xml)).toEqual([title]);
+  });
+
+  it("emits the frontmatter date as the item pubDate", () => {
+    mockPostFiles(["dated.md"], [{ title: "Dated", date: "2024-01-01" }]);
+
+    const pubDate = nodeText(feedItems(generateFeed())[0].pubDate);
+
+    expect(new Date(pubDate).toISOString()).toBe(
+      new Date("2024-01-01").toISOString(),
+    );
   });
 
   it("includes the frontmatter description as the item description", () => {
