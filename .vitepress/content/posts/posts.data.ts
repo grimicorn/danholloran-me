@@ -1,23 +1,32 @@
 import { createContentLoader } from "vitepress";
+import { Post } from "@typedefs";
 import { calculateReadTime } from "../../theme/utils/readTime.ts";
+
+declare const data: Post[];
+export { data };
 
 export default createContentLoader(".vitepress/content/posts/*.md", {
   // includeSrc is needed here only so `transform` can compute readTime below;
-  // render stays on because PostView.vue (posts/[slug].md) renders `post.html`.
-  // excerpt is intentionally omitted: no consumer reads `.excerpt`.
+  // excerpt is intentionally omitted below: no consumer reads `.excerpt`.
+  //
+  // render stays on, so `html` is still generated and shipped for every post
+  // in this same payload — the only consumer that needs it is PostView.vue
+  // (posts/[slug].md), not the list views. Splitting list metadata from post
+  // detail content into two loaders would close that gap; left as a
+  // follow-up since it's a larger change than trimming unused fields.
   includeSrc: true,
   render: true,
-  transform(data) {
-    return data
+  transform(raw) {
+    return raw
       .filter(({ frontmatter }) => !frontmatter.draft)
       .sort(
         (a, b) =>
           new Date(b.frontmatter.date).getTime() -
           new Date(a.frontmatter.date).getTime(),
       )
-      .map(({ src, ...post }) => {
+      .map(({ src, excerpt: _excerpt, ...post }) => {
         const slug = post.url
-          .replace(/\/.vitepress\/content\/posts\//g, "")
+          .replace(/\/\.vitepress\/content\/posts\//g, "")
           .replace(/\/posts\//g, "");
 
         // Build a new object rather than mutating `post` in place: VitePress

@@ -19,12 +19,14 @@ vi.mock("vitepress", () => ({
 
 function makeRawPost(overrides: Record<string, unknown> = {}) {
   return {
-    // Real createContentLoader urls have the .md extension stripped;
-    // excerpt is omitted here too since the loader no longer requests it
-    // (excerpt: true was removed from the config) and never attaches it.
+    // Real createContentLoader urls have the .md extension stripped.
+    // VitePress's own loader always attaches an `excerpt` key (undefined
+    // when the `excerpt` option isn't set) rather than omitting it, so the
+    // fixture mirrors that shape to prove the transform strips it.
     url: "/.vitepress/content/posts/example-post",
     src: "word ".repeat(400).trim(),
     html: "<p>Rendered content</p>",
+    excerpt: undefined,
     frontmatter: {
       title: "Example Post",
       image: "/images/posts/example-post.jpg",
@@ -69,12 +71,13 @@ describe("posts.data.ts loader", () => {
     expect(post.frontmatter.readTime).toBe(2);
   });
 
-  it("keeps rendered html for the post detail view but drops src", () => {
+  it("keeps rendered html for the post detail view but drops src and excerpt", () => {
     const [transformed] = capturedConfig.transform([makeRawPost()]);
     const post = transformed as Record<string, unknown>;
 
     expect(post.html).toBe("<p>Rendered content</p>");
     expect(post).not.toHaveProperty("src");
+    expect(post).not.toHaveProperty("excerpt");
   });
 
   it("filters out draft posts", () => {
