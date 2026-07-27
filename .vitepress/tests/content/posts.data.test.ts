@@ -43,6 +43,10 @@ describe("posts.data.ts loader", () => {
     await import("../../content/posts/posts.data.ts");
   });
 
+  it("registers the transform config with createContentLoader", () => {
+    expect(capturedConfig).toBeDefined();
+  });
+
   it("keeps includeSrc and render on but does not request excerpt", () => {
     expect(capturedConfig.includeSrc).toBe(true);
     expect(capturedConfig.render).toBe(true);
@@ -74,12 +78,30 @@ describe("posts.data.ts loader", () => {
   });
 
   it("filters out draft posts", () => {
-    const draftPost = makeRawPost();
-    draftPost.frontmatter = { ...draftPost.frontmatter, draft: true };
+    const draftPost = makeRawPost({
+      frontmatter: { ...makeRawPost().frontmatter, draft: true },
+    });
 
     const transformed = capturedConfig.transform([draftPost]);
 
     expect(transformed).toHaveLength(0);
+  });
+
+  it("derives the slug from a url that already omits the content-folder prefix", () => {
+    const [transformed] = capturedConfig.transform([
+      makeRawPost({ url: "/posts/example-post" }),
+    ]) as [{ url: string; frontmatter: { slug: string } }];
+
+    expect(transformed.frontmatter.slug).toBe("example-post");
+    expect(transformed.url).toBe("/posts/example-post");
+  });
+
+  it("falls back to the minimum readTime when src is absent", () => {
+    const [transformed] = capturedConfig.transform([
+      makeRawPost({ src: undefined }),
+    ]) as [{ frontmatter: { readTime: number } }];
+
+    expect(transformed.frontmatter.readTime).toBe(1);
   });
 
   it("sorts posts by date, newest first", () => {
@@ -108,18 +130,21 @@ describe("posts.data.ts loader", () => {
     ]);
   });
 
-  it("computes the same readTime when the loader re-transforms a cached post", () => {
-    // VitePress reuses the same cached raw object across reloads (e.g. dev
-    // server HMR) and re-runs transform on it. transform must not mutate
-    // that object, or a second pass would see `src` already stripped and
-    // silently recompute readTime from an empty string.
+  it("does not mutate the raw post object, so re-transforming a cached post is safe", () => {
+    // VitePress reuses the same cached raw data object across reloads (e.g.
+    // dev server HMR) and re-runs transform on it. A transform that mutates
+    // `frontmatter`/`url` in place would leak derived state (slug, readTime)
+    // back into that cache and corrupt the next pass.
     const cachedRawPost = makeRawPost();
+    const pristineRawPost = makeRawPost();
 
     capturedConfig.transform([cachedRawPost]);
+
+    expect(cachedRawPost).toEqual(pristineRawPost);
+
     const [secondPass] = capturedConfig.transform([cachedRawPost]) as [
       { frontmatter: { readTime: number } },
     ];
-
     expect(secondPass.frontmatter.readTime).toBe(2);
   });
 });

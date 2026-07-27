@@ -21,9 +21,9 @@ export default createContentLoader(".vitepress/content/posts/*.md", {
           .replace(/\/posts\//g, "");
 
         // Build a new object rather than mutating `post` in place: VitePress
-        // reuses the same cached object reference across reloads (e.g. dev
-        // server HMR), so mutating it here would make `src` permanently
-        // unavailable on the second pass and silently break readTime.
+        // reuses the same cached data object across reloads (e.g. dev server
+        // HMR), so writing slug/readTime back onto it would leak derived
+        // state into the cache and corrupt the next transform pass.
         return {
           ...post,
           url: `/posts/${slug}`,
