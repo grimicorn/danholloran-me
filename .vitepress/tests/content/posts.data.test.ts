@@ -67,7 +67,9 @@ describe("posts.data.ts loader", () => {
     expect(post.frontmatter.title).toBe("Example Post");
     // The fixture src is exactly 400 words: calculateReadTime rounds
     // wordCount / 200, so this pins the real computed value rather than
-    // just asserting "some positive number".
+    // just asserting "some positive number". (Real src also includes the
+    // frontmatter block, which calculateReadTime's own tests cover; this
+    // test only checks that the loader passes src through correctly.)
     expect(post.frontmatter.readTime).toBe(2);
   });
 
@@ -137,17 +139,16 @@ describe("posts.data.ts loader", () => {
     // VitePress reuses the same cached raw data object across reloads (e.g.
     // dev server HMR) and re-runs transform on it. A transform that mutates
     // `frontmatter`/`url` in place would leak derived state (slug, readTime)
-    // back into that cache and corrupt the next pass.
+    // back into that cache and corrupt the next pass. toStrictEqual (not
+    // toEqual) matters here: toEqual ignores undefined-valued keys, which
+    // would hide a regression that deletes/blanks a key instead of copying.
     const cachedRawPost = makeRawPost();
     const pristineRawPost = makeRawPost();
 
-    capturedConfig.transform([cachedRawPost]);
+    const [firstPass] = capturedConfig.transform([cachedRawPost]);
+    expect(cachedRawPost).toStrictEqual(pristineRawPost);
 
-    expect(cachedRawPost).toEqual(pristineRawPost);
-
-    const [secondPass] = capturedConfig.transform([cachedRawPost]) as [
-      { frontmatter: { readTime: number } },
-    ];
-    expect(secondPass.frontmatter.readTime).toBe(2);
+    const [secondPass] = capturedConfig.transform([cachedRawPost]);
+    expect(secondPass).toStrictEqual(firstPass);
   });
 });

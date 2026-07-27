@@ -7,13 +7,16 @@ export { data };
 
 export default createContentLoader(".vitepress/content/posts/*.md", {
   // includeSrc is needed here only so `transform` can compute readTime below;
-  // excerpt is intentionally omitted below: no consumer reads `.excerpt`.
+  // the `excerpt` option is omitted here and the field is stripped in
+  // `transform` below: no consumer reads `.excerpt`.
   //
   // render stays on, so `html` is still generated and shipped for every post
   // in this same payload — the only consumer that needs it is PostView.vue
-  // (posts/[slug].md), not the list views. Splitting list metadata from post
-  // detail content into two loaders would close that gap; left as a
-  // follow-up since it's a larger change than trimming unused fields.
+  // (posts/[slug].md), not the list views.
+  // @todo split list metadata (this loader) from post detail content (a
+  // dedicated render:true loader for posts/[slug].md) so html only ships to
+  // the one page that needs it; out of scope here since it's a larger
+  // change than trimming already-unused fields.
   includeSrc: true,
   render: true,
   transform(raw) {
