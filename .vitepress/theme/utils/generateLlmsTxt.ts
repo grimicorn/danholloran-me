@@ -39,20 +39,38 @@ function postSortTime(post: PostMeta): number {
   return Number.isNaN(time) ? UNDATED_SORT_TIME : time;
 }
 
+// Unlike generateFeed (which drops a post with an unparseable date entirely),
+// llms.txt keeps it — sorted to the end, same as an undated post — since an
+// incomplete listing here is lower-stakes than a broken RSS pubDate. Still
+// warn loudly, since it usually points at a frontmatter typo.
+function warnIfDateUnparseable(post: PostMeta): void {
+  if (!post.date) {
+    return;
+  }
+  if (Number.isNaN(new Date(post.date).getTime())) {
+    console.warn(
+      `generateLlmsTxt: post "${post.slug}" has an unparseable date "${post.date}"; sorting it to the end`,
+    );
+  }
+}
+
 function loadPosts(): PostMeta[] {
-  return (
-    readdirSync(POSTS_DIR)
-      .filter((f) => f.endsWith(".md") && f !== "index.md")
-      .map((file) => {
-        const { data } = parseFrontmatter(
-          readFileSync(join(POSTS_DIR, file), "utf-8"),
-        );
-        return { ...data, slug: file.replace(/\.md$/, "") } as PostMeta;
-      })
-      .filter((p) => !p.draft)
-      // Newest first; undated posts (e.g. some travel entries) sort to the end.
-      .sort((a, b) => postSortTime(b) - postSortTime(a))
-  );
+  const posts = readdirSync(POSTS_DIR)
+    .filter((f) => f.endsWith(".md") && f !== "index.md")
+    .map((file) => {
+      const { data } = parseFrontmatter(
+        readFileSync(join(POSTS_DIR, file), "utf-8"),
+      );
+      return { ...data, slug: file.replace(/\.md$/, "") } as PostMeta;
+    })
+    .filter((p) => !p.draft);
+
+  for (const post of posts) {
+    warnIfDateUnparseable(post);
+  }
+
+  // Newest first; undated posts (e.g. some travel entries) sort to the end.
+  return posts.sort((a, b) => postSortTime(b) - postSortTime(a));
 }
 
 function postLine(post: PostMeta): string {

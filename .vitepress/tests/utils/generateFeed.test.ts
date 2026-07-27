@@ -134,7 +134,8 @@ describe("generateFeed", () => {
     expect(itemTitles(generateFeed())).toEqual(["Dated"]);
   });
 
-  it("filters out posts with an unparseable date", () => {
+  it("filters out posts with an unparseable date and warns about it", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     mockPostFiles(
       ["bad-date.md", "dated.md"],
       [
@@ -147,6 +148,9 @@ describe("generateFeed", () => {
 
     expect(itemTitles(xml)).toEqual(["Dated"]);
     expect(xml).not.toContain("Invalid Date");
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("bad-date"));
+
+    warnSpy.mockRestore();
   });
 
   it("sorts posts newest first", () => {

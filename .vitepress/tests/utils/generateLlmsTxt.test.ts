@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 vi.mock("fs", () => {
   const readdirSync = vi.fn();
@@ -52,6 +52,13 @@ beforeEach(() => {
   mockReadFileSync.mockReturnValue("" as any);
 });
 
+// Safety net for the frozen-clock test below: guarantees real timers are
+// restored even if an assertion throws before its own vi.useRealTimers()
+// call runs, so a failure there can't cascade into unrelated tests.
+afterEach(() => {
+  vi.useRealTimers();
+});
+
 describe("generateLlmsTxt", () => {
   it("includes the fixed main pages and optional links regardless of posts", () => {
     mockReaddirSync.mockReturnValue([] as any);
@@ -65,10 +72,17 @@ describe("generateLlmsTxt", () => {
     expect(output).toContain(
       `- [RSS Feed](${SITE_URL}/feed.xml): Full chronological feed of all posts.`,
     );
-    const expectedYearsExperience =
-      new Date().getFullYear() - CAREER_START_YEAR;
+  });
+
+  it("computes years of experience from CAREER_START_YEAR against the current date", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2030-06-01"));
+    mockReaddirSync.mockReturnValue([] as any);
+
+    const output = generateLlmsTxt();
+
     expect(output).toContain(
-      `Dan has ${expectedYearsExperience}+ years of experience`,
+      `Dan has ${2030 - CAREER_START_YEAR}+ years of experience`,
     );
   });
 
@@ -172,7 +186,8 @@ describe("generateLlmsTxt", () => {
     ]);
   });
 
-  it("sorts posts with an unparseable date to the end, like undated posts", () => {
+  it("sorts posts with an unparseable date to the end and warns about it", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     mockPostFiles(
       ["bad-date.md", "dated.md"],
       [
@@ -187,6 +202,9 @@ describe("generateLlmsTxt", () => {
       `- [Dated](${SITE_URL}/posts/dated)`,
       `- [Bad Date](${SITE_URL}/posts/bad-date)`,
     ]);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("bad-date"));
+
+    warnSpy.mockRestore();
   });
 
   it("preserves input order among a mix of undated and unparseable-date posts", () => {
@@ -258,6 +276,30 @@ describe("generateLlmsTxt", () => {
     const output = generateLlmsTxt();
 
     expect(output).toContain(`(${SITE_URL}/posts/my-cool-post)`);
+  });
+
+  // postLine() interpolates the title straight into `- [title](url)` with no
+  // markdown escaping, so a title containing `]` breaks the link syntax.
+  // This pins today's (imperfect) output as a known limitation rather than
+  // silently drifting; fixing the escaping is tracked separately, not part
+  // of this test-coverage pass.
+  it("does not escape markdown-significant characters in the title (known limitation)", () => {
+    mockPostFiles(
+      ["brackets.md"],
+      [
+        {
+          title: "Using [] in TypeScript",
+          date: "2024-01-01",
+          topic: "development",
+        },
+      ],
+    );
+
+    const output = generateLlmsTxt();
+
+    expect(sectionItems(output, "Development")).toEqual([
+      `- [Using [] in TypeScript](${SITE_URL}/posts/brackets)`,
+    ]);
   });
 
   it("excludes index.md and non-markdown files", () => {
