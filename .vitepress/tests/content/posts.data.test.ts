@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeAll } from "vitest";
 // createContentLoader is provided by vitepress at build time; capture the
 // config object the loader module hands it so `transform` can be exercised
 // directly, the same way the real loader would call it.
+let capturedPattern: string;
 let capturedConfig: {
   includeSrc?: boolean;
   render?: boolean;
@@ -11,7 +12,8 @@ let capturedConfig: {
 };
 
 vi.mock("vitepress", () => ({
-  createContentLoader: (_pattern: string, config: typeof capturedConfig) => {
+  createContentLoader: (pattern: string, config: typeof capturedConfig) => {
+    capturedPattern = pattern;
     capturedConfig = config;
     return { watch: [], load: () => [] };
   },
@@ -45,8 +47,9 @@ describe("posts.data.ts loader", () => {
     await import("../../content/posts/posts.data.ts");
   });
 
-  it("registers the transform config with createContentLoader", () => {
-    expect(capturedConfig).toBeDefined();
+  it("registers the posts glob and a transform function with createContentLoader", () => {
+    expect(capturedPattern).toBe(".vitepress/content/posts/*.md");
+    expect(typeof capturedConfig.transform).toBe("function");
   });
 
   it("keeps includeSrc and render on but does not request excerpt", () => {
