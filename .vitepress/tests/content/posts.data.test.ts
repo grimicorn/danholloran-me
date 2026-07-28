@@ -52,7 +52,7 @@ describe("posts.data.ts loader", () => {
   it("keeps includeSrc and render on but does not request excerpt", () => {
     expect(capturedConfig.includeSrc).toBe(true);
     expect(capturedConfig.render).toBe(true);
-    expect(capturedConfig.excerpt).toBeUndefined();
+    expect(capturedConfig).not.toHaveProperty("excerpt");
   });
 
   it("returns frontmatter, url, slug, and readTime for each post", () => {

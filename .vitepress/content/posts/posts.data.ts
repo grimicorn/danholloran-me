@@ -1,5 +1,5 @@
 import { createContentLoader } from "vitepress";
-import { Post } from "@typedefs";
+import type { Post } from "@typedefs";
 import { calculateReadTime } from "../../theme/utils/readTime.ts";
 
 declare const data: Post[];
