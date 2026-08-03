@@ -57,7 +57,7 @@ describe("public/_headers connect-src", () => {
     });
   });
 
-  it("keeps the full CSP directive set intact", () => {
+  it("declares all expected CSP directives", () => {
     const cspLine = readCspLine();
     EXPECTED_DIRECTIVES.forEach((directive) => {
       expect(cspLine).toMatch(new RegExp(`[\\s;]${directive}\\s`));
