@@ -5,7 +5,7 @@ import { describe, it, expect } from "vitest";
 const HEADERS_PATH = resolve(process.cwd(), "public/_headers");
 const SELF_CONNECT_SRC = "'self'";
 const NEWSLETTER_CONNECT_SRC = "https://app.kit.com";
-const ANALYTICS_CONNECT_SRC = [
+const ANALYTICS_CONNECT_SOURCES = [
   "https://www.google-analytics.com",
   "https://www.googletagmanager.com",
 ];
@@ -52,7 +52,7 @@ describe("public/_headers connect-src", () => {
 
   it("still allows the analytics endpoints", () => {
     const sources = readConnectSrc();
-    ANALYTICS_CONNECT_SRC.forEach((source) => {
+    ANALYTICS_CONNECT_SOURCES.forEach((source) => {
       expect(sources).toContain(source);
     });
   });
