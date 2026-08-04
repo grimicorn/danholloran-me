@@ -37,14 +37,23 @@ function readPackageJson(): DependencyManifest {
   return readJsonFromRoot("package.json") as DependencyManifest;
 }
 
-// `npm ci --omit=dev` resolves root edges from the lockfile's `packages[""]`
-// block, which mirrors package.json. Asserting against it also catches a lockfile
-// left stale relative to package.json (hand-edited, `npm install` never re-run).
-function readLockfileRootManifest(): DependencyManifest {
+type LockfilePackageEntry = {
+  dev?: boolean;
+  devOptional?: boolean;
+};
+
+function readLockfilePackages(): Record<string, LockfilePackageEntry> {
   const lockfile = readJsonFromRoot("package-lock.json") as {
-    packages?: Record<string, DependencyManifest>;
+    packages?: Record<string, LockfilePackageEntry & DependencyManifest>;
   };
-  return lockfile.packages?.[""] ?? {};
+  return lockfile.packages ?? {};
+}
+
+// The lockfile's `packages[""]` block mirrors package.json's dependency edges;
+// asserting against it catches a lockfile left stale relative to package.json
+// (hand-edited, `npm install` never re-run).
+function readLockfileRootManifest(): DependencyManifest {
+  return readLockfilePackages()[""] ?? {};
 }
 
 function assertPlacement(describeName: string, manifest: DependencyManifest) {
@@ -70,3 +79,21 @@ assertPlacement(
   "package-lock.json build-time dependency placement",
   readLockfileRootManifest(),
 );
+
+// `npm ci --omit=dev` prunes each installed node whose per-package lockfile entry
+// is flagged `dev`/`devOptional`, independent of the root edges checked above. This
+// asserts on the exact mechanism the production install uses, catching a lockfile
+// that lists a package as a root dependency yet still marks its node dev-only.
+describe("package-lock.json build-time entries survive --omit=dev", () => {
+  const lockfilePackages = readLockfilePackages();
+
+  it.each(BUILD_TIME_DEPENDENCIES)(
+    "does not flag %s as dev-only",
+    (packageName) => {
+      const entry = lockfilePackages[`node_modules/${packageName}`];
+      expect(entry).toBeDefined();
+      expect(entry.dev).not.toBe(true);
+      expect(entry.devOptional).not.toBe(true);
+    },
+  );
+});
