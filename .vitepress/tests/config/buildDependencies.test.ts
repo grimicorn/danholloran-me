@@ -45,7 +45,6 @@ function readPackageJson(): DependencyManifest {
 
 type LockfilePackageEntry = {
   dev?: boolean;
-  devOptional?: boolean;
 };
 
 function readLockfilePackages(): Record<string, LockfilePackageEntry> {
