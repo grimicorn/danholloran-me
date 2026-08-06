@@ -11,8 +11,10 @@ const POSTS_DIR = join(process.cwd(), ".vitepress/content/posts");
 // and its XML serializer escapes only the first occurrence per field, so a
 // body containing the sequence twice would prematurely close the section and
 // corrupt the whole feed document. Neutralize every terminator by
-// entity-encoding its closing bracket; an HTML-rendering reader shows the
-// original literal text.
+// entity-encoding its closing bracket; since `content:encoded` is HTML, a
+// spec-compliant reader decodes it back to the original literal text (a
+// plaintext-mode reader would show `]]&gt;`, an acceptable trade for not
+// breaking the document).
 const CDATA_TERMINATOR = "]]>";
 const CDATA_TERMINATOR_SAFE = "]]&gt;";
 

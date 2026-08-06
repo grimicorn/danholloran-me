@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { xml2js, type ElementCompact } from "xml-js";
-import { createMarkdownRenderer, type MarkdownRenderer } from "vitepress";
+import type { MarkdownRenderer } from "vitepress";
 
 vi.mock("fs", () => {
   const readdirSync = vi.fn();
@@ -96,7 +96,7 @@ describe("generateFeed", () => {
   it("produces well-formed, parseable RSS XML", async () => {
     mockPostFiles(["only-post.md"], [{ title: "Hello", date: "2024-01-01" }]);
 
-    const xml = await generateFeed(passthroughRenderer());
+    const xml = generateFeed(passthroughRenderer());
 
     expect(xml.startsWith(XML_DECLARATION)).toBe(true);
     expect(() => parseFeedXml(xml)).not.toThrow();
@@ -105,7 +105,7 @@ describe("generateFeed", () => {
   it("returns a valid feed with no items when there are no posts", async () => {
     mockReaddirSync.mockReturnValue([] as any);
 
-    const xml = await generateFeed(passthroughRenderer());
+    const xml = generateFeed(passthroughRenderer());
 
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(feedItems(xml)).toHaveLength(0);
@@ -122,7 +122,7 @@ describe("generateFeed", () => {
       content: "",
     });
 
-    await generateFeed(passthroughRenderer());
+    generateFeed(passthroughRenderer());
 
     expect(mockParseFrontmatter).toHaveBeenCalledTimes(1);
     expect(mockReadFileSync).toHaveBeenCalledWith(
@@ -140,7 +140,7 @@ describe("generateFeed", () => {
       ],
     );
 
-    expect(itemTitles(await generateFeed(passthroughRenderer()))).toEqual([
+    expect(itemTitles(generateFeed(passthroughRenderer()))).toEqual([
       "Published",
     ]);
   });
@@ -151,9 +151,7 @@ describe("generateFeed", () => {
       [{ title: "No Date" }, { title: "Dated", date: "2024-01-01" }],
     );
 
-    expect(itemTitles(await generateFeed(passthroughRenderer()))).toEqual([
-      "Dated",
-    ]);
+    expect(itemTitles(generateFeed(passthroughRenderer()))).toEqual(["Dated"]);
   });
 
   it("filters out posts with an unparseable date and warns about it", async () => {
@@ -166,7 +164,7 @@ describe("generateFeed", () => {
       ],
     );
 
-    const xml = await generateFeed(passthroughRenderer());
+    const xml = generateFeed(passthroughRenderer());
 
     expect(itemTitles(xml)).toEqual(["Dated"]);
     expect(xml).not.toContain("Invalid Date");
@@ -185,7 +183,7 @@ describe("generateFeed", () => {
       ],
     );
 
-    expect(itemTitles(await generateFeed(passthroughRenderer()))).toEqual([
+    expect(itemTitles(generateFeed(passthroughRenderer()))).toEqual([
       "Newest",
       "Middle",
       "Oldest",
@@ -201,7 +199,7 @@ describe("generateFeed", () => {
       ],
     );
 
-    expect(itemTitles(await generateFeed(passthroughRenderer()))).toEqual([
+    expect(itemTitles(generateFeed(passthroughRenderer()))).toEqual([
       "First",
       "Second",
     ]);
@@ -214,7 +212,7 @@ describe("generateFeed", () => {
       [{ title: specialTitle, date: "2024-01-01" }],
     );
 
-    const xml = await generateFeed(passthroughRenderer());
+    const xml = generateFeed(passthroughRenderer());
 
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(itemTitles(xml)).toEqual([specialTitle]);
@@ -224,7 +222,7 @@ describe("generateFeed", () => {
     const title = "Nested ]]> sequence & <em>markup</em>";
     mockPostFiles(["cdata-terminator.md"], [{ title, date: "2024-01-01" }]);
 
-    const xml = await generateFeed(passthroughRenderer());
+    const xml = generateFeed(passthroughRenderer());
 
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(itemTitles(xml)).toEqual([title]);
@@ -234,7 +232,7 @@ describe("generateFeed", () => {
     mockPostFiles(["dated.md"], [{ title: "Dated", date: "2024-01-01" }]);
 
     const pubDate = nodeText(
-      feedItems(await generateFeed(passthroughRenderer()))[0].pubDate,
+      feedItems(generateFeed(passthroughRenderer()))[0].pubDate,
     );
 
     expect(new Date(pubDate).toISOString()).toBe(
@@ -254,24 +252,25 @@ describe("generateFeed", () => {
       ],
     );
 
-    const xml = await generateFeed(passthroughRenderer());
+    const xml = generateFeed(passthroughRenderer());
 
     expect(nodeText(feedItems(xml)[0].description)).toBe("A summary & a title");
   });
 
-  it("renders the markdown post body into the item content", async () => {
+  it("passes the raw markdown body through the renderer into the item content", () => {
     mockPostFiles(
       ["with-body.md"],
       [{ title: "Bodied", date: "2024-01-01", description: "Summary only" }],
-      ["# Heading\n\nSome **bold** text."],
+      ["# Heading"],
     );
-    const renderer = await createMarkdownRenderer(process.cwd());
+    const renderer = {
+      render: vi.fn((src: string) => `<rendered>${src}</rendered>`),
+    } as unknown as MarkdownRenderer;
 
     const content = itemContent(feedItems(generateFeed(renderer))[0]);
 
-    expect(content).toContain("<h1");
-    expect(content).toContain("Heading");
-    expect(content).toContain("<strong>bold</strong>");
+    expect(renderer.render).toHaveBeenCalledWith("# Heading");
+    expect(content).toContain("<rendered># Heading</rendered>");
   });
 
   it("ships the full body as content, distinct from the one-line description", async () => {
@@ -287,7 +286,7 @@ describe("generateFeed", () => {
       ["The full article body goes here."],
     );
 
-    const item = feedItems(await generateFeed(passthroughRenderer()))[0];
+    const item = feedItems(generateFeed(passthroughRenderer()))[0];
 
     expect(nodeText(item.description)).toBe("Just a summary");
     expect(itemContent(item)).toContain("The full article body goes here.");
@@ -302,9 +301,7 @@ describe("generateFeed", () => {
     );
 
     expect(
-      feedItems(await generateFeed(passthroughRenderer()))[0][
-        "content:encoded"
-      ],
+      feedItems(generateFeed(passthroughRenderer()))[0]["content:encoded"],
     ).toBeUndefined();
   });
 
@@ -315,7 +312,7 @@ describe("generateFeed", () => {
       ["<pre>one ]]> two ]]> three</pre>"],
     );
 
-    const xml = await generateFeed(passthroughRenderer());
+    const xml = generateFeed(passthroughRenderer());
 
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(itemContent(feedItems(xml)[0])).not.toContain("]]>");
@@ -331,7 +328,7 @@ describe("generateFeed", () => {
     );
 
     const content = itemContent(
-      feedItems(await generateFeed(passthroughRenderer()))[0],
+      feedItems(generateFeed(passthroughRenderer()))[0],
     );
 
     expect(content).toContain(`src="${SITE_URL}/images/posts/x.png"`);
@@ -358,7 +355,7 @@ describe("generateFeed", () => {
   it("builds absolute URLs for post links and guids from the slug", async () => {
     mockPostFiles(["my-cool-post.md"], [{ title: "Cool", date: "2024-01-01" }]);
 
-    const item = feedItems(await generateFeed(passthroughRenderer()))[0];
+    const item = feedItems(generateFeed(passthroughRenderer()))[0];
     const expectedUrl = `${SITE_URL}/posts/my-cool-post`;
 
     expect(nodeText(item.link)).toBe(expectedUrl);
@@ -368,7 +365,7 @@ describe("generateFeed", () => {
   it("does not crash and omits the title element when frontmatter has no title", async () => {
     mockPostFiles(["untitled.md"], [{ date: "2024-01-01" }]);
 
-    const xml = await generateFeed(passthroughRenderer());
+    const xml = generateFeed(passthroughRenderer());
 
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(feedItems(xml)[0].title).toBeUndefined();
