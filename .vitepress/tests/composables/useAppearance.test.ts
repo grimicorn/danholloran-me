@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { defineComponent } from "vue";
-import { mount, flushPromises } from "@vue/test-utils";
+import { mount, flushPromises, type VueWrapper } from "@vue/test-utils";
 
 import {
   readStored,
@@ -9,12 +9,18 @@ import {
 
 const STORAGE_KEY = "vitepress-theme-appearance";
 
+const mountedWrappers: VueWrapper[] = [];
+const mediaQueryListeners = {
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
+};
+
 function mockPrefersDark(prefersDark: boolean) {
   vi.spyOn(window, "matchMedia").mockReturnValue({
     matches: prefersDark,
     media: "(prefers-color-scheme: dark)",
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
+    addEventListener: mediaQueryListeners.addEventListener,
+    removeEventListener: mediaQueryListeners.removeEventListener,
     addListener: vi.fn(),
     removeListener: vi.fn(),
     onchange: null,
@@ -22,23 +28,31 @@ function mockPrefersDark(prefersDark: boolean) {
   } as unknown as MediaQueryList);
 }
 
+type Appearance = ReturnType<typeof useAppearance>;
+
 function mountAppearance() {
+  let appearance: Appearance;
   const Harness = defineComponent({
     setup() {
-      useAppearance();
+      appearance = useAppearance();
       return () => null;
     },
   });
-  return mount(Harness, { attachTo: document.body });
+  const wrapper = mount(Harness, { attachTo: document.body });
+  mountedWrappers.push(wrapper);
+  return { wrapper, appearance: appearance! };
 }
 
 describe("useAppearance", () => {
   beforeEach(() => {
     localStorage.clear();
     document.documentElement.classList.remove("dark");
+    mediaQueryListeners.addEventListener.mockClear();
+    mediaQueryListeners.removeEventListener.mockClear();
   });
 
   afterEach(() => {
+    mountedWrappers.splice(0).forEach((wrapper) => wrapper.unmount());
     vi.restoreAllMocks();
   });
 
@@ -90,6 +104,47 @@ describe("useAppearance", () => {
       mountAppearance();
       await flushPromises();
       expect(document.documentElement.classList.contains("dark")).toBe(true);
+    });
+  });
+
+  describe("cycleTheme", () => {
+    it("persists and applies the next theme in the cycle", async () => {
+      localStorage.setItem(STORAGE_KEY, "auto");
+      mockPrefersDark(false);
+      const { appearance } = mountAppearance();
+      await flushPromises();
+
+      appearance.cycleTheme();
+
+      expect(appearance.theme.value).toBe("light");
+      expect(localStorage.getItem(STORAGE_KEY)).toBe("light");
+    });
+
+    it("keeps the applied theme when persistence throws", async () => {
+      localStorage.setItem(STORAGE_KEY, "light");
+      mockPrefersDark(false);
+      const { appearance } = mountAppearance();
+      await flushPromises();
+      vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+        throw new Error("QuotaExceededError");
+      });
+
+      expect(() => appearance.cycleTheme()).not.toThrow();
+      expect(appearance.theme.value).toBe("dark");
+      expect(document.documentElement.classList.contains("dark")).toBe(true);
+    });
+  });
+
+  describe("cleanup", () => {
+    it("removes the system-preference listener on unmount", async () => {
+      mockPrefersDark(false);
+      const { wrapper } = mountAppearance();
+      await flushPromises();
+      expect(mediaQueryListeners.addEventListener).toHaveBeenCalledTimes(1);
+
+      wrapper.unmount();
+
+      expect(mediaQueryListeners.removeEventListener).toHaveBeenCalledTimes(1);
     });
   });
 });
