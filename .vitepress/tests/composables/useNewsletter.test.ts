@@ -7,7 +7,9 @@ const VALID_EMAIL = "reader@example.com";
 function mockFetchStatus(responseStatus: number) {
   return vi
     .spyOn(globalThis, "fetch")
-    .mockResolvedValue(new Response(null, { status: responseStatus }));
+    .mockImplementation(() =>
+      Promise.resolve(new Response(null, { status: responseStatus })),
+    );
 }
 
 function deferredResponse() {
@@ -50,9 +52,7 @@ describe("useNewsletter", () => {
 
   it("ignores a second submit while the first is in flight", async () => {
     const { promise, resolveFetch } = deferredResponse();
-    const fetchMock = vi
-      .spyOn(globalThis, "fetch")
-      .mockReturnValue(promise as ReturnType<typeof fetch>);
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockReturnValue(promise);
     const { email, status, subscribe } = useNewsletter();
 
     email.value = VALID_EMAIL;
