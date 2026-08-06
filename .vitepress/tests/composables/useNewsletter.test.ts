@@ -48,6 +48,26 @@ describe("useNewsletter", () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(status.value).toBe("success");
+
+    const [url, init] = fetchMock.mock.calls[0];
+    const headers = init?.headers as Record<string, string>;
+    const body = init?.body as FormData;
+    expect(url).toBe("https://app.kit.com/forms/9565549/subscriptions");
+    expect(init?.method).toBe("POST");
+    expect(headers.Accept).toBe("application/json");
+    expect(body.get("email_address")).toBe(VALID_EMAIL);
+  });
+
+  it("trims surrounding whitespace before validating and posting", async () => {
+    const fetchMock = mockFetchStatus(200);
+    const { email, status, subscribe } = useNewsletter();
+
+    email.value = `  ${VALID_EMAIL}  `;
+    await subscribe();
+
+    expect(status.value).toBe("success");
+    const body = fetchMock.mock.calls[0][1]?.body as FormData;
+    expect(body.get("email_address")).toBe(VALID_EMAIL);
   });
 
   it("ignores a second submit while the first is in flight", async () => {
@@ -68,15 +88,20 @@ describe("useNewsletter", () => {
     expect(status.value).toBe("success");
   });
 
-  it("allows a resubmit after the first request settles", async () => {
-    const fetchMock = mockFetchStatus(200);
-    const { email, subscribe } = useNewsletter();
+  it("releases the guard after a failed request so a retry can succeed", async () => {
+    const fetchMock = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(new Response(null, { status: 500 }))
+      .mockResolvedValueOnce(new Response(null, { status: 200 }));
+    const { email, status, subscribe } = useNewsletter();
 
     email.value = VALID_EMAIL;
     await subscribe();
-    await subscribe();
+    expect(status.value).toBe("error");
 
+    await subscribe();
     expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(status.value).toBe("success");
   });
 
   it("reports an error when the API responds with a non-ok status", async () => {
@@ -105,5 +130,6 @@ describe("useNewsletter", () => {
     await subscribe();
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(status.value).toBe("success");
+    expect(errorMessage.value).toBe("");
   });
 });
