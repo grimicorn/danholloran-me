@@ -80,6 +80,13 @@ function itemContent(item: ElementCompact): string {
   return nodeText(item["content:encoded"]);
 }
 
+// A minimal renderer stand-in that skips real markdown-it startup for tests
+// asserting feed structure and post-render processing (CDATA/URL handling)
+// rather than markdown-to-HTML conversion itself.
+function passthroughRenderer(): MarkdownRenderer {
+  return { render: (src: string) => src } as unknown as MarkdownRenderer;
+}
+
 beforeEach(() => {
   vi.resetAllMocks();
   mockReadFileSync.mockReturnValue("" as any);
@@ -270,7 +277,7 @@ describe("generateFeed", () => {
       ["The full article body goes here."],
     );
 
-    const item = feedItems(await generateFeed())[0];
+    const item = feedItems(await generateFeed(passthroughRenderer()))[0];
 
     expect(nodeText(item.description)).toBe("Just a summary");
     expect(itemContent(item)).toContain("The full article body goes here.");
@@ -285,7 +292,9 @@ describe("generateFeed", () => {
     );
 
     expect(
-      feedItems(await generateFeed())[0]["content:encoded"],
+      feedItems(await generateFeed(passthroughRenderer()))[0][
+        "content:encoded"
+      ],
     ).toBeUndefined();
   });
 
@@ -296,10 +305,29 @@ describe("generateFeed", () => {
       ["<pre>one ]]> two ]]> three</pre>"],
     );
 
-    const xml = await generateFeed();
+    const xml = await generateFeed(passthroughRenderer());
 
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(itemContent(feedItems(xml)[0])).not.toContain("]]>");
+  });
+
+  it("rewrites root-relative body URLs to absolute site URLs, leaving protocol-relative URLs alone", async () => {
+    mockPostFiles(
+      ["links.md"],
+      [{ title: "Links", date: "2024-01-01" }],
+      [
+        '<img src="/images/posts/x.png"> <a href="/posts/y/">y</a> <img src="//cdn.example.com/z.png">',
+      ],
+    );
+
+    const content = itemContent(
+      feedItems(await generateFeed(passthroughRenderer()))[0],
+    );
+
+    expect(content).toContain(`src="${SITE_URL}/images/posts/x.png"`);
+    expect(content).toContain(`href="${SITE_URL}/posts/y/"`);
+    expect(content).toContain('src="//cdn.example.com/z.png"');
+    expect(content).not.toContain(`${SITE_URL}//cdn.example.com`);
   });
 
   it("fails loud with the offending slug when rendering a body throws", async () => {

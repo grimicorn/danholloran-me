@@ -11,10 +11,17 @@ const POSTS_DIR = join(process.cwd(), ".vitepress/content/posts");
 // and its XML serializer escapes only the first occurrence per field, so a
 // body containing the sequence twice would prematurely close the section and
 // corrupt the whole feed document. Neutralize every terminator by
-// entity-encoding its closing bracket; a feed reader renders `]]&gt;` back to
-// the original literal text.
+// entity-encoding its closing bracket; an HTML-rendering reader shows the
+// original literal text.
 const CDATA_TERMINATOR = "]]>";
 const CDATA_TERMINATOR_SAFE = "]]&gt;";
+
+// Post bodies use root-relative URLs (e.g. `/images/...`, `/posts/...`) that a
+// feed reader resolves against its own origin, 404-ing every image and dead-
+// linking every internal reference. Rewrite them to absolute site URLs — the
+// same rule the item `image` field already applies. The negative lookahead
+// leaves protocol-relative `//host` URLs untouched.
+const ROOT_RELATIVE_URL = /(\s(?:src|href)=")\/(?!\/)/g;
 
 // A post with no date, or a date that fails to parse, is excluded from the
 // feed rather than shipping an `Invalid Date` pubDate to subscribers. Warn
@@ -52,6 +59,10 @@ function loadPosts(): Record<string, any>[] {
     );
 }
 
+function absolutizeUrls(html: string): string {
+  return html.replace(ROOT_RELATIVE_URL, `$1${SITE_URL}/`);
+}
+
 // Fail loud with the offending slug: a body-less feed item is worse than a
 // build that stops and names the post that could not be rendered.
 function renderBody(
@@ -59,7 +70,7 @@ function renderBody(
   post: Record<string, any>,
 ): string {
   try {
-    const html = renderer.render(post.body ?? "");
+    const html = absolutizeUrls(renderer.render(post.body ?? ""));
     return html.split(CDATA_TERMINATOR).join(CDATA_TERMINATOR_SAFE);
   } catch (error) {
     throw new Error(`generateFeed: failed to render "${post.slug}"`, {
@@ -69,11 +80,12 @@ function renderBody(
 }
 
 // `renderer` is injectable so the markdown pipeline (an external dependency)
-// can be substituted in tests; the build calls `generateFeed()` with no
-// argument and gets VitePress's own markdown-it, reused so feed content comes
-// from the same converter the site builds with rather than a bespoke one. The
-// creation call is async; the returned renderer's `render` is synchronous, so
-// it's built once and reused per post.
+// can be substituted in tests. The build passes one created from the resolved
+// site config (see config.ts `buildEnd`), so feed content is produced by the
+// exact same converter — themes, code transformers, and all — that renders the
+// site's pages. The no-argument fallback builds a default renderer for
+// standalone use. The creation call is async; the returned renderer's `render`
+// is synchronous, so it's built once and reused per post.
 export async function generateFeed(
   renderer?: MarkdownRenderer,
 ): Promise<string> {
