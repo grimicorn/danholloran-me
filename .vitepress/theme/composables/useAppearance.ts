@@ -7,15 +7,16 @@ const DEFAULT_THEME: Theme = "auto";
 const CYCLE_ORDER: Theme[] = [DEFAULT_THEME, "light", "dark"];
 
 function isTheme(value: string | null): value is Theme {
-  return value !== null && CYCLE_ORDER.includes(value as Theme);
+  return CYCLE_ORDER.includes(value as Theme);
 }
 
 export function readStored(): Theme {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (!isTheme(stored)) {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return isTheme(stored) ? stored : DEFAULT_THEME;
+  } catch {
     return DEFAULT_THEME;
   }
-  return stored;
 }
 
 function prefersDark(): boolean {
