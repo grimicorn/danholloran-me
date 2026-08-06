@@ -68,8 +68,8 @@ export default defineConfig({
     },
   },
   transformPageData,
-  buildEnd(siteConfig) {
-    writeFileSync(join(siteConfig.outDir, "feed.xml"), generateFeed());
+  async buildEnd(siteConfig) {
+    writeFileSync(join(siteConfig.outDir, "feed.xml"), await generateFeed());
     writeFileSync(join(siteConfig.outDir, "llms.txt"), generateLlmsTxt());
   },
   cleanUrls: true,

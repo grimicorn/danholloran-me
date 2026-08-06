@@ -1,4 +1,5 @@
 import { Feed } from "feed";
+import { createMarkdownRenderer, type MarkdownRenderer } from "vitepress";
 import { readdirSync, readFileSync } from "fs";
 import { join } from "path";
 import { parseFrontmatter } from "./frontmatter";
@@ -23,7 +24,32 @@ function hasParseableDate(post: Record<string, any>): boolean {
   return !isUnparseable;
 }
 
-export function generateFeed(): string {
+// Reuses VitePress's own markdown pipeline (same one the site's pages render
+// through) so feed content matches on-site rendering rather than a bespoke
+// converter. `createMarkdownRenderer` is async; the returned renderer's
+// `render` is synchronous, so it's created once and reused per post below.
+function createPostRenderer(): Promise<MarkdownRenderer> {
+  return createMarkdownRenderer(process.cwd());
+}
+
+function loadPosts(): Record<string, any>[] {
+  const files = readdirSync(POSTS_DIR).filter(
+    (f) => f.endsWith(".md") && f !== "index.md",
+  );
+
+  return files
+    .map((file) => {
+      const raw = readFileSync(join(POSTS_DIR, file), "utf-8");
+      const { data, content } = parseFrontmatter(raw);
+      const slug = file.replace(/\.md$/, "");
+      return { ...data, slug, body: content } as Record<string, any>;
+    })
+    .filter((p) => !p.draft && hasParseableDate(p))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+export async function generateFeed(): Promise<string> {
+  const renderer = await createPostRenderer();
   const feed = new Feed({
     title: "Dan Holloran",
     description: SITE_DESCRIPTION,
@@ -36,27 +62,14 @@ export function generateFeed(): string {
     author: { name: "Dan Holloran", link: SITE_URL },
   });
 
-  const files = readdirSync(POSTS_DIR).filter(
-    (f) => f.endsWith(".md") && f !== "index.md",
-  );
-
-  const posts = files
-    .map((file) => {
-      const raw = readFileSync(join(POSTS_DIR, file), "utf-8");
-      const { data } = parseFrontmatter(raw);
-      const slug = file.replace(/\.md$/, "");
-      return { ...data, slug } as Record<string, any>;
-    })
-    .filter((p) => !p.draft && hasParseableDate(p))
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-  for (const post of posts) {
+  for (const post of loadPosts()) {
     const url = `${SITE_URL}/posts/${post.slug}`;
     feed.addItem({
       title: post.title,
       id: url,
       link: url,
       description: post.description ?? "",
+      content: renderer.render(post.body ?? ""),
       date: new Date(post.date),
       category: post.tags?.map((t: string) => ({ name: t })) ?? [],
       image: post.image ? `${SITE_URL}${post.image}` : undefined,

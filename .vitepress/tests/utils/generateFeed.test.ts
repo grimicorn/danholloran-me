@@ -23,15 +23,20 @@ const mockParseFrontmatter = vi.mocked(parseFrontmatter);
 const XML_DECLARATION = '<?xml version="1.0" encoding="utf-8"?>';
 
 // Registers a post file list and the frontmatter each file resolves to, in
-// the same order generateFeed() will read them.
+// the same order generateFeed() will read them. `bodies`, when provided,
+// supplies the markdown body for each file (defaulting to empty).
 function mockPostFiles(
   files: string[],
   frontmatters: Record<string, unknown>[],
+  bodies: string[] = [],
 ): void {
   mockReaddirSync.mockReturnValue(files as any);
-  for (const data of frontmatters) {
-    mockParseFrontmatter.mockReturnValueOnce({ data, content: "" });
-  }
+  frontmatters.forEach((data, index) => {
+    mockParseFrontmatter.mockReturnValueOnce({
+      data,
+      content: bodies[index] ?? "",
+    });
+  });
 }
 
 // xml-js's `xml2js` throws on real malformed XML (a bare `&` or `<` outside
@@ -69,31 +74,36 @@ function itemTitles(xml: string): string[] {
   return feedItems(xml).map((item) => nodeText(item.title));
 }
 
+// The full post body renders into <content:encoded> (feed's `content` field).
+function itemContent(item: ElementCompact): string {
+  return nodeText(item["content:encoded"]);
+}
+
 beforeEach(() => {
   vi.resetAllMocks();
   mockReadFileSync.mockReturnValue("" as any);
 });
 
 describe("generateFeed", () => {
-  it("produces well-formed, parseable RSS XML", () => {
+  it("produces well-formed, parseable RSS XML", async () => {
     mockPostFiles(["only-post.md"], [{ title: "Hello", date: "2024-01-01" }]);
 
-    const xml = generateFeed();
+    const xml = await generateFeed();
 
     expect(xml.startsWith(XML_DECLARATION)).toBe(true);
     expect(() => parseFeedXml(xml)).not.toThrow();
   });
 
-  it("returns a valid feed with no items when there are no posts", () => {
+  it("returns a valid feed with no items when there are no posts", async () => {
     mockReaddirSync.mockReturnValue([] as any);
 
-    const xml = generateFeed();
+    const xml = await generateFeed();
 
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(feedItems(xml)).toHaveLength(0);
   });
 
-  it("excludes index.md and non-markdown files from the feed", () => {
+  it("excludes index.md and non-markdown files from the feed", async () => {
     mockReaddirSync.mockReturnValue([
       "index.md",
       "real-post.md",
@@ -104,7 +114,7 @@ describe("generateFeed", () => {
       content: "",
     });
 
-    generateFeed();
+    await generateFeed();
 
     expect(mockParseFrontmatter).toHaveBeenCalledTimes(1);
     expect(mockReadFileSync).toHaveBeenCalledWith(
@@ -113,7 +123,7 @@ describe("generateFeed", () => {
     );
   });
 
-  it("filters out draft posts", () => {
+  it("filters out draft posts", async () => {
     mockPostFiles(
       ["draft.md", "published.md"],
       [
@@ -122,19 +132,19 @@ describe("generateFeed", () => {
       ],
     );
 
-    expect(itemTitles(generateFeed())).toEqual(["Published"]);
+    expect(itemTitles(await generateFeed())).toEqual(["Published"]);
   });
 
-  it("filters out posts with no date", () => {
+  it("filters out posts with no date", async () => {
     mockPostFiles(
       ["no-date.md", "dated.md"],
       [{ title: "No Date" }, { title: "Dated", date: "2024-01-01" }],
     );
 
-    expect(itemTitles(generateFeed())).toEqual(["Dated"]);
+    expect(itemTitles(await generateFeed())).toEqual(["Dated"]);
   });
 
-  it("filters out posts with an unparseable date and warns about it", () => {
+  it("filters out posts with an unparseable date and warns about it", async () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     mockPostFiles(
       ["bad-date.md", "dated.md"],
@@ -144,7 +154,7 @@ describe("generateFeed", () => {
       ],
     );
 
-    const xml = generateFeed();
+    const xml = await generateFeed();
 
     expect(itemTitles(xml)).toEqual(["Dated"]);
     expect(xml).not.toContain("Invalid Date");
@@ -153,7 +163,7 @@ describe("generateFeed", () => {
     warnSpy.mockRestore();
   });
 
-  it("sorts posts newest first", () => {
+  it("sorts posts newest first", async () => {
     mockPostFiles(
       ["oldest.md", "newest.md", "middle.md"],
       [
@@ -163,10 +173,14 @@ describe("generateFeed", () => {
       ],
     );
 
-    expect(itemTitles(generateFeed())).toEqual(["Newest", "Middle", "Oldest"]);
+    expect(itemTitles(await generateFeed())).toEqual([
+      "Newest",
+      "Middle",
+      "Oldest",
+    ]);
   });
 
-  it("preserves input order for posts with identical dates (stable sort)", () => {
+  it("preserves input order for posts with identical dates (stable sort)", async () => {
     mockPostFiles(
       ["first.md", "second.md"],
       [
@@ -175,43 +189,43 @@ describe("generateFeed", () => {
       ],
     );
 
-    expect(itemTitles(generateFeed())).toEqual(["First", "Second"]);
+    expect(itemTitles(await generateFeed())).toEqual(["First", "Second"]);
   });
 
-  it("escapes special XML characters in the title without corrupting content", () => {
+  it("escapes special XML characters in the title without corrupting content", async () => {
     const specialTitle = 'A & B <script>alert("x")</script> "quoted"';
     mockPostFiles(
       ["special.md"],
       [{ title: specialTitle, date: "2024-01-01" }],
     );
 
-    const xml = generateFeed();
+    const xml = await generateFeed();
 
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(itemTitles(xml)).toEqual([specialTitle]);
   });
 
-  it("does not let a CDATA-terminator sequence in the title break the document", () => {
+  it("does not let a CDATA-terminator sequence in the title break the document", async () => {
     const title = "Nested ]]> sequence & <em>markup</em>";
     mockPostFiles(["cdata-terminator.md"], [{ title, date: "2024-01-01" }]);
 
-    const xml = generateFeed();
+    const xml = await generateFeed();
 
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(itemTitles(xml)).toEqual([title]);
   });
 
-  it("emits the frontmatter date as the item pubDate", () => {
+  it("emits the frontmatter date as the item pubDate", async () => {
     mockPostFiles(["dated.md"], [{ title: "Dated", date: "2024-01-01" }]);
 
-    const pubDate = nodeText(feedItems(generateFeed())[0].pubDate);
+    const pubDate = nodeText(feedItems(await generateFeed())[0].pubDate);
 
     expect(new Date(pubDate).toISOString()).toBe(
       new Date("2024-01-01").toISOString(),
     );
   });
 
-  it("includes the frontmatter description as the item description", () => {
+  it("includes the frontmatter description as the item description", async () => {
     mockPostFiles(
       ["described.md"],
       [
@@ -223,25 +237,59 @@ describe("generateFeed", () => {
       ],
     );
 
-    const xml = generateFeed();
+    const xml = await generateFeed();
 
     expect(nodeText(feedItems(xml)[0].description)).toBe("A summary & a title");
   });
 
-  it("builds absolute URLs for post links and guids from the slug", () => {
+  it("renders the markdown post body into the item content", async () => {
+    mockPostFiles(
+      ["with-body.md"],
+      [{ title: "Bodied", date: "2024-01-01", description: "Summary only" }],
+      ["# Heading\n\nSome **bold** text."],
+    );
+
+    const content = itemContent(feedItems(await generateFeed())[0]);
+
+    expect(content).toContain("<h1");
+    expect(content).toContain("Heading");
+    expect(content).toContain("<strong>bold</strong>");
+  });
+
+  it("ships the full body as content, distinct from the one-line description", async () => {
+    mockPostFiles(
+      ["distinct.md"],
+      [
+        {
+          title: "Distinct",
+          date: "2024-01-01",
+          description: "Just a summary",
+        },
+      ],
+      ["The full article body goes here."],
+    );
+
+    const item = feedItems(await generateFeed())[0];
+
+    expect(nodeText(item.description)).toBe("Just a summary");
+    expect(itemContent(item)).toContain("The full article body goes here.");
+    expect(itemContent(item)).not.toBe("");
+  });
+
+  it("builds absolute URLs for post links and guids from the slug", async () => {
     mockPostFiles(["my-cool-post.md"], [{ title: "Cool", date: "2024-01-01" }]);
 
-    const item = feedItems(generateFeed())[0];
+    const item = feedItems(await generateFeed())[0];
     const expectedUrl = `${SITE_URL}/posts/my-cool-post`;
 
     expect(nodeText(item.link)).toBe(expectedUrl);
     expect(nodeText(item.guid)).toBe(expectedUrl);
   });
 
-  it("does not crash and omits the title element when frontmatter has no title", () => {
+  it("does not crash and omits the title element when frontmatter has no title", async () => {
     mockPostFiles(["untitled.md"], [{ date: "2024-01-01" }]);
 
-    const xml = generateFeed();
+    const xml = await generateFeed();
 
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(feedItems(xml)[0].title).toBeUndefined();
