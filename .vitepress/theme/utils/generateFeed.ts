@@ -35,7 +35,7 @@ function hasParseableDate(post: Record<string, any>): boolean {
 
 function loadPosts(): Record<string, any>[] {
   const files = readdirSync(POSTS_DIR).filter(
-    (f) => f.endsWith(".md") && f !== "index.md",
+    (file) => file.endsWith(".md") && file !== "index.md",
   );
 
   return files
@@ -45,8 +45,11 @@ function loadPosts(): Record<string, any>[] {
       const slug = file.replace(/\.md$/, "");
       return { ...data, slug, body: content } as Record<string, any>;
     })
-    .filter((p) => !p.draft && hasParseableDate(p))
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    .filter((post) => !post.draft && hasParseableDate(post))
+    .sort(
+      (left, right) =>
+        new Date(right.date).getTime() - new Date(left.date).getTime(),
+    );
 }
 
 // Fail loud with the offending slug: a body-less feed item is worse than a
@@ -65,11 +68,17 @@ function renderBody(
   }
 }
 
-export async function generateFeed(): Promise<string> {
-  // VitePress's own markdown-it renderer, reused so feed content comes from the
-  // same converter the site builds with rather than a bespoke one. Created once
-  // (the call is async; the returned renderer's `render` is synchronous).
-  const renderer = await createMarkdownRenderer(process.cwd());
+// `renderer` is injectable so the markdown pipeline (an external dependency)
+// can be substituted in tests; the build calls `generateFeed()` with no
+// argument and gets VitePress's own markdown-it, reused so feed content comes
+// from the same converter the site builds with rather than a bespoke one. The
+// creation call is async; the returned renderer's `render` is synchronous, so
+// it's built once and reused per post.
+export async function generateFeed(
+  renderer?: MarkdownRenderer,
+): Promise<string> {
+  const markdownRenderer =
+    renderer ?? (await createMarkdownRenderer(process.cwd()));
   const feed = new Feed({
     title: "Dan Holloran",
     description: SITE_DESCRIPTION,
@@ -89,9 +98,9 @@ export async function generateFeed(): Promise<string> {
       id: url,
       link: url,
       description: post.description ?? "",
-      content: renderBody(renderer, post),
+      content: renderBody(markdownRenderer, post),
       date: new Date(post.date),
-      category: post.tags?.map((t: string) => ({ name: t })) ?? [],
+      category: post.tags?.map((tag: string) => ({ name: tag })) ?? [],
       image: post.image ? `${SITE_URL}${post.image}` : undefined,
     });
   }

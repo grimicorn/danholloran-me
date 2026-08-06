@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { xml2js, type ElementCompact } from "xml-js";
+import type { MarkdownRenderer } from "vitepress";
 
 vi.mock("fs", () => {
   const readdirSync = vi.fn();
@@ -299,6 +300,21 @@ describe("generateFeed", () => {
 
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(itemContent(feedItems(xml)[0])).not.toContain("]]>");
+  });
+
+  it("fails loud with the offending slug when rendering a body throws", async () => {
+    mockPostFiles(
+      ["broken.md"],
+      [{ title: "Broken", date: "2024-01-01" }],
+      ["body"],
+    );
+    const renderer = {
+      render: vi.fn(() => {
+        throw new Error("render exploded");
+      }),
+    } as unknown as MarkdownRenderer;
+
+    await expect(generateFeed(renderer)).rejects.toThrow(/broken/);
   });
 
   it("builds absolute URLs for post links and guids from the slug", async () => {
