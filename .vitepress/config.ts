@@ -76,7 +76,7 @@ export default defineConfig({
     );
     writeFileSync(
       join(siteConfig.outDir, "feed.xml"),
-      await generateFeed(feedRenderer),
+      generateFeed(feedRenderer),
     );
     writeFileSync(join(siteConfig.outDir, "llms.txt"), generateLlmsTxt());
   },

@@ -1,5 +1,5 @@
 import { Feed } from "feed";
-import { createMarkdownRenderer, type MarkdownRenderer } from "vitepress";
+import type { MarkdownRenderer } from "vitepress";
 import { readdirSync, readFileSync } from "fs";
 import { join } from "path";
 import { parseFrontmatter } from "./frontmatter";
@@ -79,18 +79,13 @@ function renderBody(
   }
 }
 
-// `renderer` is injectable so the markdown pipeline (an external dependency)
-// can be substituted in tests. The build passes one created from the resolved
-// site config (see config.ts `buildEnd`), so feed content is produced by the
-// exact same converter — themes, code transformers, and all — that renders the
-// site's pages. The no-argument fallback builds a default renderer for
-// standalone use. The creation call is async; the returned renderer's `render`
-// is synchronous, so it's built once and reused per post.
-export async function generateFeed(
-  renderer?: MarkdownRenderer,
-): Promise<string> {
-  const markdownRenderer =
-    renderer ?? (await createMarkdownRenderer(process.cwd()));
+// The markdown renderer is injected (an external dependency, kept out of this
+// module so it stays testable in isolation). The build passes one created from
+// the resolved site config (see config.ts `buildEnd`), so feed bodies run
+// through the site's own markdown-it — themes, code transformers, and plugins
+// included. VitePress's page-level preprocessing (e.g. `<!--@include-->`) is
+// not replicated; no post relies on it.
+export function generateFeed(renderer: MarkdownRenderer): string {
   const feed = new Feed({
     title: "Dan Holloran",
     description: SITE_DESCRIPTION,
@@ -110,7 +105,7 @@ export async function generateFeed(
       id: url,
       link: url,
       description: post.description ?? "",
-      content: renderBody(markdownRenderer, post),
+      content: renderBody(renderer, post),
       date: new Date(post.date),
       category: post.tags?.map((tag: string) => ({ name: tag })) ?? [],
       image: post.image ? `${SITE_URL}${post.image}` : undefined,
