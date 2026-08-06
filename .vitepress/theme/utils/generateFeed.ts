@@ -7,6 +7,15 @@ import { SITE_URL, SITE_DESCRIPTION } from "./constants";
 
 const POSTS_DIR = join(process.cwd(), ".vitepress/content/posts");
 
+// `]]>` closes a CDATA section. The `feed` library wraps item content in CDATA
+// and its XML serializer escapes only the first occurrence per field, so a
+// body containing the sequence twice would prematurely close the section and
+// corrupt the whole feed document. Neutralize every terminator by
+// entity-encoding its closing bracket; a feed reader renders `]]&gt;` back to
+// the original literal text.
+const CDATA_TERMINATOR = "]]>";
+const CDATA_TERMINATOR_SAFE = "]]&gt;";
+
 // A post with no date, or a date that fails to parse, is excluded from the
 // feed rather than shipping an `Invalid Date` pubDate to subscribers. Warn
 // loudly on the unparseable case (as opposed to simply missing) since it
@@ -22,14 +31,6 @@ function hasParseableDate(post: Record<string, any>): boolean {
     );
   }
   return !isUnparseable;
-}
-
-// Reuses VitePress's own markdown pipeline (same one the site's pages render
-// through) so feed content matches on-site rendering rather than a bespoke
-// converter. `createMarkdownRenderer` is async; the returned renderer's
-// `render` is synchronous, so it's created once and reused per post below.
-function createPostRenderer(): Promise<MarkdownRenderer> {
-  return createMarkdownRenderer(process.cwd());
 }
 
 function loadPosts(): Record<string, any>[] {
@@ -48,8 +49,27 @@ function loadPosts(): Record<string, any>[] {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
+// Fail loud with the offending slug: a body-less feed item is worse than a
+// build that stops and names the post that could not be rendered.
+function renderBody(
+  renderer: MarkdownRenderer,
+  post: Record<string, any>,
+): string {
+  try {
+    const html = renderer.render(post.body ?? "");
+    return html.split(CDATA_TERMINATOR).join(CDATA_TERMINATOR_SAFE);
+  } catch (error) {
+    throw new Error(`generateFeed: failed to render "${post.slug}"`, {
+      cause: error,
+    });
+  }
+}
+
 export async function generateFeed(): Promise<string> {
-  const renderer = await createPostRenderer();
+  // VitePress's own markdown-it renderer, reused so feed content comes from the
+  // same converter the site builds with rather than a bespoke one. Created once
+  // (the call is async; the returned renderer's `render` is synchronous).
+  const renderer = await createMarkdownRenderer(process.cwd());
   const feed = new Feed({
     title: "Dan Holloran",
     description: SITE_DESCRIPTION,
@@ -69,7 +89,7 @@ export async function generateFeed(): Promise<string> {
       id: url,
       link: url,
       description: post.description ?? "",
-      content: renderer.render(post.body ?? ""),
+      content: renderBody(renderer, post),
       date: new Date(post.date),
       category: post.tags?.map((t: string) => ({ name: t })) ?? [],
       image: post.image ? `${SITE_URL}${post.image}` : undefined,

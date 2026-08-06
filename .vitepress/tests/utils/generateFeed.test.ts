@@ -276,6 +276,31 @@ describe("generateFeed", () => {
     expect(itemContent(item)).not.toBe("");
   });
 
+  it("omits the content element for a post with an empty body", async () => {
+    mockPostFiles(
+      ["empty-body.md"],
+      [{ title: "Empty", date: "2024-01-01" }],
+      [""],
+    );
+
+    expect(
+      feedItems(await generateFeed())[0]["content:encoded"],
+    ).toBeUndefined();
+  });
+
+  it("keeps the feed well-formed when the body contains multiple CDATA terminators", async () => {
+    mockPostFiles(
+      ["cdata-body.md"],
+      [{ title: "Raw", date: "2024-01-01" }],
+      ["<pre>one ]]> two ]]> three</pre>"],
+    );
+
+    const xml = await generateFeed();
+
+    expect(() => parseFeedXml(xml)).not.toThrow();
+    expect(itemContent(feedItems(xml)[0])).not.toContain("]]>");
+  });
+
   it("builds absolute URLs for post links and guids from the slug", async () => {
     mockPostFiles(["my-cool-post.md"], [{ title: "Cool", date: "2024-01-01" }]);
 
