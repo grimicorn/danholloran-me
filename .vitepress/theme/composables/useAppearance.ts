@@ -3,10 +3,19 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 type Theme = "auto" | "light" | "dark";
 
 const STORAGE_KEY = "vitepress-theme-appearance";
-const CYCLE_ORDER: Theme[] = ["auto", "light", "dark"];
+const DEFAULT_THEME: Theme = "auto";
+const CYCLE_ORDER: Theme[] = [DEFAULT_THEME, "light", "dark"];
 
-function readStored(): Theme {
-  return (localStorage.getItem(STORAGE_KEY) as Theme) ?? "auto";
+function isTheme(value: string | null): value is Theme {
+  return value !== null && CYCLE_ORDER.includes(value as Theme);
+}
+
+export function readStored(): Theme {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (!isTheme(stored)) {
+    return DEFAULT_THEME;
+  }
+  return stored;
 }
 
 function prefersDark(): boolean {
@@ -19,7 +28,7 @@ function applyTheme(theme: Theme): void {
 }
 
 export function useAppearance() {
-  const theme = ref<Theme>("auto");
+  const theme = ref<Theme>(DEFAULT_THEME);
   let mediaQuery: MediaQueryList | null = null;
 
   function setTheme(value: Theme): void {
