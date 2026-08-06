@@ -120,6 +120,18 @@ describe("useAppearance", () => {
       expect(localStorage.getItem(STORAGE_KEY)).toBe("light");
     });
 
+    it("wraps from the last theme back to the first", async () => {
+      localStorage.setItem(STORAGE_KEY, "dark");
+      mockPrefersDark(false);
+      const { appearance } = mountAppearance();
+      await flushPromises();
+
+      appearance.cycleTheme();
+
+      expect(appearance.theme.value).toBe("auto");
+      expect(localStorage.getItem(STORAGE_KEY)).toBe("auto");
+    });
+
     it("keeps the applied theme when persistence throws", async () => {
       localStorage.setItem(STORAGE_KEY, "light");
       mockPrefersDark(false);
@@ -136,15 +148,22 @@ describe("useAppearance", () => {
   });
 
   describe("cleanup", () => {
-    it("removes the system-preference listener on unmount", async () => {
+    it("removes the same system-preference listener it registered on unmount", async () => {
       mockPrefersDark(false);
       const { wrapper } = mountAppearance();
       await flushPromises();
       expect(mediaQueryListeners.addEventListener).toHaveBeenCalledTimes(1);
+      const [registeredEvent, registeredHandler] =
+        mediaQueryListeners.addEventListener.mock.calls[0];
 
+      mountedWrappers.splice(mountedWrappers.indexOf(wrapper), 1);
       wrapper.unmount();
 
       expect(mediaQueryListeners.removeEventListener).toHaveBeenCalledTimes(1);
+      expect(mediaQueryListeners.removeEventListener).toHaveBeenCalledWith(
+        registeredEvent,
+        registeredHandler,
+      );
     });
   });
 });
