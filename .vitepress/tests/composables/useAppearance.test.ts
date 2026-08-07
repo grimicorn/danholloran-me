@@ -8,7 +8,7 @@ import {
   type MockInstance,
 } from "vitest";
 import { createApp, defineComponent, type App } from "vue";
-import { useAppearance } from "../../theme/composables/useAppearance";
+import { readStored, useAppearance } from "../../theme/composables/useAppearance";
 
 const STORAGE_KEY = "vitepress-theme-appearance";
 const DARK_CLASS = "dark";
@@ -105,6 +105,39 @@ describe("useAppearance", () => {
     vi.restoreAllMocks();
   });
 
+  describe("readStored", () => {
+    it("returns a valid stored theme unchanged", () => {
+      localStorage.setItem(STORAGE_KEY, "dark");
+      expect(readStored()).toBe("dark");
+    });
+
+    it("returns 'light' when a valid 'light' value is stored", () => {
+      localStorage.setItem(STORAGE_KEY, "light");
+      expect(readStored()).toBe("light");
+    });
+
+    it("falls back to the default theme when no value is stored", () => {
+      expect(readStored()).toBe("auto");
+    });
+
+    it("falls back to the default theme when the stored value is corrupt", () => {
+      localStorage.setItem(STORAGE_KEY, "not-a-theme");
+      expect(readStored()).toBe("auto");
+    });
+
+    it("falls back to the default theme when the stored value is empty", () => {
+      localStorage.setItem(STORAGE_KEY, "");
+      expect(readStored()).toBe("auto");
+    });
+
+    it("falls back to the default theme when localStorage access throws", () => {
+      vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+        throw new Error("SecurityError");
+      });
+      expect(readStored()).toBe("auto");
+    });
+  });
+
   describe("localStorage persistence", () => {
     it("reads the stored theme on mount", () => {
       stubSystemDark(false);
@@ -127,6 +160,16 @@ describe("useAppearance", () => {
       expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
     });
 
+    it("resolves a corrupt stored value to the default (auto) on mount", () => {
+      stubSystemDark(true);
+      localStorage.setItem(STORAGE_KEY, "not-a-theme");
+
+      const { result } = withSetup(useAppearance);
+
+      expect(result.theme.value).toBe("auto");
+      expect(isDocumentDark()).toBe(true);
+    });
+
     it("persists every theme to localStorage as it is cycled", () => {
       stubSystemDark(false);
 
@@ -140,6 +183,20 @@ describe("useAppearance", () => {
 
       result.cycleTheme();
       expect(localStorage.getItem(STORAGE_KEY)).toBe("auto");
+    });
+
+    it("keeps the applied theme when persistence throws", () => {
+      stubSystemDark(false);
+
+      const { result } = withSetup(useAppearance);
+      result.cycleTheme(); // light
+      vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+        throw new Error("QuotaExceededError");
+      });
+
+      expect(() => result.cycleTheme()).not.toThrow();
+      expect(result.theme.value).toBe("dark");
+      expect(isDocumentDark()).toBe(true);
     });
   });
 

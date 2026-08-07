@@ -12,6 +12,14 @@ function stubFetch(ok: boolean): MockInstance {
   return vi.spyOn(globalThis, "fetch").mockResolvedValue(okResponse(ok));
 }
 
+function deferredResponse() {
+  let resolveFetch!: (_response: Response) => void;
+  const promise = new Promise<Response>((resolve) => {
+    resolveFetch = resolve;
+  });
+  return { promise, resolveFetch };
+}
+
 // Each pins a different constraint of EMAIL_RE so loosening the regex fails a test.
 const INVALID_EMAILS = [
   "",
@@ -91,11 +99,8 @@ describe("useNewsletter", () => {
 
   describe("state transitions", () => {
     it("moves to loading and clears a prior error while the request is in flight", async () => {
-      let resolveFetch: (_value: Response) => void = () => {};
-      const pending = new Promise<Response>((resolve) => {
-        resolveFetch = resolve;
-      });
-      vi.spyOn(globalThis, "fetch").mockReturnValue(pending);
+      const { promise, resolveFetch } = deferredResponse();
+      vi.spyOn(globalThis, "fetch").mockReturnValue(promise);
 
       const { email, status, errorMessage, subscribe } = useNewsletter();
       errorMessage.value = "stale error";
@@ -143,6 +148,60 @@ describe("useNewsletter", () => {
 
       expect(status.value).toBe("error");
       expect(errorMessage.value).toBe("network error — please try again.");
+    });
+  });
+
+  describe("in-flight guard", () => {
+    it("ignores a second submit while the first is in flight", async () => {
+      const { promise, resolveFetch } = deferredResponse();
+      const fetchSpy = vi.spyOn(globalThis, "fetch").mockReturnValue(promise);
+      const { email, status, subscribe } = useNewsletter();
+
+      email.value = VALID_EMAIL;
+      const firstCall = subscribe();
+      expect(status.value).toBe("loading");
+
+      const secondCall = subscribe();
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+
+      resolveFetch(okResponse(true));
+      await Promise.all([firstCall, secondCall]);
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+      expect(status.value).toBe("success");
+    });
+
+    it("releases the guard after a failed request so a retry can succeed", async () => {
+      const fetchSpy = vi
+        .spyOn(globalThis, "fetch")
+        .mockResolvedValueOnce(okResponse(false))
+        .mockResolvedValueOnce(okResponse(true));
+      const { email, status, subscribe } = useNewsletter();
+
+      email.value = VALID_EMAIL;
+      await subscribe();
+      expect(status.value).toBe("error");
+
+      await subscribe();
+      expect(fetchSpy).toHaveBeenCalledTimes(2);
+      expect(status.value).toBe("success");
+    });
+
+    it("releases the guard after a network failure so a retry can succeed", async () => {
+      const fetchSpy = vi
+        .spyOn(globalThis, "fetch")
+        .mockRejectedValueOnce(new TypeError("Failed to fetch"))
+        .mockResolvedValueOnce(okResponse(true));
+      const { email, status, errorMessage, subscribe } = useNewsletter();
+
+      email.value = VALID_EMAIL;
+      await subscribe();
+      expect(status.value).toBe("error");
+      expect(errorMessage.value).toBe("network error — please try again.");
+
+      await subscribe();
+      expect(fetchSpy).toHaveBeenCalledTimes(2);
+      expect(status.value).toBe("success");
+      expect(errorMessage.value).toBe("");
     });
   });
 });
