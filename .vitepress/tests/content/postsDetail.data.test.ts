@@ -22,9 +22,9 @@ vi.mock("vitepress", () => ({
   },
 }));
 
-describe("posts.data.ts list loader", () => {
+describe("postsDetail.data.ts detail loader", () => {
   beforeAll(async () => {
-    await import("../../content/posts/posts.data.ts");
+    await import("../../content/posts/postsDetail.data.ts");
   });
 
   it("registers the shared posts glob and shared transform with createContentLoader", () => {
@@ -32,8 +32,8 @@ describe("posts.data.ts list loader", () => {
     expect(capturedConfig.transform).toBe(transformPosts);
   });
 
-  it("runs with render:false so Home and the blog index ship no rendered html", () => {
-    expect(capturedConfig.render).toBe(false);
+  it("runs with render:true so the post detail page can v-html the body", () => {
+    expect(capturedConfig.render).toBe(true);
     expect(capturedConfig.includeSrc).toBe(true);
     expect(capturedConfig).not.toHaveProperty("excerpt");
   });
