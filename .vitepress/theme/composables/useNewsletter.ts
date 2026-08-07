@@ -14,7 +14,7 @@ export function useNewsletter() {
   const { trackEvent } = useAnalytics();
 
   async function subscribe() {
-    if (status.value === "loading") {
+    if (status.value === "loading" || status.value === "success") {
       return;
     }
 
@@ -36,17 +36,19 @@ export function useNewsletter() {
         body: fd,
         headers: { Accept: "application/json" },
       });
-      if (res.ok) {
-        status.value = "success";
-        trackEvent(SUBSCRIBE_EVENT);
-      } else {
+      if (!res.ok) {
         status.value = "error";
         errorMessage.value = "something went wrong — please try again.";
+        return;
       }
     } catch {
       status.value = "error";
       errorMessage.value = "network error — please try again.";
+      return;
     }
+
+    status.value = "success";
+    trackEvent(SUBSCRIBE_EVENT);
   }
 
   return { email, status, errorMessage, subscribe };

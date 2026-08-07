@@ -19,8 +19,11 @@ export function useAnalytics() {
     }
     try {
       gtag("event", eventName, params);
-    } catch {
+    } catch (error) {
       // Analytics is best-effort: never let a gtag failure surface to callers.
+      if (import.meta.env.DEV) {
+        console.warn(`gtag event "${eventName}" failed`, error);
+      }
     }
   }
 

@@ -158,6 +158,20 @@ describe("useNewsletter", () => {
     expect(status.value).toBe("success");
   });
 
+  it("ignores a repeat submit after success, firing no second event or request", async () => {
+    const fetchMock = mockFetchStatus(200);
+    const gtag = mockGtag();
+    const { email, status, subscribe } = useNewsletter();
+
+    email.value = VALID_EMAIL;
+    await subscribe();
+    await subscribe();
+
+    expect(status.value).toBe("success");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(gtag).toHaveBeenCalledTimes(1);
+  });
+
   it("fires no analytics event when the API responds with a non-ok status", async () => {
     mockFetchStatus(500);
     const gtag = mockGtag();
