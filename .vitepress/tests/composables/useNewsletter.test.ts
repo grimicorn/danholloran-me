@@ -48,9 +48,9 @@ describe("useNewsletter", () => {
         email.value = invalidEmail;
         await subscribe();
 
+        expect(fetchSpy).not.toHaveBeenCalled();
         expect(status.value).toBe("error");
         expect(errorMessage.value).toBe("enter a valid email address.");
-        expect(fetchSpy).not.toHaveBeenCalled();
       },
     );
 

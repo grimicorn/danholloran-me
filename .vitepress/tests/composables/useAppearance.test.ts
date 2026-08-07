@@ -8,12 +8,17 @@ import {
   type MockInstance,
 } from "vitest";
 import { createApp, defineComponent, type App } from "vue";
-import { readStored, useAppearance } from "../../theme/composables/useAppearance";
+import {
+  readStored,
+  useAppearance,
+} from "../../theme/composables/useAppearance";
 
 const STORAGE_KEY = "vitepress-theme-appearance";
 const DARK_CLASS = "dark";
 
-type ChangeListener = () => void;
+const CHANGE_EVENT = "change";
+
+type ChangeListener = (_event: MediaQueryListEvent) => void;
 
 type ControllableMediaQuery = {
   mediaQuery: MediaQueryList;
@@ -24,18 +29,25 @@ type ControllableMediaQuery = {
 
 // A matchMedia stand-in whose `matches` and `change` listeners we drive by hand,
 // so system-theme behavior is deterministic instead of tied to the real host.
-function createControllableMediaQuery(initialMatches: boolean): {
-  mediaQuery: MediaQueryList;
-  emitSystemChange: (_matches: boolean) => void;
-  listenerCount: () => number;
-} {
+// Both doubles honor the real contract: only `change` listeners are tracked and
+// each is invoked with a MediaQueryListEvent, so a listener registered on the
+// wrong event (or reading the event rather than re-querying) fails a test.
+function createControllableMediaQuery(
+  initialMatches: boolean,
+): Omit<ControllableMediaQuery, "matchMediaSpy"> {
   const listeners: ChangeListener[] = [];
   const mediaQuery = {
     matches: initialMatches,
-    addEventListener: vi.fn((_event: string, listener: ChangeListener) => {
+    addEventListener: vi.fn((event: string, listener: ChangeListener) => {
+      if (event !== CHANGE_EVENT) {
+        return;
+      }
       listeners.push(listener);
     }),
-    removeEventListener: vi.fn((_event: string, listener: ChangeListener) => {
+    removeEventListener: vi.fn((event: string, listener: ChangeListener) => {
+      if (event !== CHANGE_EVENT) {
+        return;
+      }
       const index = listeners.indexOf(listener);
       if (index !== -1) {
         listeners.splice(index, 1);
@@ -45,7 +57,9 @@ function createControllableMediaQuery(initialMatches: boolean): {
 
   function emitSystemChange(matches: boolean): void {
     (mediaQuery as unknown as { matches: boolean }).matches = matches;
-    listeners.slice().forEach((listener) => listener());
+    listeners
+      .slice()
+      .forEach((listener) => listener({ matches } as MediaQueryListEvent));
   }
 
   return {
