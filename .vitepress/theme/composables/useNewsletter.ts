@@ -1,6 +1,8 @@
 import { ref } from "vue";
+import { useAnalytics } from "@composables/useAnalytics";
 
 const KIT_FORM_ACTION = "https://app.kit.com/forms/9565549/subscriptions";
+const SUBSCRIBE_EVENT = "newsletter_subscribe";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export type NewsletterStatus = "idle" | "loading" | "success" | "error";
@@ -9,6 +11,7 @@ export function useNewsletter() {
   const email = ref("");
   const status = ref<NewsletterStatus>("idle");
   const errorMessage = ref("");
+  const { trackEvent } = useAnalytics();
 
   async function subscribe() {
     if (status.value === "loading") {
@@ -35,6 +38,7 @@ export function useNewsletter() {
       });
       if (res.ok) {
         status.value = "success";
+        trackEvent(SUBSCRIBE_EVENT);
       } else {
         status.value = "error";
         errorMessage.value = "something went wrong — please try again.";

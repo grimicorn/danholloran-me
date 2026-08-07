@@ -3,6 +3,13 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { useNewsletter } from "../../theme/composables/useNewsletter";
 
 const VALID_EMAIL = "reader@example.com";
+const SUBSCRIBE_EVENT = "newsletter_subscribe";
+
+function mockGtag() {
+  const gtag = vi.fn();
+  (globalThis as unknown as { gtag: typeof gtag }).gtag = gtag;
+  return gtag;
+}
 
 function mockFetchStatus(responseStatus: number) {
   return vi
@@ -23,6 +30,7 @@ function deferredResponse() {
 describe("useNewsletter", () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    delete (globalThis as unknown as { gtag?: unknown }).gtag;
   });
 
   it("rejects an invalid email without calling the API", async () => {
@@ -113,6 +121,55 @@ describe("useNewsletter", () => {
 
     expect(status.value).toBe("error");
     expect(errorMessage.value).toBe("something went wrong — please try again.");
+  });
+
+  it("fires exactly one analytics event on a successful subscribe", async () => {
+    mockFetchStatus(200);
+    const gtag = mockGtag();
+    const { email, subscribe } = useNewsletter();
+
+    email.value = VALID_EMAIL;
+    await subscribe();
+
+    expect(gtag).toHaveBeenCalledTimes(1);
+    expect(gtag).toHaveBeenCalledWith("event", SUBSCRIBE_EVENT, {});
+  });
+
+  it("fires no analytics event when the API responds with a non-ok status", async () => {
+    mockFetchStatus(500);
+    const gtag = mockGtag();
+    const { email, subscribe } = useNewsletter();
+
+    email.value = VALID_EMAIL;
+    await subscribe();
+
+    expect(gtag).not.toHaveBeenCalled();
+  });
+
+  it("fires no analytics event when the request throws", async () => {
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(
+      new TypeError("Failed to fetch"),
+    );
+    const gtag = mockGtag();
+    const { email, subscribe } = useNewsletter();
+
+    email.value = VALID_EMAIL;
+    await subscribe();
+
+    expect(gtag).not.toHaveBeenCalled();
+  });
+
+  it("fires no analytics event when the email is invalid", async () => {
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(
+      new Error("fetch should not be called"),
+    );
+    const gtag = mockGtag();
+    const { email, subscribe } = useNewsletter();
+
+    email.value = "not-an-email";
+    await subscribe();
+
+    expect(gtag).not.toHaveBeenCalled();
   });
 
   it("releases the guard after a network failure so a retry can succeed", async () => {
