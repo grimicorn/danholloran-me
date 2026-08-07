@@ -137,6 +137,7 @@ describe("useNewsletter", () => {
 
   it("still reports success when the analytics call throws", async () => {
     mockFetchStatus(200);
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     (globalThis as unknown as { gtag: () => void }).gtag = vi.fn(() => {
       throw new Error("gtag blew up");
     });
@@ -146,6 +147,7 @@ describe("useNewsletter", () => {
     await subscribe();
 
     expect(status.value).toBe("success");
+    expect(warn).toHaveBeenCalledTimes(1);
   });
 
   it("still reports success when gtag is absent", async () => {
