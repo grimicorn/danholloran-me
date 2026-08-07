@@ -17,7 +17,11 @@ export function useAnalytics() {
     if (typeof gtag !== "function") {
       return;
     }
-    gtag("event", eventName, params);
+    try {
+      gtag("event", eventName, params);
+    } catch {
+      // Analytics is best-effort: never let a gtag failure surface to callers.
+    }
   }
 
   return { trackEvent };

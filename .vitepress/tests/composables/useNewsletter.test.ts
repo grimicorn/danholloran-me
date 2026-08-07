@@ -135,6 +135,29 @@ describe("useNewsletter", () => {
     expect(gtag).toHaveBeenCalledWith("event", SUBSCRIBE_EVENT, {});
   });
 
+  it("still reports success when the analytics call throws", async () => {
+    mockFetchStatus(200);
+    (globalThis as unknown as { gtag: () => void }).gtag = vi.fn(() => {
+      throw new Error("gtag blew up");
+    });
+    const { email, status, subscribe } = useNewsletter();
+
+    email.value = VALID_EMAIL;
+    await subscribe();
+
+    expect(status.value).toBe("success");
+  });
+
+  it("still reports success when gtag is absent", async () => {
+    mockFetchStatus(200);
+    const { email, status, subscribe } = useNewsletter();
+
+    email.value = VALID_EMAIL;
+    await subscribe();
+
+    expect(status.value).toBe("success");
+  });
+
   it("fires no analytics event when the API responds with a non-ok status", async () => {
     mockFetchStatus(500);
     const gtag = mockGtag();
