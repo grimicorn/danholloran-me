@@ -9,6 +9,14 @@ function mockGtag() {
   return gtag;
 }
 
+function mockThrowingGtag() {
+  const gtag = vi.fn(() => {
+    throw new Error("gtag blew up");
+  });
+  (globalThis as unknown as { gtag: typeof gtag }).gtag = gtag;
+  return gtag;
+}
+
 describe("useAnalytics", () => {
   afterEach(() => {
     vi.restoreAllMocks();
@@ -18,10 +26,12 @@ describe("useAnalytics", () => {
   });
 
   it("no-ops during SSR when window is undefined", () => {
+    const gtag = mockGtag();
     vi.stubGlobal("window", undefined);
     const { trackEvent } = useAnalytics();
 
     expect(() => trackEvent(EVENT_NAME)).not.toThrow();
+    expect(gtag).not.toHaveBeenCalled();
   });
 
   it("no-ops when gtag is absent", () => {
@@ -60,9 +70,7 @@ describe("useAnalytics", () => {
   it("swallows a throwing gtag and warns in dev", () => {
     vi.stubEnv("DEV", true);
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    (globalThis as unknown as { gtag: () => void }).gtag = vi.fn(() => {
-      throw new Error("gtag blew up");
-    });
+    mockThrowingGtag();
     const { trackEvent } = useAnalytics();
 
     expect(() => trackEvent(EVENT_NAME)).not.toThrow();
@@ -72,9 +80,7 @@ describe("useAnalytics", () => {
   it("swallows a throwing gtag silently outside dev", () => {
     vi.stubEnv("DEV", false);
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    (globalThis as unknown as { gtag: () => void }).gtag = vi.fn(() => {
-      throw new Error("gtag blew up");
-    });
+    mockThrowingGtag();
     const { trackEvent } = useAnalytics();
 
     expect(() => trackEvent(EVENT_NAME)).not.toThrow();

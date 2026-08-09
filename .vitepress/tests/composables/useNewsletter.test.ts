@@ -19,6 +19,14 @@ function mockGtag() {
   return gtag;
 }
 
+function mockThrowingGtag() {
+  const gtag = vi.fn(() => {
+    throw new Error("gtag blew up");
+  });
+  (globalThis as unknown as { gtag: typeof gtag }).gtag = gtag;
+  return gtag;
+}
+
 function deferredResponse() {
   let resolveFetch!: (_response: Response) => void;
   const promise = new Promise<Response>((resolve) => {
@@ -231,9 +239,7 @@ describe("useNewsletter", () => {
       vi.stubEnv("DEV", true);
       stubFetch(true);
       const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-      (globalThis as unknown as { gtag: () => void }).gtag = vi.fn(() => {
-        throw new Error("gtag blew up");
-      });
+      mockThrowingGtag();
       const { email, status, subscribe } = useNewsletter();
 
       email.value = VALID_EMAIL;
@@ -247,9 +253,7 @@ describe("useNewsletter", () => {
       vi.stubEnv("DEV", false);
       stubFetch(true);
       const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-      (globalThis as unknown as { gtag: () => void }).gtag = vi.fn(() => {
-        throw new Error("gtag blew up");
-      });
+      mockThrowingGtag();
       const { email, status, subscribe } = useNewsletter();
 
       email.value = VALID_EMAIL;
@@ -334,6 +338,23 @@ describe("useNewsletter", () => {
       resolveFetch(okResponse(true));
       await Promise.all([firstCall, secondCall]);
 
+      expect(gtag).toHaveBeenCalledTimes(1);
+    });
+
+    it("fires one event when a retry after an error succeeds", async () => {
+      const fetchSpy = vi
+        .spyOn(globalThis, "fetch")
+        .mockResolvedValueOnce(okResponse(false))
+        .mockResolvedValueOnce(okResponse(true));
+      const gtag = mockGtag();
+      const { email, status, subscribe } = useNewsletter();
+
+      email.value = VALID_EMAIL;
+      await subscribe();
+      await subscribe();
+
+      expect(fetchSpy).toHaveBeenCalledTimes(2);
+      expect(status.value).toBe("success");
       expect(gtag).toHaveBeenCalledTimes(1);
     });
   });
