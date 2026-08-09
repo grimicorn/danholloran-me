@@ -43,6 +43,7 @@ const VALID_EMAILS = [VALID_EMAIL, "a+tag@sub.example.co.uk"];
 describe("useNewsletter", () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllEnvs();
     delete (globalThis as unknown as { gtag?: unknown }).gtag;
   });
 
@@ -226,7 +227,8 @@ describe("useNewsletter", () => {
       expect(gtag).toHaveBeenCalledWith("event", SUBSCRIBE_EVENT, {});
     });
 
-    it("still reports success when the analytics call throws", async () => {
+    it("still reports success and warns in dev when the analytics call throws", async () => {
+      vi.stubEnv("DEV", true);
       stubFetch(true);
       const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
       (globalThis as unknown as { gtag: () => void }).gtag = vi.fn(() => {
@@ -239,6 +241,22 @@ describe("useNewsletter", () => {
 
       expect(status.value).toBe("success");
       expect(warn).toHaveBeenCalledTimes(1);
+    });
+
+    it("swallows a throwing analytics call silently outside dev", async () => {
+      vi.stubEnv("DEV", false);
+      stubFetch(true);
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      (globalThis as unknown as { gtag: () => void }).gtag = vi.fn(() => {
+        throw new Error("gtag blew up");
+      });
+      const { email, status, subscribe } = useNewsletter();
+
+      email.value = VALID_EMAIL;
+      await subscribe();
+
+      expect(status.value).toBe("success");
+      expect(warn).not.toHaveBeenCalled();
     });
 
     it("still reports success when gtag is absent", async () => {
@@ -290,16 +308,33 @@ describe("useNewsletter", () => {
     });
 
     it("fires no analytics event when the email is invalid", async () => {
-      vi.spyOn(globalThis, "fetch").mockRejectedValue(
-        new Error("fetch should not be called"),
-      );
+      const fetchSpy = vi
+        .spyOn(globalThis, "fetch")
+        .mockRejectedValue(new Error("fetch should not be called"));
       const gtag = mockGtag();
       const { email, subscribe } = useNewsletter();
 
       email.value = "not-an-email";
       await subscribe();
 
+      expect(fetchSpy).not.toHaveBeenCalled();
       expect(gtag).not.toHaveBeenCalled();
+    });
+
+    it("fires exactly one event when a second submit lands mid-flight", async () => {
+      const { promise, resolveFetch } = deferredResponse();
+      vi.spyOn(globalThis, "fetch").mockReturnValue(promise);
+      const gtag = mockGtag();
+      const { email, subscribe } = useNewsletter();
+
+      email.value = VALID_EMAIL;
+      const firstCall = subscribe();
+      const secondCall = subscribe();
+
+      resolveFetch(okResponse(true));
+      await Promise.all([firstCall, secondCall]);
+
+      expect(gtag).toHaveBeenCalledTimes(1);
     });
   });
 });

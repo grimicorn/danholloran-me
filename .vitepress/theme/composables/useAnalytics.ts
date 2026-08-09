@@ -4,6 +4,14 @@ type GtagFn = (
   _eventParams?: Record<string, unknown>,
 ) => void;
 
+// Analytics is best-effort: never let a gtag failure surface to callers.
+function warnInDev(eventName: string, error: unknown) {
+  if (!import.meta.env.DEV) {
+    return;
+  }
+  console.warn(`gtag event "${eventName}" failed`, error);
+}
+
 /**
  * Thin wrapper over the globally-loaded gtag (see config.ts head scripts).
  * No-ops during SSR or when the GA script is blocked, so callers never guard.
@@ -20,10 +28,7 @@ export function useAnalytics() {
     try {
       gtag("event", eventName, params);
     } catch (error) {
-      // Analytics is best-effort: never let a gtag failure surface to callers.
-      if (import.meta.env.DEV) {
-        console.warn(`gtag event "${eventName}" failed`, error);
-      }
+      warnInDev(eventName, error);
     }
   }
 

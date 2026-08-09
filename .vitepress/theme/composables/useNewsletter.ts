@@ -14,6 +14,8 @@ export function useNewsletter() {
   const { trackEvent } = useAnalytics();
 
   async function subscribe() {
+    // Locks after success on purpose: consumers unmount the form on success,
+    // so there is no reset path — a mounted-on-success caller would need one.
     if (status.value === "loading" || status.value === "success") {
       return;
     }
