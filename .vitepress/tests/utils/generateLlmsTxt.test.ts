@@ -52,11 +52,13 @@ beforeEach(() => {
   mockReadFileSync.mockReturnValue("" as any);
 });
 
-// Safety net for the frozen-clock test below: guarantees real timers are
-// restored even if an assertion throws before its own vi.useRealTimers()
-// call runs, so a failure there can't cascade into unrelated tests.
+// Safety net: guarantees real timers and original console spies are restored
+// even if an assertion throws before a test's own restore runs, so a failure
+// can't cascade into unrelated tests (a spied-on console.warn is otherwise
+// left stubbed for every test after it).
 afterEach(() => {
   vi.useRealTimers();
+  vi.restoreAllMocks();
 });
 
 describe("generateLlmsTxt", () => {
@@ -154,12 +156,10 @@ describe("generateLlmsTxt", () => {
       expect.stringContaining("unrecognized topic"),
     );
     expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("cooking"));
-
-    warnSpy.mockRestore();
   });
 
   it("collects multiple unknown-topic posts into a single 'Other' section, newest first", () => {
-    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.spyOn(console, "warn").mockImplementation(() => {});
     mockPostFiles(
       ["cooking.md", "gardening.md"],
       [
@@ -174,8 +174,6 @@ describe("generateLlmsTxt", () => {
       `- [Gardening Post](${SITE_URL}/posts/gardening)`,
       `- [Cooking Post](${SITE_URL}/posts/cooking)`,
     ]);
-
-    warnSpy.mockRestore();
   });
 
   it("lists posts that have no topic under 'Other' and warns", () => {
@@ -191,12 +189,10 @@ describe("generateLlmsTxt", () => {
       `- [No Topic](${SITE_URL}/posts/untopiced)`,
     ]);
     expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("no topic"));
-
-    warnSpy.mockRestore();
   });
 
   it("keeps known and unknown topics disjoint and renders 'Other' after the known sections and before 'Optional'", () => {
-    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.spyOn(console, "warn").mockImplementation(() => {});
     mockPostFiles(
       ["dev.md", "odd.md"],
       [
@@ -219,8 +215,6 @@ describe("generateLlmsTxt", () => {
     expect(output.indexOf("## Other")).toBeLessThan(
       output.indexOf("## Optional"),
     );
-
-    warnSpy.mockRestore();
   });
 
   it("does not warn about or list a draft post with an unknown topic", () => {
@@ -242,8 +236,6 @@ describe("generateLlmsTxt", () => {
     expect(output).not.toContain("## Other");
     expect(output).not.toContain("Draft Odd");
     expect(warnSpy).not.toHaveBeenCalled();
-
-    warnSpy.mockRestore();
   });
 
   it("sorts posts within a topic section newest first", () => {
@@ -299,8 +291,6 @@ describe("generateLlmsTxt", () => {
       `- [Bad Date](${SITE_URL}/posts/bad-date)`,
     ]);
     expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("bad-date"));
-
-    warnSpy.mockRestore();
   });
 
   it("preserves input order among a mix of undated and unparseable-date posts", () => {
@@ -430,7 +420,8 @@ describe("generateLlmsTxt", () => {
     expect(output).not.toContain("## Obsidian & Productivity");
     expect(output).not.toContain("## Finance");
     expect(output).not.toContain("## Travel & Photography");
-
-    warnSpy.mockRestore();
+    // A field-less post has no topic, so it takes the "Other" path and warns
+    // rather than being silently dropped.
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("no topic"));
   });
 });
