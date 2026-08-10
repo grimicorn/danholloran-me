@@ -7,14 +7,15 @@ import { SITE_URL, SITE_DESCRIPTION } from "./constants";
 
 const POSTS_DIR = join(process.cwd(), ".vitepress/content/posts");
 
-// `]]>` closes a CDATA section. The `feed` library wraps item content in CDATA
-// and its XML serializer escapes only the first occurrence per field, so a
-// body containing the sequence twice would prematurely close the section and
-// corrupt the whole feed document. Neutralize every terminator by
-// entity-encoding its closing bracket; since `content:encoded` is HTML, a
-// spec-compliant reader decodes it back to the original literal text (a
-// plaintext-mode reader would show `]]&gt;`, an acceptable trade for not
-// breaking the document).
+// `]]>` closes a CDATA section. The `feed` library wraps every item title,
+// description, and body in CDATA and its XML serializer escapes only the first
+// occurrence per field, so any of them containing the sequence twice would
+// prematurely close the section and corrupt the whole feed document.
+// Neutralize every terminator by entity-encoding its closing bracket. For the
+// HTML `content:encoded` body a spec-compliant reader decodes it back to the
+// original literal text; the RSS `<title>`/`<description>` are plain text, so
+// the entity shows literally as `]]&gt;` in every reader — an accepted trade
+// for not breaking the document.
 const CDATA_TERMINATOR = "]]>";
 const CDATA_TERMINATOR_SAFE = "]]&gt;";
 
@@ -110,7 +111,7 @@ export function generateFeed(renderer: MarkdownRenderer): string {
   for (const post of loadPosts()) {
     const url = `${SITE_URL}/posts/${post.slug}`;
     feed.addItem({
-      title: post.title ? neutralizeCdata(post.title) : post.title,
+      title: neutralizeCdata(post.title ?? ""),
       id: url,
       link: url,
       description: neutralizeCdata(post.description ?? ""),

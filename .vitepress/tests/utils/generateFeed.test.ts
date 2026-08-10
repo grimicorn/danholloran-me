@@ -228,8 +228,9 @@ describe("generateFeed", () => {
     const xml = generateFeed(passthroughRenderer());
 
     expect(() => parseFeedXml(xml)).not.toThrow();
-    expect(itemTitles(xml)[0]).not.toContain("]]>");
-    expect(itemTitles(xml)[0]).toContain("& <em>markup</em>");
+    expect(itemTitles(xml)).toEqual([
+      "Nested ]]&gt; sequence & <em>markup</em>",
+    ]);
   });
 
   it("neutralizes multiple CDATA terminators in the title so the document stays well-formed", async () => {
@@ -244,7 +245,7 @@ describe("generateFeed", () => {
     const xml = generateFeed(passthroughRenderer());
 
     expect(() => parseFeedXml(xml)).not.toThrow();
-    expect(itemTitles(xml)[0]).not.toContain("]]>");
+    expect(itemTitles(xml)).toEqual(["one ]]&gt; two ]]&gt; three"]);
   });
 
   it("neutralizes multiple CDATA terminators in the description so the document stays well-formed", async () => {
@@ -262,7 +263,7 @@ describe("generateFeed", () => {
     const xml = generateFeed(passthroughRenderer());
 
     expect(() => parseFeedXml(xml)).not.toThrow();
-    expect(nodeText(feedItems(xml)[0].description)).not.toContain("]]>");
+    expect(nodeText(feedItems(xml)[0].description)).toBe("a ]]&gt; b ]]&gt; c");
   });
 
   it("emits the frontmatter date as the item pubDate", async () => {
