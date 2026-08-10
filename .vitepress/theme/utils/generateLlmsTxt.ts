@@ -16,6 +16,13 @@ const TOPIC_SECTIONS: { topic: string; heading: string }[] = [
   { topic: "travel", heading: "Travel & Photography" },
 ];
 
+/** Catch-all heading for posts whose topic matches no known section. */
+const OTHER_HEADING = "Other";
+
+function isKnownTopic(topic: string): boolean {
+  return TOPIC_SECTIONS.some((section) => section.topic === topic);
+}
+
 interface PostMeta {
   title: string;
   description?: string;
@@ -54,6 +61,23 @@ function warnIfDateUnparseable(post: PostMeta): void {
   }
 }
 
+// A post carrying a topic that matches no known section would otherwise vanish
+// from the index entirely — the same silent-drop failure the date handling
+// guards against. Warn loudly (mirroring warnIfDateUnparseable) so a
+// newly-added topic surfaces at build time instead of shipping an incomplete
+// AI index; the post is still listed under the "Other" section.
+function warnIfUnknownTopic(post: PostMeta): void {
+  if (!post.topic) {
+    return;
+  }
+  if (isKnownTopic(post.topic)) {
+    return;
+  }
+  console.warn(
+    `generateLlmsTxt: post "${post.slug}" has an unrecognized topic "${post.topic}"; listing it under "${OTHER_HEADING}"`,
+  );
+}
+
 function loadPosts(): PostMeta[] {
   const posts = readdirSync(POSTS_DIR)
     .filter((f) => f.endsWith(".md") && f !== "index.md")
@@ -67,6 +91,7 @@ function loadPosts(): PostMeta[] {
 
   for (const post of posts) {
     warnIfDateUnparseable(post);
+    warnIfUnknownTopic(post);
   }
 
   // Newest first; undated posts (e.g. some travel entries) sort to the end.
@@ -107,6 +132,13 @@ export function generateLlmsTxt(): string {
     const sectionPosts = posts.filter((p) => p.topic === topic);
     if (sectionPosts.length === 0) continue;
     lines.push("", `## ${heading}`, "", ...sectionPosts.map(postLine));
+  }
+
+  const otherPosts = posts.filter(
+    (post) => post.topic && !isKnownTopic(post.topic),
+  );
+  if (otherPosts.length > 0) {
+    lines.push("", `## ${OTHER_HEADING}`, "", ...otherPosts.map(postLine));
   }
 
   lines.push(

@@ -138,7 +138,8 @@ describe("generateLlmsTxt", () => {
     expect(output).not.toContain("## Travel & Photography");
   });
 
-  it("drops posts whose topic matches none of the known sections", () => {
+  it("lists posts whose topic matches no known section under 'Other' and warns", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     mockPostFiles(
       ["odd.md"],
       [{ title: "Odd One Out", date: "2024-01-01", topic: "cooking" }],
@@ -146,8 +147,48 @@ describe("generateLlmsTxt", () => {
 
     const output = generateLlmsTxt();
 
-    expect(output).not.toContain("Odd One Out");
-    expect(output).not.toContain("## Cooking");
+    expect(sectionItems(output, "Other")).toEqual([
+      `- [Odd One Out](${SITE_URL}/posts/odd)`,
+    ]);
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining("unrecognized topic"),
+    );
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("cooking"));
+
+    warnSpy.mockRestore();
+  });
+
+  it("collects multiple unknown-topic posts into a single 'Other' section, newest first", () => {
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    mockPostFiles(
+      ["cooking.md", "gardening.md"],
+      [
+        { title: "Cooking Post", date: "2024-01-01", topic: "cooking" },
+        { title: "Gardening Post", date: "2024-06-01", topic: "gardening" },
+      ],
+    );
+
+    const output = generateLlmsTxt();
+
+    expect(sectionItems(output, "Other")).toEqual([
+      `- [Gardening Post](${SITE_URL}/posts/gardening)`,
+      `- [Cooking Post](${SITE_URL}/posts/cooking)`,
+    ]);
+  });
+
+  it("does not create an 'Other' section for posts that have no topic", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    mockPostFiles(
+      ["untopiced.md"],
+      [{ title: "No Topic", date: "2024-01-01" }],
+    );
+
+    const output = generateLlmsTxt();
+
+    expect(output).not.toContain("## Other");
+    expect(warnSpy).not.toHaveBeenCalled();
+
+    warnSpy.mockRestore();
   });
 
   it("sorts posts within a topic section newest first", () => {
