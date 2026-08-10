@@ -4,11 +4,13 @@ vi.mock("fs", () => {
   const existsSync = vi.fn();
   const readFileSync = vi.fn();
   const statSync = vi.fn();
+  const readdirSync = vi.fn();
   return {
-    default: { existsSync, readFileSync, statSync },
+    default: { existsSync, readFileSync, statSync, readdirSync },
     existsSync,
     readFileSync,
     statSync,
+    readdirSync,
   };
 });
 
@@ -16,17 +18,33 @@ vi.mock("../../theme/utils/frontmatter", () => ({
   parseFrontmatter: vi.fn(),
 }));
 
-import { existsSync, readFileSync, statSync } from "fs";
+import { existsSync, readFileSync, statSync, readdirSync } from "fs";
 import { parseFrontmatter } from "../../theme/utils/frontmatter";
 import { transformSitemapItems } from "../../theme/utils/sitemap";
 
 const mockExistsSync = vi.mocked(existsSync);
 const mockReadFileSync = vi.mocked(readFileSync);
 const mockStatSync = vi.mocked(statSync);
+const mockReaddirSync = vi.mocked(readdirSync);
 const mockParseFrontmatter = vi.mocked(parseFrontmatter);
+
+// Registers the posts directory listing and the frontmatter each file
+// resolves to, in the order transformSitemapItems' loader will read them.
+// Defaults to an empty directory so non-post tests don't have to set it up.
+function mockPostFiles(
+  files: string[] = [],
+  frontmatters: Record<string, unknown>[] = [],
+): void {
+  mockReaddirSync.mockReturnValue(files as any);
+  mockReadFileSync.mockReturnValue("" as any);
+  for (const data of frontmatters) {
+    mockParseFrontmatter.mockReturnValueOnce({ data, content: "" });
+  }
+}
 
 beforeEach(() => {
   vi.clearAllMocks();
+  mockReaddirSync.mockReturnValue([] as any);
 });
 
 describe("transformSitemapItems", () => {
@@ -38,12 +56,7 @@ describe("transformSitemapItems", () => {
 
   it("uses frontmatter date as lastmod for post URLs", () => {
     const postDate = "2024-03-15";
-    mockExistsSync.mockReturnValue(true);
-    mockReadFileSync.mockReturnValue("" as any);
-    mockParseFrontmatter.mockReturnValue({
-      data: { date: postDate },
-      content: "",
-    });
+    mockPostFiles(["my-post.md"], [{ date: postDate }]);
 
     const result = transformSitemapItems([{ url: "posts/my-post" }]);
     expect(result[0].lastmod).toEqual(new Date(postDate));
@@ -51,13 +64,39 @@ describe("transformSitemapItems", () => {
 
   it("falls through to file mtime when post file has no date", () => {
     const mtime = new Date("2024-05-01");
+    mockPostFiles(["my-post.md"], [{}]);
     mockExistsSync.mockReturnValue(true);
-    mockReadFileSync.mockReturnValue("" as any);
-    mockParseFrontmatter.mockReturnValue({ data: {}, content: "" });
     mockStatSync.mockReturnValue({ mtime } as any);
 
     const result = transformSitemapItems([{ url: "posts/my-post" }]);
     expect(result[0].lastmod).toEqual(mtime);
+  });
+
+  it("falls through to file mtime for a draft post rather than its frontmatter date", () => {
+    const mtime = new Date("2024-05-01");
+    mockPostFiles(["draft-post.md"], [{ date: "2024-03-15", draft: true }]);
+    mockExistsSync.mockReturnValue(true);
+    mockStatSync.mockReturnValue({ mtime } as any);
+
+    const result = transformSitemapItems([{ url: "posts/draft-post" }]);
+    expect(result[0].lastmod).toEqual(mtime);
+  });
+
+  it("warns and falls through to file mtime for an unparseable post date instead of throwing", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const mtime = new Date("2024-05-01");
+    mockPostFiles(["bad-date.md"], [{ date: "not-a-real-date" }]);
+    mockExistsSync.mockReturnValue(true);
+    mockStatSync.mockReturnValue({ mtime } as any);
+
+    let result: ReturnType<typeof transformSitemapItems> | undefined;
+    expect(() => {
+      result = transformSitemapItems([{ url: "posts/bad-date" }]);
+    }).not.toThrow();
+    expect(result![0].lastmod).toEqual(mtime);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("bad-date"));
+
+    warnSpy.mockRestore();
   });
 
   it("uses file mtime for non-post URLs", () => {

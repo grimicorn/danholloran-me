@@ -1,11 +1,7 @@
 import { Feed } from "feed";
 import type { MarkdownRenderer } from "vitepress";
-import { readdirSync, readFileSync } from "fs";
-import { join } from "path";
-import { parseFrontmatter } from "./frontmatter";
+import { loadPublishedPosts, hasUsableDate } from "./loadPublishedPosts";
 import { SITE_URL, SITE_DESCRIPTION } from "./constants";
-
-const POSTS_DIR = join(process.cwd(), ".vitepress/content/posts");
 
 // `]]>` closes a CDATA section. The `feed` library wraps item content in CDATA
 // and its XML serializer escapes only the first occurrence per field, so a
@@ -26,39 +22,11 @@ const CDATA_TERMINATOR_SAFE = "]]&gt;";
 const ROOT_RELATIVE_URL = /(\s(?:src|href)=")\/(?!\/)/g;
 
 // A post with no date, or a date that fails to parse, is excluded from the
-// feed rather than shipping an `Invalid Date` pubDate to subscribers. Warn
-// loudly on the unparseable case (as opposed to simply missing) since it
-// points at a frontmatter typo rather than an intentionally undated post.
-function hasParseableDate(post: Record<string, any>): boolean {
-  if (!post.date) {
-    return false;
-  }
-  const isUnparseable = Number.isNaN(new Date(post.date).getTime());
-  if (isUnparseable) {
-    console.warn(
-      `generateFeed: skipping "${post.slug}" — unparseable date "${post.date}"`,
-    );
-  }
-  return !isUnparseable;
-}
-
-function loadPosts(): Record<string, any>[] {
-  const files = readdirSync(POSTS_DIR).filter(
-    (file) => file.endsWith(".md") && file !== "index.md",
-  );
-
-  return files
-    .map((file) => {
-      const raw = readFileSync(join(POSTS_DIR, file), "utf-8");
-      const { data, content } = parseFrontmatter(raw);
-      const slug = file.replace(/\.md$/, "");
-      return { ...data, slug, body: content } as Record<string, any>;
-    })
-    .filter((post) => !post.draft && hasParseableDate(post))
-    .sort(
-      (left, right) =>
-        new Date(right.date).getTime() - new Date(left.date).getTime(),
-    );
+// feed rather than shipping an `Invalid Date` pubDate to subscribers. The
+// shared loader already warns loudly on the unparseable case (a frontmatter
+// typo) and sorts both to the end; here we simply drop them.
+function loadFeedPosts() {
+  return loadPublishedPosts().filter(hasUsableDate);
 }
 
 function absolutizeUrls(html: string): string {
@@ -100,7 +68,7 @@ export function generateFeed(renderer: MarkdownRenderer): string {
     author: { name: "Dan Holloran", link: SITE_URL },
   });
 
-  for (const post of loadPosts()) {
+  for (const post of loadFeedPosts()) {
     const url = `${SITE_URL}/posts/${post.slug}`;
     feed.addItem({
       title: post.title,

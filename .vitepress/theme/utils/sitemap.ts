@@ -1,38 +1,40 @@
-import { existsSync, readFileSync, statSync } from "fs";
+import { existsSync, statSync } from "fs";
 import { join } from "path";
-import { parseFrontmatter } from "./frontmatter";
 import type { SitemapItem } from "vitepress";
+import {
+  loadPublishedPosts,
+  hasUsableDate,
+  type PublishedPost,
+} from "./loadPublishedPosts";
+
+function indexBySlug(posts: PublishedPost[]): Map<string, PublishedPost> {
+  const bySlug = new Map<string, PublishedPost>();
+  for (const post of posts) {
+    bySlug.set(post.slug, post);
+  }
+  return bySlug;
+}
 
 // Post pages carry their published date as lastmod. Returns null when the URL
-// isn't a post, the file is missing, or it has no date, so the caller can fall
-// through to file mtime.
-function postLastmod(url: string): Date | null {
+// isn't a post, or the post isn't a published post with a usable date, so the
+// caller can fall through to file mtime. A draft or bad-date post is not in
+// the published set (the shared loader excludes drafts and warns on an
+// unparseable date rather than throwing), so it falls through to mtime.
+function postLastmod(
+  url: string,
+  publishedBySlug: Map<string, PublishedPost>,
+): Date | null {
   const postSlug = url.match(/^posts\/(.+)$/)?.[1];
   if (!postSlug) {
     return null;
   }
 
-  const postPath = join(
-    process.cwd(),
-    ".vitepress/content/posts",
-    `${postSlug}.md`,
-  );
-  if (!existsSync(postPath)) {
+  const post = publishedBySlug.get(postSlug);
+  if (!post || !hasUsableDate(post)) {
     return null;
   }
 
-  const { data } = parseFrontmatter(readFileSync(postPath, "utf-8"));
-  if (!data.date) {
-    return null;
-  }
-
-  const parsed = new Date(data.date);
-  if (Number.isNaN(parsed.getTime())) {
-    throw new Error(
-      `Invalid date "${data.date}" in frontmatter of ${postSlug}.md`,
-    );
-  }
-  return parsed;
+  return new Date(post.date as string);
 }
 
 // Resolves a stripped URL to the source file that backs it, returning the final
@@ -56,12 +58,13 @@ function fileEntry(url: string): { url: string; lastmod: Date } | null {
 }
 
 export function transformSitemapItems(items: SitemapItem[]): SitemapItem[] {
+  const publishedBySlug = indexBySlug(loadPublishedPosts());
   return items
     .filter((item) => item.url !== "README")
     .map((item) => {
       const url = item.url.replace(/\/$/, "");
 
-      const postDate = postLastmod(url);
+      const postDate = postLastmod(url, publishedBySlug);
       if (postDate) {
         return { ...item, url, lastmod: postDate };
       }
