@@ -110,7 +110,10 @@ function loadPosts(): PostMeta[] {
 function postLine(post: PostMeta): string {
   const url = `${SITE_URL}/posts/${post.slug}`;
   const description = post.description ? `: ${post.description}` : "";
-  return `- [${post.title}](${url})${description}`;
+  // Fall back to the slug so a post missing its title (now reachable via the
+  // "Other" section) never ships a literal "undefined" as its link text.
+  const label = post.title || post.slug;
+  return `- [${label}](${url})${description}`;
 }
 
 /**

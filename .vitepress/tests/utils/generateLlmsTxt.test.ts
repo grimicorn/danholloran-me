@@ -421,7 +421,11 @@ describe("generateLlmsTxt", () => {
     expect(output).not.toContain("## Finance");
     expect(output).not.toContain("## Travel & Photography");
     // A field-less post has no topic, so it takes the "Other" path and warns
-    // rather than being silently dropped.
+    // rather than being silently dropped; with no title it falls back to the
+    // slug for its link text instead of emitting a literal "undefined".
+    expect(sectionItems(output, "Other")).toEqual([
+      `- [empty](${SITE_URL}/posts/empty)`,
+    ]);
     expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("no topic"));
   });
 });
