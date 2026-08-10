@@ -16,22 +16,11 @@ import {
   loadPublishedPosts,
   hasUsableDate,
 } from "../../theme/utils/loadPublishedPosts";
+import { mockPostFiles } from "../helpers/mockPostFiles";
 
 const mockReaddirSync = vi.mocked(readdirSync);
 const mockReadFileSync = vi.mocked(readFileSync);
 const mockParseFrontmatter = vi.mocked(parseFrontmatter);
-
-// Registers a post file list and the frontmatter each file resolves to, in
-// the same order loadPublishedPosts() will read them.
-function mockPostFiles(
-  files: string[],
-  frontmatters: Record<string, unknown>[],
-): void {
-  mockReaddirSync.mockReturnValue(files as any);
-  for (const data of frontmatters) {
-    mockParseFrontmatter.mockReturnValueOnce({ data, content: "" });
-  }
-}
 
 function slugs(posts: { slug: string }[]): string[] {
   return posts.map((post) => post.slug);

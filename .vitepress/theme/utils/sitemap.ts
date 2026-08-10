@@ -7,6 +7,12 @@ import {
   type PublishedPost,
 } from "./loadPublishedPosts";
 
+// Post source files live here, not at a route-shaped path: `/posts/<slug>` is
+// served by the dynamic `posts/[slug].md` route, so `fileEntry` (which probes
+// `<cwd>/posts/<slug>.md`) never finds them. The mtime fall-through therefore
+// has to resolve against the real content file directly.
+const POSTS_CONTENT_DIR = join(process.cwd(), ".vitepress/content/posts");
+
 function indexBySlug(posts: PublishedPost[]): Map<string, PublishedPost> {
   const bySlug = new Map<string, PublishedPost>();
   for (const post of posts) {
@@ -15,11 +21,12 @@ function indexBySlug(posts: PublishedPost[]): Map<string, PublishedPost> {
   return bySlug;
 }
 
-// Post pages carry their published date as lastmod. Returns null when the URL
-// isn't a post, or the post isn't a published post with a usable date, so the
-// caller can fall through to file mtime. A draft or bad-date post is not in
-// the published set (the shared loader excludes drafts and warns on an
-// unparseable date rather than throwing), so it falls through to mtime.
+// Post pages carry their published date as lastmod. A published post with a
+// usable date uses that date; anything else (a draft, an undated post, or one
+// with a date the shared loader warned about rather than threw on) falls back
+// to the source file's mtime — a stable value, unlike the build timestamp.
+// Returns null only when the URL isn't a post or no source file backs it, so
+// the caller can fall through to its own handling.
 function postLastmod(
   url: string,
   publishedBySlug: Map<string, PublishedPost>,
@@ -30,11 +37,16 @@ function postLastmod(
   }
 
   const post = publishedBySlug.get(postSlug);
-  if (!post || !hasUsableDate(post)) {
-    return null;
+  if (post && hasUsableDate(post)) {
+    return new Date(post.sortTime);
   }
 
-  return new Date(post.date as string);
+  const contentPath = join(POSTS_CONTENT_DIR, `${postSlug}.md`);
+  if (existsSync(contentPath)) {
+    return statSync(contentPath).mtime;
+  }
+
+  return null;
 }
 
 // Resolves a stripped URL to the source file that backs it, returning the final

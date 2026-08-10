@@ -329,6 +329,47 @@ describe("transformPageData – posts/index.md", () => {
     expect(ld.blogPost[0].image).toBe(`${SITE_URL}/images/a.jpg`);
     expect(ld.blogPost[1].image).toBeUndefined();
   });
+
+  it("caps the blogPost list at the 10 newest published posts and excludes drafts", () => {
+    const files = Array.from({ length: 12 }, (_, index) => `post-${index}.md`);
+    mockReaddirSync.mockReturnValue(files as any);
+    mockReadFileSync.mockReturnValue("" as any);
+    files.forEach((_, index) => {
+      // Later index = newer date, so post-11 is newest; mark one as a draft to
+      // prove it is filtered before the 10-item cap is applied.
+      const month = String(index + 1).padStart(2, "0");
+      mockParseFrontmatter.mockReturnValueOnce({
+        data: {
+          title: `Post ${index}`,
+          date: `2024-${month}-01`,
+          draft: index === 0,
+        },
+        content: "",
+      });
+    });
+
+    const pageData = makePageData({
+      filePath: "posts/index.md",
+      frontmatter: { title: "Blog", description: "All posts" },
+    });
+    transformPageData(pageData);
+
+    const scriptTag = (pageData.frontmatter.head ?? []).find(
+      (tag: any[]) =>
+        tag[0] === "script" &&
+        tag[1]?.type === "application/ld+json" &&
+        tag[2]?.includes("Blog"),
+    );
+    const ld = JSON.parse(scriptTag[2]);
+
+    expect(ld.blogPost).toHaveLength(10);
+    expect(ld.blogPost[0].headline).toBe("Post 11");
+    expect(
+      ld.blogPost.some(
+        (post: { headline: string }) => post.headline === "Post 0",
+      ),
+    ).toBe(false);
+  });
 });
 
 describe("transformPageData – posts/[slug].md", () => {

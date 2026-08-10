@@ -35,7 +35,8 @@ function parsePostFile(file: string): ParsedPost {
   const { data, content } = parseFrontmatter(
     readFileSync(join(POSTS_DIR, file), "utf-8"),
   );
-  return { ...data, slug: file.replace(/\.md$/, ""), body: content };
+  const slug = file.slice(0, -MARKDOWN_EXTENSION.length);
+  return { ...data, slug, body: content };
 }
 
 function isPublished(post: ParsedPost): boolean {
@@ -46,8 +47,9 @@ function isPublished(post: ParsedPost): boolean {
 // intentionally undated post (e.g. some travel entries) is legitimate. An
 // unparseable date warns loudly, since it almost always points at a
 // frontmatter typo rather than a deliberate omission. Neither is dropped or
-// thrown here; both sort to the end, and consumers that need a guaranteed-
-// valid date filter with `hasUsableDate`.
+// thrown here; both collapse to the undated sentinel. The warning states only
+// the fact, not the consequence, because that differs per consumer (the feed
+// drops the post, llms.txt lists it last, the sitemap falls back to mtime).
 function resolveSortTime(slug: string, date: unknown): number {
   if (!date) {
     return UNDATED_SORT_TIME;
@@ -55,7 +57,7 @@ function resolveSortTime(slug: string, date: unknown): number {
   const time = new Date(date as string).getTime();
   if (Number.isNaN(time)) {
     console.warn(
-      `loadPublishedPosts: post "${slug}" has an unparseable date "${date}"; sorting it to the end`,
+      `loadPublishedPosts: post "${slug}" has an unparseable date "${date}"`,
     );
     return UNDATED_SORT_TIME;
   }

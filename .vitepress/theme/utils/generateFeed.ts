@@ -21,14 +21,6 @@ const CDATA_TERMINATOR_SAFE = "]]&gt;";
 // leaves protocol-relative `//host` URLs untouched.
 const ROOT_RELATIVE_URL = /(\s(?:src|href)=")\/(?!\/)/g;
 
-// A post with no date, or a date that fails to parse, is excluded from the
-// feed rather than shipping an `Invalid Date` pubDate to subscribers. The
-// shared loader already warns loudly on the unparseable case (a frontmatter
-// typo) and sorts both to the end; here we simply drop them.
-function loadFeedPosts() {
-  return loadPublishedPosts().filter(hasUsableDate);
-}
-
 function absolutizeUrls(html: string): string {
   return html.replace(ROOT_RELATIVE_URL, `$1${SITE_URL}/`);
 }
@@ -68,7 +60,11 @@ export function generateFeed(renderer: MarkdownRenderer): string {
     author: { name: "Dan Holloran", link: SITE_URL },
   });
 
-  for (const post of loadFeedPosts()) {
+  // A post with no date, or a date that fails to parse, is excluded from the
+  // feed rather than shipping an `Invalid Date` pubDate to subscribers. The
+  // shared loader already warns loudly on the unparseable case; here we drop
+  // both undated and bad-date posts via hasUsableDate.
+  for (const post of loadPublishedPosts().filter(hasUsableDate)) {
     const url = `${SITE_URL}/posts/${post.slug}`;
     feed.addItem({
       title: post.title,
