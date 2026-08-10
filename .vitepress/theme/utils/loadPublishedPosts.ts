@@ -92,3 +92,10 @@ export function loadPublishedPosts(): PublishedPost[] {
     .map(withSortTime)
     .sort(byNewestFirst);
 }
+
+// Published posts that carry a real, parseable date. The feed (needs a valid
+// pubDate), the blog JSON-LD (needs a valid datePublished), and the latest-
+// image lookup all want exactly this set, so it lives here once.
+export function loadDatedPosts(): PublishedPost[] {
+  return loadPublishedPosts().filter(hasUsableDate);
+}

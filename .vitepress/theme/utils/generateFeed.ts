@@ -1,6 +1,6 @@
 import { Feed } from "feed";
 import type { MarkdownRenderer } from "vitepress";
-import { loadPublishedPosts, hasUsableDate } from "./loadPublishedPosts";
+import { loadDatedPosts } from "./loadPublishedPosts";
 import { SITE_URL, SITE_DESCRIPTION } from "./constants";
 
 // `]]>` closes a CDATA section. The `feed` library wraps item content in CDATA
@@ -60,11 +60,9 @@ export function generateFeed(renderer: MarkdownRenderer): string {
     author: { name: "Dan Holloran", link: SITE_URL },
   });
 
-  // A post with no date, or a date that fails to parse, is excluded from the
-  // feed rather than shipping an `Invalid Date` pubDate to subscribers. The
-  // shared loader already warns loudly on the unparseable case; here we drop
-  // both undated and bad-date posts via hasUsableDate.
-  for (const post of loadPublishedPosts().filter(hasUsableDate)) {
+  // loadDatedPosts already excludes undated and bad-date posts (which the
+  // shared loader warned about), so no `Invalid Date` pubDate ever ships.
+  for (const post of loadDatedPosts()) {
     const url = `${SITE_URL}/posts/${post.slug}`;
     feed.addItem({
       title: post.title,
@@ -72,7 +70,7 @@ export function generateFeed(renderer: MarkdownRenderer): string {
       link: url,
       description: post.description ?? "",
       content: renderBody(renderer, post),
-      date: new Date(post.date),
+      date: new Date(post.sortTime),
       category: post.tags?.map((tag: string) => ({ name: tag })) ?? [],
       image: post.image ? `${SITE_URL}${post.image}` : undefined,
     });

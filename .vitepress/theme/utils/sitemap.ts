@@ -24,7 +24,10 @@ function indexBySlug(posts: PublishedPost[]): Map<string, PublishedPost> {
 // Post pages carry their published date as lastmod. A published post with a
 // usable date uses that date; anything else (a draft, an undated post, or one
 // with a date the shared loader warned about rather than threw on) falls back
-// to the source file's mtime — a stable value, unlike the build timestamp.
+// to the source file's mtime. That mtime is a meaningful "last changed" signal
+// when the working tree is preserved between builds; on a fresh CI clone git
+// doesn't restore mtimes, so it degrades to checkout time (a git-log-derived
+// date would be the fully robust fix — see follow-up).
 // Returns null only when the URL isn't a post or no source file backs it, so
 // the caller can fall through to its own handling.
 function postLastmod(

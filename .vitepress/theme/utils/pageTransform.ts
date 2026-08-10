@@ -2,8 +2,11 @@ import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { parseFrontmatter } from "./frontmatter";
 import type { PageData } from "vitepress";
-import { loadPublishedPosts, hasUsableDate } from "./loadPublishedPosts";
+import { loadDatedPosts } from "./loadPublishedPosts";
 import { SITE_URL } from "./constants";
+
+// The blog index's JSON-LD lists at most this many recent posts.
+const MAX_BLOG_POSTING_ENTRIES = 10;
 import {
   pageMeta,
   personJsonLd,
@@ -123,13 +126,12 @@ function transformGrimicornNeonThemes(pageData: PageData): void {
   });
 }
 
-// Newest-first BlogPosting JSON-LD for the up-to-10 published posts. Only
+// Newest-first BlogPosting JSON-LD for the most recent published posts. Only
 // posts with a usable date are listed, so `datePublished` is never an
 // `Invalid Date` string that structured-data validators reject.
 function buildBlogPostingList() {
-  return loadPublishedPosts()
-    .filter(hasUsableDate)
-    .slice(0, 10)
+  return loadDatedPosts()
+    .slice(0, MAX_BLOG_POSTING_ENTRIES)
     .map((post) => ({
       "@type": "BlogPosting",
       headline: post.title ?? "",
