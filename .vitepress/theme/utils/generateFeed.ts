@@ -11,11 +11,11 @@ const POSTS_DIR = join(process.cwd(), ".vitepress/content/posts");
 // description, and body in CDATA and its XML serializer escapes only the first
 // occurrence per field, so any of them containing the sequence twice would
 // prematurely close the section and corrupt the whole feed document.
-// Neutralize every terminator by entity-encoding its closing bracket. For the
-// HTML `content:encoded` body a spec-compliant reader decodes it back to the
-// original literal text; the RSS `<title>`/`<description>` are plain text, so
-// the entity shows literally as `]]&gt;` in every reader — an accepted trade
-// for not breaking the document.
+// Neutralize every terminator by entity-encoding its closing bracket. The
+// `<description>` and `content:encoded` body are rendered as HTML by feed
+// readers, so a spec-compliant reader decodes `]]&gt;` back to the original
+// literal text; the RSS `<title>` is plain text, so the entity shows literally
+// there — an accepted trade for not breaking the document.
 const CDATA_TERMINATOR = "]]>";
 const CDATA_TERMINATOR_SAFE = "]]&gt;";
 
@@ -66,11 +66,12 @@ function absolutizeUrls(html: string): string {
   return html.replace(ROOT_RELATIVE_URL, `$1${SITE_URL}/`);
 }
 
-// The `feed` library CDATA-wraps every item title, description, and body, so
-// each is vulnerable to the same premature-close bug: neutralize terminators
-// in all three via one helper rather than open-coding the replace per field.
-function neutralizeCdata(text: string): string {
-  return text.split(CDATA_TERMINATOR).join(CDATA_TERMINATOR_SAFE);
+// `unknown` because frontmatter values arrive from YAML: a `title: 2026` parses
+// to a number, which is coerced to text here rather than crashing `split`.
+function neutralizeCdata(text: unknown): string {
+  return String(text ?? "")
+    .split(CDATA_TERMINATOR)
+    .join(CDATA_TERMINATOR_SAFE);
 }
 
 // Fail loud with the offending slug: a body-less feed item is worse than a
@@ -111,10 +112,10 @@ export function generateFeed(renderer: MarkdownRenderer): string {
   for (const post of loadPosts()) {
     const url = `${SITE_URL}/posts/${post.slug}`;
     feed.addItem({
-      title: neutralizeCdata(post.title ?? ""),
+      title: neutralizeCdata(post.title),
       id: url,
       link: url,
-      description: neutralizeCdata(post.description ?? ""),
+      description: neutralizeCdata(post.description),
       content: renderBody(renderer, post),
       date: new Date(post.date),
       category: post.tags?.map((tag: string) => ({ name: tag })) ?? [],

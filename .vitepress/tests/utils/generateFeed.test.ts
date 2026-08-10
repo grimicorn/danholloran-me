@@ -266,6 +266,15 @@ describe("generateFeed", () => {
     expect(nodeText(feedItems(xml)[0].description)).toBe("a ]]&gt; b ]]&gt; c");
   });
 
+  it("coerces a non-string title (e.g. a numeric YAML value) to text instead of crashing", async () => {
+    mockPostFiles(["numeric-title.md"], [{ title: 2026, date: "2024-01-01" }]);
+
+    const xml = generateFeed(passthroughRenderer());
+
+    expect(() => parseFeedXml(xml)).not.toThrow();
+    expect(itemTitles(xml)).toEqual(["2026"]);
+  });
+
   it("emits the frontmatter date as the item pubDate", async () => {
     mockPostFiles(["dated.md"], [{ title: "Dated", date: "2024-01-01" }]);
 
