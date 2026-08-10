@@ -65,6 +65,13 @@ function absolutizeUrls(html: string): string {
   return html.replace(ROOT_RELATIVE_URL, `$1${SITE_URL}/`);
 }
 
+// The `feed` library CDATA-wraps every item title, description, and body, so
+// each is vulnerable to the same premature-close bug: neutralize terminators
+// in all three via one helper rather than open-coding the replace per field.
+function neutralizeCdata(text: string): string {
+  return text.split(CDATA_TERMINATOR).join(CDATA_TERMINATOR_SAFE);
+}
+
 // Fail loud with the offending slug: a body-less feed item is worse than a
 // build that stops and names the post that could not be rendered.
 function renderBody(
@@ -73,7 +80,7 @@ function renderBody(
 ): string {
   try {
     const html = absolutizeUrls(renderer.render(post.body ?? ""));
-    return html.split(CDATA_TERMINATOR).join(CDATA_TERMINATOR_SAFE);
+    return neutralizeCdata(html);
   } catch (error) {
     throw new Error(`generateFeed: failed to render "${post.slug}"`, {
       cause: error,
@@ -103,10 +110,10 @@ export function generateFeed(renderer: MarkdownRenderer): string {
   for (const post of loadPosts()) {
     const url = `${SITE_URL}/posts/${post.slug}`;
     feed.addItem({
-      title: post.title,
+      title: post.title ? neutralizeCdata(post.title) : post.title,
       id: url,
       link: url,
-      description: post.description ?? "",
+      description: neutralizeCdata(post.description ?? ""),
       content: renderBody(renderer, post),
       date: new Date(post.date),
       category: post.tags?.map((tag: string) => ({ name: tag })) ?? [],
