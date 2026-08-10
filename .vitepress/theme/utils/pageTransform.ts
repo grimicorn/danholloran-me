@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { parseFrontmatter } from "./frontmatter";
 import type { PageData } from "vitepress";
-import { loadPublishedPosts } from "./loadPublishedPosts";
+import { loadPublishedPosts, hasUsableDate } from "./loadPublishedPosts";
 import { SITE_URL } from "./constants";
 import {
   pageMeta,
@@ -123,16 +123,19 @@ function transformGrimicornNeonThemes(pageData: PageData): void {
   });
 }
 
-// Newest-first BlogPosting JSON-LD for the up-to-10 published posts.
+// Newest-first BlogPosting JSON-LD for the up-to-10 published posts. Only
+// posts with a usable date are listed, so `datePublished` is never an
+// `Invalid Date` string that structured-data validators reject.
 function buildBlogPostingList() {
   return loadPublishedPosts()
+    .filter(hasUsableDate)
     .slice(0, 10)
     .map((post) => ({
       "@type": "BlogPosting",
-      headline: (post.title as string | undefined) ?? "",
-      description: (post.description as string | undefined) ?? "",
+      headline: post.title ?? "",
+      description: post.description ?? "",
       url: `${SITE_URL}/posts/${post.slug}`,
-      datePublished: post.date as string | undefined,
+      datePublished: post.date,
       ...(post.image && { image: `${SITE_URL}${post.image}` }),
       author: {
         "@type": "Person",

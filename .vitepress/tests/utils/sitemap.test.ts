@@ -18,11 +18,12 @@ vi.mock("../../theme/utils/frontmatter", () => ({
   parseFrontmatter: vi.fn(),
 }));
 
-import { existsSync, statSync, readdirSync } from "fs";
+import { existsSync, readFileSync, statSync, readdirSync } from "fs";
 import { transformSitemapItems } from "../../theme/utils/sitemap";
 import { mockPostFiles } from "../helpers/mockPostFiles";
 
 const mockExistsSync = vi.mocked(existsSync);
+const mockReadFileSync = vi.mocked(readFileSync);
 const mockStatSync = vi.mocked(statSync);
 const mockReaddirSync = vi.mocked(readdirSync);
 
@@ -37,6 +38,7 @@ function contentPath(slug: string): string {
 beforeEach(() => {
   vi.resetAllMocks();
   mockReaddirSync.mockReturnValue([] as any);
+  mockReadFileSync.mockReturnValue("" as any);
 });
 
 describe("transformSitemapItems", () => {

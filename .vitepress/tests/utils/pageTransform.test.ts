@@ -335,14 +335,15 @@ describe("transformPageData – posts/index.md", () => {
     mockReaddirSync.mockReturnValue(files as any);
     mockReadFileSync.mockReturnValue("" as any);
     files.forEach((_, index) => {
-      // Later index = newer date, so post-11 is newest; mark one as a draft to
-      // prove it is filtered before the 10-item cap is applied.
+      // Later index = newer date, so post-11 is newest. Mark the newest as a
+      // draft: if draft filtering broke, it would surface at the top of the
+      // list, so the cap alone cannot hide the failure.
       const month = String(index + 1).padStart(2, "0");
       mockParseFrontmatter.mockReturnValueOnce({
         data: {
           title: `Post ${index}`,
           date: `2024-${month}-01`,
-          draft: index === 0,
+          draft: index === 11,
         },
         content: "",
       });
@@ -362,11 +363,13 @@ describe("transformPageData – posts/index.md", () => {
     );
     const ld = JSON.parse(scriptTag[2]);
 
+    // 11 published posts (post-11 is a draft), newest-first, capped at 10:
+    // post-10 leads, post-11 is absent, and the oldest (post-0) is cut by the cap.
     expect(ld.blogPost).toHaveLength(10);
-    expect(ld.blogPost[0].headline).toBe("Post 11");
+    expect(ld.blogPost[0].headline).toBe("Post 10");
     expect(
       ld.blogPost.some(
-        (post: { headline: string }) => post.headline === "Post 0",
+        (post: { headline: string }) => post.headline === "Post 11",
       ),
     ).toBe(false);
   });
