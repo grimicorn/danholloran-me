@@ -23,6 +23,14 @@ function isKnownTopic(topic: string): boolean {
   return TOPIC_SECTIONS.some((section) => section.topic === topic);
 }
 
+// True when a post would otherwise fall through every known section: it either
+// carries a topic none of TOPIC_SECTIONS recognizes, or carries no topic at
+// all. Shared by the warning and the "Other" section so the two can never
+// disagree about which posts are unplaced.
+function hasUnknownTopic(post: PostMeta): boolean {
+  return !post.topic || !isKnownTopic(post.topic);
+}
+
 interface PostMeta {
   title: string;
   description?: string;
@@ -61,20 +69,21 @@ function warnIfDateUnparseable(post: PostMeta): void {
   }
 }
 
-// A post carrying a topic that matches no known section would otherwise vanish
-// from the index entirely — the same silent-drop failure the date handling
-// guards against. Warn loudly (mirroring warnIfDateUnparseable) so a
-// newly-added topic surfaces at build time instead of shipping an incomplete
-// AI index; the post is still listed under the "Other" section.
+// A post whose topic matches no known section — or that has no topic at all —
+// would otherwise vanish from the index entirely, the same silent-drop failure
+// the date handling guards against. Warn loudly (mirroring
+// warnIfDateUnparseable) so a missing or newly-added topic surfaces at build
+// time instead of shipping an incomplete AI index; the post is still listed
+// under the "Other" section.
 function warnIfUnknownTopic(post: PostMeta): void {
-  if (!post.topic) {
+  if (!hasUnknownTopic(post)) {
     return;
   }
-  if (isKnownTopic(post.topic)) {
-    return;
-  }
+  const topicDescription = post.topic
+    ? `an unrecognized topic "${post.topic}"`
+    : "no topic";
   console.warn(
-    `generateLlmsTxt: post "${post.slug}" has an unrecognized topic "${post.topic}"; listing it under "${OTHER_HEADING}"`,
+    `generateLlmsTxt: post "${post.slug}" has ${topicDescription}; listing it under "${OTHER_HEADING}"`,
   );
 }
 
@@ -134,9 +143,7 @@ export function generateLlmsTxt(): string {
     lines.push("", `## ${heading}`, "", ...sectionPosts.map(postLine));
   }
 
-  const otherPosts = posts.filter(
-    (post) => post.topic && !isKnownTopic(post.topic),
-  );
+  const otherPosts = posts.filter(hasUnknownTopic);
   if (otherPosts.length > 0) {
     lines.push("", `## ${OTHER_HEADING}`, "", ...otherPosts.map(postLine));
   }

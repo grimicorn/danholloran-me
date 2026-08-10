@@ -159,7 +159,7 @@ describe("generateLlmsTxt", () => {
   });
 
   it("collects multiple unknown-topic posts into a single 'Other' section, newest first", () => {
-    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     mockPostFiles(
       ["cooking.md", "gardening.md"],
       [
@@ -174,9 +174,11 @@ describe("generateLlmsTxt", () => {
       `- [Gardening Post](${SITE_URL}/posts/gardening)`,
       `- [Cooking Post](${SITE_URL}/posts/cooking)`,
     ]);
+
+    warnSpy.mockRestore();
   });
 
-  it("does not create an 'Other' section for posts that have no topic", () => {
+  it("lists posts that have no topic under 'Other' and warns", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     mockPostFiles(
       ["untopiced.md"],
@@ -185,7 +187,60 @@ describe("generateLlmsTxt", () => {
 
     const output = generateLlmsTxt();
 
+    expect(sectionItems(output, "Other")).toEqual([
+      `- [No Topic](${SITE_URL}/posts/untopiced)`,
+    ]);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("no topic"));
+
+    warnSpy.mockRestore();
+  });
+
+  it("keeps known and unknown topics disjoint and renders 'Other' after the known sections and before 'Optional'", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    mockPostFiles(
+      ["dev.md", "odd.md"],
+      [
+        { title: "Dev Post", date: "2024-01-01", topic: "development" },
+        { title: "Odd Post", date: "2024-01-01", topic: "cooking" },
+      ],
+    );
+
+    const output = generateLlmsTxt();
+
+    expect(sectionItems(output, "Development")).toEqual([
+      `- [Dev Post](${SITE_URL}/posts/dev)`,
+    ]);
+    expect(sectionItems(output, "Other")).toEqual([
+      `- [Odd Post](${SITE_URL}/posts/odd)`,
+    ]);
+    expect(output.indexOf("## Development")).toBeLessThan(
+      output.indexOf("## Other"),
+    );
+    expect(output.indexOf("## Other")).toBeLessThan(
+      output.indexOf("## Optional"),
+    );
+
+    warnSpy.mockRestore();
+  });
+
+  it("does not warn about or list a draft post with an unknown topic", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    mockPostFiles(
+      ["draft-odd.md"],
+      [
+        {
+          title: "Draft Odd",
+          date: "2024-01-01",
+          topic: "cooking",
+          draft: true,
+        },
+      ],
+    );
+
+    const output = generateLlmsTxt();
+
     expect(output).not.toContain("## Other");
+    expect(output).not.toContain("Draft Odd");
     expect(warnSpy).not.toHaveBeenCalled();
 
     warnSpy.mockRestore();
@@ -364,6 +419,7 @@ describe("generateLlmsTxt", () => {
   });
 
   it("does not crash on a post with no frontmatter fields at all", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     mockPostFiles(["empty.md"], [{}]);
 
     let output = "";
@@ -374,5 +430,7 @@ describe("generateLlmsTxt", () => {
     expect(output).not.toContain("## Obsidian & Productivity");
     expect(output).not.toContain("## Finance");
     expect(output).not.toContain("## Travel & Photography");
+
+    warnSpy.mockRestore();
   });
 });
