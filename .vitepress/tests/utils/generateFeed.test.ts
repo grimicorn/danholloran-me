@@ -275,6 +275,20 @@ describe("generateFeed", () => {
     expect(itemTitles(xml)).toEqual(["2026"]);
   });
 
+  it("degrades a structured (non-scalar) title to text rather than breaking the whole build", async () => {
+    // A malformed object title (e.g. a stray-indent YAML map) should still yield
+    // a valid feed for every other post — coercion is deliberately lenient here.
+    mockPostFiles(
+      ["object-title.md"],
+      [{ title: { a: 1 }, date: "2024-01-01" }],
+    );
+
+    const xml = generateFeed(passthroughRenderer());
+
+    expect(() => parseFeedXml(xml)).not.toThrow();
+    expect(itemTitles(xml)).toEqual(["[object Object]"]);
+  });
+
   it("emits the frontmatter date as the item pubDate", async () => {
     mockPostFiles(["dated.md"], [{ title: "Dated", date: "2024-01-01" }]);
 
