@@ -12,10 +12,45 @@ const TOPIC_SECTIONS: { topic: string; heading: string }[] = [
   { topic: "travel", heading: "Travel & Photography" },
 ];
 
+/** Catch-all heading for posts whose topic matches no known section. */
+const OTHER_HEADING = "Other";
+
+function isKnownTopic(topic: string): boolean {
+  return TOPIC_SECTIONS.some((section) => section.topic === topic);
+}
+
+// True when a post would otherwise fall through every known section: it either
+// carries a topic none of TOPIC_SECTIONS recognizes, or carries no topic at
+// all. Shared by the warning and the "Other" section so the two can never
+// disagree about which posts are unplaced.
+function hasUnknownTopic(post: PublishedPost): boolean {
+  return !post.topic || !isKnownTopic(post.topic);
+}
+
+// A post whose topic matches no known section — or that has no topic at all —
+// would otherwise vanish from the index entirely, the same silent-drop failure
+// the shared loader's unparseable-date warning guards against. Warn loudly so a
+// missing or newly-added topic surfaces at build time instead of shipping an
+// incomplete AI index; the post is still listed under the "Other" section.
+function warnIfUnknownTopic(post: PublishedPost): void {
+  if (!hasUnknownTopic(post)) {
+    return;
+  }
+  const topicDescription = post.topic
+    ? `an unrecognized topic "${post.topic}"`
+    : "no topic";
+  console.warn(
+    `generateLlmsTxt: post "${post.slug}" has ${topicDescription}; listing it under "${OTHER_HEADING}"`,
+  );
+}
+
 function postLine(post: PublishedPost): string {
   const url = `${SITE_URL}/posts/${post.slug}`;
   const description = post.description ? `: ${post.description}` : "";
-  return `- [${post.title}](${url})${description}`;
+  // Fall back to the slug so a post missing its title (now reachable via the
+  // "Other" section) never ships a literal "undefined" as its link text.
+  const label = post.title || post.slug;
+  return `- [${label}](${url})${description}`;
 }
 
 /**
@@ -25,6 +60,10 @@ function postLine(post: PublishedPost): string {
  */
 export function generateLlmsTxt(): string {
   const posts = loadPublishedPosts();
+  // Warn once per unplaced post at build time before rendering the sections.
+  for (const post of posts) {
+    warnIfUnknownTopic(post);
+  }
   const yearsExperience = new Date().getFullYear() - CAREER_START_YEAR;
   const place = CURRENT_LOCATION;
 
@@ -46,6 +85,11 @@ export function generateLlmsTxt(): string {
     const sectionPosts = posts.filter((p) => p.topic === topic);
     if (sectionPosts.length === 0) continue;
     lines.push("", `## ${heading}`, "", ...sectionPosts.map(postLine));
+  }
+
+  const otherPosts = posts.filter(hasUnknownTopic);
+  if (otherPosts.length > 0) {
+    lines.push("", `## ${OTHER_HEADING}`, "", ...otherPosts.map(postLine));
   }
 
   lines.push(
