@@ -214,6 +214,35 @@ describe("useNewsletter", () => {
       expect(status.value).toBe("success");
     });
 
+    it("releases the success lock when the email is changed so a new address can subscribe", async () => {
+      const fetchSpy = stubFetch(true);
+      const { email, status, subscribe } = useNewsletter();
+
+      email.value = VALID_EMAIL;
+      await subscribe();
+      expect(status.value).toBe("success");
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+
+      email.value = "second@example.com";
+      expect(status.value).toBe("idle");
+
+      await subscribe();
+      expect(fetchSpy).toHaveBeenCalledTimes(2);
+      expect(status.value).toBe("success");
+    });
+
+    it("keeps the success lock for a repeat submit of the same address", async () => {
+      const fetchSpy = stubFetch(true);
+      const { email, status, subscribe } = useNewsletter();
+
+      email.value = VALID_EMAIL;
+      await subscribe();
+      await subscribe();
+
+      expect(status.value).toBe("success");
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+    });
+
     it("releases the guard after a failed request so a retry can succeed", async () => {
       const fetchSpy = vi
         .spyOn(globalThis, "fetch")

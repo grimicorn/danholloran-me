@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useAnalytics } from "@composables/useAnalytics";
 
 const KIT_FORM_ACTION = "https://app.kit.com/forms/9565549/subscriptions";
@@ -28,10 +28,24 @@ export function useNewsletter() {
   const errorMessage = ref("");
   const { trackEvent } = useAnalytics();
 
+  // A post-success edit means the visitor wants to subscribe a different
+  // address, so release the one-shot success lock and let them submit again.
+  // Sync flush keeps the lock released before any submit in the same tick.
+  watch(
+    email,
+    () => {
+      if (status.value !== "success") {
+        return;
+      }
+      status.value = "idle";
+    },
+    { flush: "sync" },
+  );
+
   async function subscribe() {
-    // Locks after success on purpose: consumers hide or disable the submit
-    // path on success (NewsletterBanner unmounts the form, NewsletterTerminal
-    // disables the input). Re-subscribing requires a fresh useNewsletter().
+    // Blocks a duplicate submit while a request is in flight, or a repeat of
+    // the same address that already succeeded (the success lock releases the
+    // moment the email is edited — see the watcher above).
     if (status.value === "loading" || status.value === "success") {
       return;
     }
