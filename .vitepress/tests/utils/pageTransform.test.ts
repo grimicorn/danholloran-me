@@ -429,24 +429,21 @@ describe("transformPageData – posts/[slug].md", () => {
     expect(scriptTag).toBeDefined();
   });
 
-  it("falls back to default-social.png for og:image and Article JSON-LD when no frontmatter image", () => {
+  it("falls back to default-social.png for og:image, twitter:image, and Article JSON-LD when no frontmatter image", () => {
     const pageData = transformPostWithFrontmatter({
       title: "T",
       description: "D",
       date: "2024-03-01",
     });
+    const defaultImageUrl = `${SITE_URL}/images/default-social.png`;
 
     expect(
-      findHead(
-        pageData,
-        "meta",
-        "content",
-        `${SITE_URL}/images/default-social.png`,
-      ),
-    ).toBeDefined();
-    expect(getJsonLd(pageData).image).toBe(
-      `${SITE_URL}/images/default-social.png`,
-    );
+      findHead(pageData, "meta", "property", "og:image")?.[1]?.content,
+    ).toBe(defaultImageUrl);
+    expect(
+      findHead(pageData, "meta", "name", "twitter:image")?.[1]?.content,
+    ).toBe(defaultImageUrl);
+    expect(getJsonLd(pageData).image).toBe(defaultImageUrl);
   });
 
   it("uses the frontmatter image over the default when provided", () => {
