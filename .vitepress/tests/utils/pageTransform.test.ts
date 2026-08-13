@@ -453,10 +453,14 @@ describe("transformPageData – posts/[slug].md", () => {
       date: "2024-03-01",
       image: "/images/post.png",
     });
+    const postImageUrl = `${SITE_URL}/images/post.png`;
 
     expect(
-      findHead(pageData, "meta", "content", `${SITE_URL}/images/post.png`),
-    ).toBeDefined();
+      findHead(pageData, "meta", "property", "og:image")?.[1]?.content,
+    ).toBe(postImageUrl);
+    expect(
+      findHead(pageData, "meta", "name", "twitter:image")?.[1]?.content,
+    ).toBe(postImageUrl);
     expect(
       findHead(
         pageData,
@@ -465,7 +469,7 @@ describe("transformPageData – posts/[slug].md", () => {
         `${SITE_URL}/images/default-social.png`,
       ),
     ).toBeUndefined();
-    expect(getJsonLd(pageData).image).toBe(`${SITE_URL}/images/post.png`);
+    expect(getJsonLd(pageData).image).toBe(postImageUrl);
   });
 
   it("sets dateModified to the post date when no dateModified is in frontmatter", () => {

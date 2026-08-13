@@ -10,7 +10,8 @@ const MAX_BLOG_POSTING_ENTRIES = 10;
 
 // Fallback social image for pages without a frontmatter `image`, so og:image,
 // twitter:image, and the Article JSON-LD image always resolve. (The post hero
-// is fed by the postsDetail content loader, not this transform.)
+// is fed by the postsDetail content loader, not this transform. The blog-index
+// BlogPosting list entries intentionally stay image-optional.)
 const DEFAULT_SOCIAL_IMAGE = "/images/default-social.png";
 import {
   pageMeta,
