@@ -26,15 +26,21 @@ export function useNewsletter() {
   const email = ref("");
   const status = ref<NewsletterStatus>("idle");
   const errorMessage = ref("");
+  const subscribedEmail = ref("");
   const { trackEvent } = useAnalytics();
 
-  // A post-success edit means the visitor wants to subscribe a different
-  // address, so release the one-shot success lock and let them submit again.
-  // Sync flush keeps the lock released before any submit in the same tick.
+  // Editing the address to a *different* one after success means the visitor
+  // wants to subscribe someone new, so release the one-shot success lock and
+  // let them submit again. Editing back to the address that already succeeded
+  // keeps the lock, so we never re-POST a duplicate. Sync flush keeps the lock
+  // released before any submit in the same tick.
   watch(
     email,
     () => {
       if (status.value !== "success") {
+        return;
+      }
+      if (email.value.trim() === subscribedEmail.value) {
         return;
       }
       status.value = "idle";
@@ -43,9 +49,9 @@ export function useNewsletter() {
   );
 
   async function subscribe() {
-    // Blocks a duplicate submit while a request is in flight, or a repeat of
-    // the same address that already succeeded (the success lock releases the
-    // moment the email is edited — see the watcher above).
+    // Blocks a duplicate submit while a request is in flight, and blocks a
+    // repeat of the address that already succeeded. The success lock releases
+    // only when the email is edited to a different address (see the watcher).
     if (status.value === "loading" || status.value === "success") {
       return;
     }
@@ -81,6 +87,7 @@ export function useNewsletter() {
     }
 
     status.value = "success";
+    subscribedEmail.value = trimmedEmail;
     trackEvent(SUBSCRIBE_EVENT);
   }
 

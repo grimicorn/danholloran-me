@@ -231,14 +231,18 @@ describe("useNewsletter", () => {
       expect(status.value).toBe("success");
     });
 
-    it("keeps the success lock for a repeat submit of the same address", async () => {
+    it("keeps the success lock when the email is edited back to the subscribed address", async () => {
       const fetchSpy = stubFetch(true);
       const { email, status, subscribe } = useNewsletter();
 
       email.value = VALID_EMAIL;
       await subscribe();
-      await subscribe();
+      expect(status.value).toBe("success");
 
+      email.value = `  ${VALID_EMAIL}  `;
+      expect(status.value).toBe("success");
+
+      await subscribe();
       expect(status.value).toBe("success");
       expect(fetchSpy).toHaveBeenCalledTimes(1);
     });
