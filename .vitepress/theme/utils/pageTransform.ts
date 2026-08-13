@@ -8,8 +8,9 @@ import { SITE_URL } from "./constants";
 // The blog index's JSON-LD lists at most this many recent posts.
 const MAX_BLOG_POSTING_ENTRIES = 10;
 
-// Fallback social/hero image for pages without a frontmatter `image`, so
-// og:image, twitter:image, Article JSON-LD, and the hero always resolve.
+// Fallback social image for pages without a frontmatter `image`, so og:image,
+// twitter:image, and the Article JSON-LD image always resolve. (The post hero
+// is fed by the postsDetail content loader, not this transform.)
 const DEFAULT_SOCIAL_IMAGE = "/images/default-social.png";
 import {
   pageMeta,
