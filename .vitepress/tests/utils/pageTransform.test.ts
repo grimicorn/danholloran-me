@@ -429,6 +429,48 @@ describe("transformPageData – posts/[slug].md", () => {
     expect(scriptTag).toBeDefined();
   });
 
+  it("falls back to default-social.png for og:image and Article JSON-LD when no frontmatter image", () => {
+    const pageData = transformPostWithFrontmatter({
+      title: "T",
+      description: "D",
+      date: "2024-03-01",
+    });
+
+    expect(
+      findHead(
+        pageData,
+        "meta",
+        "content",
+        `${SITE_URL}/images/default-social.png`,
+      ),
+    ).toBeDefined();
+    expect(getJsonLd(pageData).image).toBe(
+      `${SITE_URL}/images/default-social.png`,
+    );
+  });
+
+  it("uses the frontmatter image over the default when provided", () => {
+    const pageData = transformPostWithFrontmatter({
+      title: "T",
+      description: "D",
+      date: "2024-03-01",
+      image: "/images/post.png",
+    });
+
+    expect(
+      findHead(pageData, "meta", "content", `${SITE_URL}/images/post.png`),
+    ).toBeDefined();
+    expect(
+      findHead(
+        pageData,
+        "meta",
+        "content",
+        `${SITE_URL}/images/default-social.png`,
+      ),
+    ).toBeUndefined();
+    expect(getJsonLd(pageData).image).toBe(`${SITE_URL}/images/post.png`);
+  });
+
   it("sets dateModified to the post date when no dateModified is in frontmatter", () => {
     mockExistsSync.mockReturnValue(true);
     mockReadFileSync.mockReturnValue("" as any);

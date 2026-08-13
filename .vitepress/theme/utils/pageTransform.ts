@@ -7,6 +7,10 @@ import { SITE_URL } from "./constants";
 
 // The blog index's JSON-LD lists at most this many recent posts.
 const MAX_BLOG_POSTING_ENTRIES = 10;
+
+// Fallback social/hero image for pages without a frontmatter `image`, so
+// og:image, twitter:image, Article JSON-LD, and the hero always resolve.
+const DEFAULT_SOCIAL_IMAGE = "/images/default-social.png";
 import {
   pageMeta,
   personJsonLd,
@@ -162,7 +166,7 @@ function transformPostsIndex(pageData: PageData): void {
       url,
       image:
         (pageData.frontmatter.image as string | undefined) ??
-        "/images/default-social.png",
+        DEFAULT_SOCIAL_IMAGE,
       jsonLd: {
         "@context": "https://schema.org",
         "@type": "Blog",
@@ -228,12 +232,13 @@ function transformPost(pageData: PageData): void {
   const { data } = parseFrontmatter(readFileSync(postPath, "utf-8"));
   const title = data.title ?? "";
   const description = data.description ?? "";
+  const image = data.image ?? DEFAULT_SOCIAL_IMAGE;
   const url = `${SITE_URL}/posts/${slug}`;
   setStandardPageMeta(pageData, {
     title,
     description,
     url,
-    image: data.image,
+    image,
     type: "article",
     jsonLd: {
       "@context": "https://schema.org",
@@ -244,9 +249,7 @@ function transformPost(pageData: PageData): void {
       dateModified: data.dateModified ?? data.date,
       url,
       ...buildArticleTopicalFields(data),
-      ...(data.image && {
-        image: `${SITE_URL}${data.image}`,
-      }),
+      image: `${SITE_URL}${image}`,
       author: {
         "@type": "Person",
         name: `${resume.firstName} ${resume.lastName}`,
