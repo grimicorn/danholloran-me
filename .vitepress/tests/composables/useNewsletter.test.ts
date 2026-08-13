@@ -257,6 +257,26 @@ describe("useNewsletter", () => {
       expect(fetchSpy).toHaveBeenCalledTimes(1);
     });
 
+    it("clears a stale error when re-affirming the subscribed address after a failed edit", async () => {
+      const fetchSpy = stubFetch(true);
+      const { email, status, errorMessage, subscribe } = useNewsletter();
+
+      email.value = VALID_EMAIL;
+      await subscribe();
+
+      email.value = "not-an-email";
+      await subscribe();
+      expect(status.value).toBe("error");
+      expect(errorMessage.value).toBe("enter a valid email address.");
+
+      email.value = VALID_EMAIL;
+      await subscribe();
+
+      expect(status.value).toBe("success");
+      expect(errorMessage.value).toBe("");
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+    });
+
     it("does not re-POST after editing away and back to the subscribed address without submitting", async () => {
       const fetchSpy = stubFetch(true);
       const { email, subscribe } = useNewsletter();

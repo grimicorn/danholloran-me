@@ -51,6 +51,7 @@ export function useNewsletter() {
       normalizeEmail(trimmedEmail) === subscribedEmail.value
     ) {
       status.value = "success";
+      errorMessage.value = "";
       return;
     }
 
