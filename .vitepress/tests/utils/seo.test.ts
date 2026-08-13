@@ -137,8 +137,10 @@ describe("pageMeta", () => {
     // <script> element or start a new tag.
     expect(payload.includes("<")).toBe(false);
     expect(payload.includes(">")).toBe(false);
+    expect(payload.includes("&")).toBe(false);
     expect(payload).not.toContain("</script>");
     expect(payload).toContain("\\u003c");
+    expect(payload).toContain("\\u0026");
 
     // The payload is still valid JSON and decodes back to the original values.
     const parsed = JSON.parse(payload);
