@@ -214,7 +214,7 @@ describe("useNewsletter", () => {
       expect(status.value).toBe("success");
     });
 
-    it("releases the success lock when the email is changed so a new address can subscribe", async () => {
+    it("re-enables the form after success when the email is changed to a new address", async () => {
       const fetchSpy = stubFetch(true);
       const { email, status, subscribe } = useNewsletter();
 
@@ -224,26 +224,50 @@ describe("useNewsletter", () => {
       expect(fetchSpy).toHaveBeenCalledTimes(1);
 
       email.value = "second@example.com";
-      expect(status.value).toBe("idle");
-
       await subscribe();
+
       expect(fetchSpy).toHaveBeenCalledTimes(2);
       expect(status.value).toBe("success");
     });
 
-    it("keeps the success lock when the email is edited back to the subscribed address", async () => {
+    it("keeps the success lock for a whitespace-only re-type of the subscribed address", async () => {
       const fetchSpy = stubFetch(true);
       const { email, status, subscribe } = useNewsletter();
 
       email.value = VALID_EMAIL;
       await subscribe();
-      expect(status.value).toBe("success");
 
       email.value = `  ${VALID_EMAIL}  `;
-      expect(status.value).toBe("success");
-
       await subscribe();
+
       expect(status.value).toBe("success");
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("keeps the success lock for a case-only re-type of the subscribed address", async () => {
+      const fetchSpy = stubFetch(true);
+      const { email, subscribe } = useNewsletter();
+
+      email.value = VALID_EMAIL;
+      await subscribe();
+
+      email.value = VALID_EMAIL.toUpperCase();
+      await subscribe();
+
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("does not re-POST after editing away and back to the subscribed address without submitting", async () => {
+      const fetchSpy = stubFetch(true);
+      const { email, subscribe } = useNewsletter();
+
+      email.value = VALID_EMAIL;
+      await subscribe();
+
+      email.value = "other@example.com";
+      email.value = VALID_EMAIL;
+      await subscribe();
+
       expect(fetchSpy).toHaveBeenCalledTimes(1);
     });
 

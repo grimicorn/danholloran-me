@@ -1,4 +1,4 @@
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { useAnalytics } from "@composables/useAnalytics";
 
 const KIT_FORM_ACTION = "https://app.kit.com/forms/9565549/subscriptions";
@@ -7,6 +7,12 @@ const SUBSCRIBE_EVENT = "newsletter_subscribe";
 // instead of pinning status at "loading" until a page reload.
 const REQUEST_TIMEOUT_MS = 10_000;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Kit treats an address case-insensitively, so normalize before comparing to
+// the address that already succeeded — a case-only re-type is the same signup.
+function normalizeEmail(value: string): string {
+  return value.trim().toLowerCase();
+}
 
 // Undefined on browsers without AbortSignal.timeout so the request stays
 // unbounded (as before) rather than throwing and failing every subscribe.
@@ -29,34 +35,25 @@ export function useNewsletter() {
   const subscribedEmail = ref("");
   const { trackEvent } = useAnalytics();
 
-  // Editing the address to a *different* one after success means the visitor
-  // wants to subscribe someone new, so release the one-shot success lock and
-  // let them submit again. Editing back to the address that already succeeded
-  // keeps the lock, so we never re-POST a duplicate. Sync flush keeps the lock
-  // released before any submit in the same tick.
-  watch(
-    email,
-    () => {
-      if (status.value !== "success") {
-        return;
-      }
-      if (email.value.trim() === subscribedEmail.value) {
-        return;
-      }
-      status.value = "idle";
-    },
-    { flush: "sync" },
-  );
-
   async function subscribe() {
-    // Blocks a duplicate submit while a request is in flight, and blocks a
-    // repeat of the address that already succeeded. The success lock releases
-    // only when the email is edited to a different address (see the watcher).
-    if (status.value === "loading" || status.value === "success") {
+    // One request at a time.
+    if (status.value === "loading") {
       return;
     }
 
     const trimmedEmail = email.value.trim();
+
+    // Success lock scoped to the address that succeeded: a repeat submit of the
+    // same address (case/whitespace aside) re-affirms success and sends
+    // nothing, while editing to a different address re-enables the form.
+    if (
+      subscribedEmail.value !== "" &&
+      normalizeEmail(trimmedEmail) === subscribedEmail.value
+    ) {
+      status.value = "success";
+      return;
+    }
+
     if (!EMAIL_RE.test(trimmedEmail)) {
       status.value = "error";
       errorMessage.value = "enter a valid email address.";
@@ -87,7 +84,7 @@ export function useNewsletter() {
     }
 
     status.value = "success";
-    subscribedEmail.value = trimmedEmail;
+    subscribedEmail.value = normalizeEmail(trimmedEmail);
     trackEvent(SUBSCRIBE_EVENT);
   }
 
