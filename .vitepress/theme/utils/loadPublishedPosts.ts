@@ -39,8 +39,14 @@ function parsePostFile(file: string): ParsedPost {
   return { ...data, slug, body: content };
 }
 
-function isPublished(post: ParsedPost): boolean {
-  return !post.draft;
+// The single draft policy shared by every consumer. Content loaders, route
+// generation (`posts/[slug].paths.ts`), and the SEO transform
+// (`pageTransform.ts`) all filter on this, so a `draft: true` post is dropped
+// identically everywhere and never leaks a reachable, indexable blank page.
+// Takes just the frontmatter's draft flag so callers holding raw frontmatter
+// (not a full ParsedPost) can reuse it.
+export function isPublished(frontmatter: { draft?: unknown }): boolean {
+  return !frontmatter.draft;
 }
 
 // The one date policy shared by every consumer. A missing date is silent — an
