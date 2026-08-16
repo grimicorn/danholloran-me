@@ -698,6 +698,8 @@ describe("transformPageData – posts/[slug].md", () => {
 
     expect(pageData.title).toBe("");
     expect(pageData.description).toBe("");
+    expect(pageData.frontmatter.title).toBeUndefined();
+    expect(pageData.frontmatter.description).toBeUndefined();
     expect(pageData.frontmatter.head).toBeUndefined();
   });
 

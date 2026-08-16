@@ -21,7 +21,7 @@ function isPublishedPostFile(file: string): boolean {
 }
 
 export default {
-  watch: ["./.vitepress/content/posts/*.md"],
+  watch: [`${POSTS_DIR}/*${MARKDOWN_EXTENSION}`],
   paths() {
     return fs
       .readdirSync(POSTS_DIR)

@@ -11,6 +11,7 @@ vi.mock("../../theme/utils/frontmatter", () => ({
 }));
 
 import fs from "node:fs";
+import path from "node:path";
 import { parseFrontmatter } from "../../theme/utils/frontmatter";
 import postsPaths from "../../../posts/[slug].paths";
 
@@ -38,6 +39,12 @@ describe("posts/[slug].paths", () => {
       });
 
     expect(generatedSlugs()).toEqual(["published"]);
+    // Guards against POSTS_DIR drifting out of sync with the watch glob: the
+    // loader must read from the content posts directory it declares.
+    expect(mockReadFileSync).toHaveBeenCalledWith(
+      path.join("./.vitepress/content/posts", "published.md"),
+      "utf-8",
+    );
   });
 
   it("generates a route for every published post", () => {
