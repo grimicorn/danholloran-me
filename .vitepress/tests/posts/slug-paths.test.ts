@@ -39,12 +39,26 @@ describe("posts/[slug].paths", () => {
       });
 
     expect(generatedSlugs()).toEqual(["published"]);
-    // Guards against POSTS_DIR drifting out of sync with the watch glob: the
-    // loader must read from the content posts directory it declares.
+    // Pins the loader to the content posts directory it declares, so the read
+    // path can't silently drift away from where the posts actually live.
     expect(mockReadFileSync).toHaveBeenCalledWith(
       path.join("./.vitepress/content/posts", "published.md"),
       "utf-8",
     );
+  });
+
+  it("treats a non-boolean draft value as a draft and warns", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    mockReaddirSync.mockReturnValue(["typo.md"] as any);
+    mockParseFrontmatter.mockReturnValueOnce({
+      data: { title: "Typo", draft: "false" },
+      content: "",
+    });
+
+    expect(generatedSlugs()).toEqual([]);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("draft"));
+
+    warnSpy.mockRestore();
   });
 
   it("generates a route for every published post", () => {

@@ -44,9 +44,18 @@ function parsePostFile(file: string): ParsedPost {
 // (`pageTransform.ts`) all filter on this, so a `draft: true` post is dropped
 // identically everywhere and never leaks a reachable, indexable blank page.
 // Takes just the frontmatter's draft flag so callers holding raw frontmatter
-// (not a full ParsedPost) can reuse it.
+// (not a full ParsedPost) can reuse it. A non-boolean draft (e.g. the string
+// "false", or `draft: maybe`) is truthy and so treated as a draft — hiding the
+// post — which almost always means a frontmatter typo, so warn loudly rather
+// than let it silently vanish from the build (mirrors resolveSortTime's policy).
 export function isPublished(frontmatter: { draft?: unknown }): boolean {
-  return !frontmatter.draft;
+  const { draft } = frontmatter;
+  if (draft !== undefined && typeof draft !== "boolean") {
+    console.warn(
+      `loadPublishedPosts: non-boolean draft value ${JSON.stringify(draft)}; treating the post as a draft`,
+    );
+  }
+  return !draft;
 }
 
 // The one date policy shared by every consumer. A missing date is silent — an

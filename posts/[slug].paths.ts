@@ -6,10 +6,10 @@ import { isPublished } from "../.vitepress/theme/utils/loadPublishedPosts";
 const POSTS_DIR = "./.vitepress/content/posts";
 const MARKDOWN_EXTENSION = ".md";
 
-// A draft must not generate a route: postsDetail.data.ts excludes it, so its
-// page renders blank while pageTransform would still emit SEO metadata for it.
-// Filter on the shared draft policy so drafts are dropped here exactly as they
-// are in the content loaders and the SEO transform.
+// Primary gate keeping drafts out of the build: a draft generates no route at
+// all. Filter on the shared draft policy so drafts are dropped here exactly as
+// they are in the content loaders and the SEO transform (pageTransform.ts keeps
+// a matching guard as defense-in-depth for any draft reached another way).
 function isPublishedPostFile(file: string): boolean {
   if (path.extname(file) !== MARKDOWN_EXTENSION) {
     return false;
