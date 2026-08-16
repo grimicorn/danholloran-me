@@ -43,19 +43,25 @@ function parsePostFile(file: string): ParsedPost {
 // generation (`posts/[slug].paths.ts`), and the SEO transform
 // (`pageTransform.ts`) all filter on this, so a `draft: true` post is dropped
 // identically everywhere and never leaks a reachable, indexable blank page.
-// Takes just the frontmatter's draft flag so callers holding raw frontmatter
-// (not a full ParsedPost) can reuse it. A non-boolean draft (e.g. the string
-// "false", or `draft: maybe`) is truthy and so treated as a draft — hiding the
-// post — which almost always means a frontmatter typo, so warn loudly rather
-// than let it silently vanish from the build (mirrors resolveSortTime's policy).
-export function isPublished(frontmatter: { draft?: unknown }): boolean {
+// Takes just the frontmatter's draft flag (so callers holding raw frontmatter,
+// not a full ParsedPost, can reuse it) plus a `source` label naming the post,
+// so a warning is traceable to a file. A non-boolean draft almost always means
+// a frontmatter typo — a truthy one (e.g. the string "false") silently hides
+// the post, a falsy one (bare `draft:` → null, `draft: 0`) silently publishes
+// it — so warn loudly either way, stating the outcome the value actually
+// produced (mirrors resolveSortTime's fail-loud policy).
+export function isPublished(
+  frontmatter: { draft?: unknown },
+  source: string,
+): boolean {
   const { draft } = frontmatter;
+  const published = !draft;
   if (draft !== undefined && typeof draft !== "boolean") {
     console.warn(
-      `loadPublishedPosts: non-boolean draft value ${JSON.stringify(draft)}; treating the post as a draft`,
+      `isPublished: ${source} has a non-boolean draft value ${JSON.stringify(draft)}; treating the post as ${published ? "published" : "a draft"}`,
     );
   }
-  return !draft;
+  return published;
 }
 
 // The one date policy shared by every consumer. A missing date is silent — an
@@ -103,7 +109,7 @@ export function loadPublishedPosts(): PublishedPost[] {
   return readdirSync(POSTS_DIR)
     .filter(isPostFile)
     .map(parsePostFile)
-    .filter(isPublished)
+    .filter((post) => isPublished(post, post.slug))
     .map(withSortTime)
     .sort(byNewestFirst);
 }

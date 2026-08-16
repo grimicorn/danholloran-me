@@ -47,7 +47,7 @@ describe("posts/[slug].paths", () => {
     );
   });
 
-  it("treats a non-boolean draft value as a draft and warns", () => {
+  it("treats a truthy non-boolean draft as a draft and warns with the file", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     mockReaddirSync.mockReturnValue(["typo.md"] as any);
     mockParseFrontmatter.mockReturnValueOnce({
@@ -56,9 +56,36 @@ describe("posts/[slug].paths", () => {
     });
 
     expect(generatedSlugs()).toEqual([]);
-    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("draft"));
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringMatching(/typo\.md.*treating the post as a draft/),
+    );
 
     warnSpy.mockRestore();
+  });
+
+  it("publishes a post with a falsy non-boolean draft but warns", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    mockReaddirSync.mockReturnValue(["bare.md"] as any);
+    mockParseFrontmatter.mockReturnValueOnce({
+      data: { title: "Bare", draft: null },
+      content: "",
+    });
+
+    expect(generatedSlugs()).toEqual(["bare"]);
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringMatching(/bare\.md.*treating the post as published/),
+    );
+
+    warnSpy.mockRestore();
+  });
+
+  it("throws an error naming the file when a post cannot be read", () => {
+    mockReaddirSync.mockReturnValue(["broken.md"] as any);
+    mockReadFileSync.mockImplementation(() => {
+      throw new Error("ENOENT");
+    });
+
+    expect(() => postsPaths.paths()).toThrow(/broken\.md/);
   });
 
   it("generates a route for every published post", () => {

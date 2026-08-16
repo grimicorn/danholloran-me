@@ -237,7 +237,7 @@ function transformPost(pageData: PageData): void {
   // source never emits title/canonical/OG/JSON-LD. Without this a draft would
   // ship rich SEO metadata over a body PostView renders blank (postsDetail.data
   // excludes it) — a reachable, indexable, empty page.
-  if (!isPublished(data)) return;
+  if (!isPublished(data, slug)) return;
 
   const title = data.title ?? "";
   const description = data.description ?? "";

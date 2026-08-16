@@ -14,10 +14,19 @@ function isPublishedPostFile(file: string): boolean {
   if (path.extname(file) !== MARKDOWN_EXTENSION) {
     return false;
   }
-  const { data } = parseFrontmatter(
-    fs.readFileSync(path.join(POSTS_DIR, file), "utf-8"),
-  );
-  return isPublished(data);
+  try {
+    const { data } = parseFrontmatter(
+      fs.readFileSync(path.join(POSTS_DIR, file), "utf-8"),
+    );
+    return isPublished(data, file);
+  } catch (error) {
+    // The read/parse are new throw sites in what was a pure extension filter.
+    // Fail loud (a broken post shouldn't ship as a missing route) but name the
+    // file, or the raw ENOENT/YAML error points at no post.
+    throw new Error(`posts/[slug].paths: cannot read frontmatter for ${file}`, {
+      cause: error,
+    });
+  }
 }
 
 export default {
