@@ -7,8 +7,10 @@ import {
   ALL_TAG,
   POSTS_BASE,
   archiveHref,
+  hasFilterRoute,
   pageSlice,
   toFilterSlug,
+  toPageNumber,
   totalPagesForCount,
 } from "@utils/archive";
 
@@ -37,6 +39,10 @@ const FIRST_PAGE = 1;
 const PAGE_WINDOW = 1;
 const ELLIPSIS = "…";
 
+// Guard against a missing / malformed page param (Number(undefined) === NaN),
+// which would otherwise slice out an empty, thin archive page.
+const currentPage = computed(() => toPageNumber(page));
+
 const activeTopicSlug = computed(() => (topic === ALL_TOPIC ? null : topic));
 const activeTagSlug = computed(() => (tag === ALL_TAG ? null : tag));
 
@@ -45,11 +51,32 @@ const filterContext = computed(() => ({
   tagSlug: activeTagSlug.value,
 }));
 
-const topicEntries = computed(() =>
-  [...new Set(posts.map((post) => post.frontmatter.topic))]
-    .sort()
-    .map((label) => ({ label, slug: toFilterSlug(label) })),
-);
+function tagsOf(post: Post): string[] {
+  return Array.isArray(post.frontmatter.tags) ? post.frontmatter.tags : [];
+}
+
+// De-duped by slug (not label) and stripped of route-less labels, so the row
+// never renders two chips pointing at one route or a dead /posts/topic/ link.
+const topicEntries = computed(() => {
+  const bySlug = new Map<string, string>();
+  for (const label of posts.map((post) => post.frontmatter.topic)) {
+    registerTopic(bySlug, label);
+  }
+  return [...bySlug.entries()]
+    .map(([slug, label]) => ({ slug, label }))
+    .sort((left, right) => left.label.localeCompare(right.label));
+});
+
+function registerTopic(bySlug: Map<string, string>, label: string): void {
+  if (!hasFilterRoute(label)) {
+    return;
+  }
+  const slug = toFilterSlug(label);
+  const existing = bySlug.get(slug);
+  if (existing === undefined || label < existing) {
+    bySlug.set(slug, label);
+  }
+}
 
 function matchesTopic(post: Post): boolean {
   if (activeTopicSlug.value === null) {
@@ -62,7 +89,7 @@ function matchesTag(post: Post): boolean {
   if (activeTagSlug.value === null) {
     return true;
   }
-  return post.frontmatter.tags.some(
+  return tagsOf(post).some(
     (postTag) => toFilterSlug(postTag) === activeTagSlug.value,
   );
 }
@@ -72,11 +99,30 @@ const filtered = computed(() =>
 );
 
 const totalPages = computed(() => totalPagesForCount(filtered.value.length));
-const pagePosts = computed(() => pageSlice(filtered.value, page));
+const pagePosts = computed(() => pageSlice(filtered.value, currentPage.value));
+
+// A per-filter heading so each topic/tag page is a distinct indexable surface
+// rather than repeating the blog index's H1. Null keeps the default two-line
+// hero on the unfiltered archive (including its paginated pages).
+const activeTopicLabel = computed(
+  () =>
+    topicEntries.value.find((entry) => entry.slug === activeTopicSlug.value)
+      ?.label ?? "",
+);
+
+const pageHeading = computed(() => {
+  if (activeTopicSlug.value !== null) {
+    return `Posts on ${activeTopicLabel.value || topic}`;
+  }
+  if (activeTagSlug.value !== null) {
+    return `Posts tagged #${tagLabel || tag}`;
+  }
+  return null;
+});
 
 // The featured full-width lead card only renders on page 1 of a filter.
 function isFeatured(index: number): boolean {
-  return page === FIRST_PAGE && index === 0;
+  return currentPage.value === FIRST_PAGE && index === 0;
 }
 
 function topicHref(slug: string): string {
@@ -103,7 +149,7 @@ function isWindowed(pageNumber: number): boolean {
   if (pageNumber === FIRST_PAGE || pageNumber === totalPages.value) {
     return true;
   }
-  return Math.abs(pageNumber - page) <= PAGE_WINDOW;
+  return Math.abs(pageNumber - currentPage.value) <= PAGE_WINDOW;
 }
 
 function toPaginationItem(pageNumber: number): PaginationItem | null {
@@ -113,10 +159,10 @@ function toPaginationItem(pageNumber: number): PaginationItem | null {
       key: String(pageNumber),
       page: pageNumber,
       href: pageHref(pageNumber),
-      active: pageNumber === page,
+      active: pageNumber === currentPage.value,
     };
   }
-  if (Math.abs(pageNumber - page) === PAGE_WINDOW + 1) {
+  if (Math.abs(pageNumber - currentPage.value) === PAGE_WINDOW + 1) {
     return { kind: "gap", key: `${ELLIPSIS}${pageNumber}` };
   }
   return null;
@@ -137,10 +183,10 @@ const paginationItems = computed<PaginationItem[]>(() => {
   return items;
 });
 
-const hasPrev = computed(() => page > FIRST_PAGE);
-const hasNext = computed(() => page < totalPages.value);
-const prevHref = computed(() => pageHref(page - 1));
-const nextHref = computed(() => pageHref(page + 1));
+const hasPrev = computed(() => currentPage.value > FIRST_PAGE);
+const hasNext = computed(() => currentPage.value < totalPages.value);
+const prevHref = computed(() => pageHref(currentPage.value - 1));
+const nextHref = computed(() => pageHref(currentPage.value + 1));
 
 let fadeObserver: IntersectionObserver | null = null;
 
@@ -176,6 +222,14 @@ onUnmounted(() => {
       // writing
     </div>
     <h1
+      v-if="pageHeading"
+      class="mb-4 font-mono leading-[1.1] font-bold"
+      style="font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: -0.04em"
+    >
+      {{ pageHeading }}
+    </h1>
+    <h1
+      v-else
       class="mb-4 font-mono leading-[1.1] font-bold"
       style="font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: -0.04em"
     >

@@ -4,8 +4,10 @@ import {
   REST_PAGE_SIZE,
   archiveHref,
   extraPageNumbers,
+  hasFilterRoute,
   pageSlice,
   toFilterSlug,
+  toPageNumber,
   totalPagesForCount,
 } from "@utils/archive";
 
@@ -21,6 +23,39 @@ describe("toFilterSlug", () => {
 
   it("collapses labels that differ only by punctuation to one slug", () => {
     expect(toFilterSlug("tailwind.css")).toBe(toFilterSlug("tailwind-css"));
+  });
+
+  it("folds accents to ASCII instead of splitting on the combining mark", () => {
+    expect(toFilterSlug("Café")).toBe("cafe");
+    expect(toFilterSlug("Québec")).toBe("quebec");
+  });
+
+  it("returns an empty slug for a label with no alphanumerics", () => {
+    expect(toFilterSlug("→")).toBe("");
+    expect(toFilterSlug("!!!")).toBe("");
+  });
+});
+
+describe("hasFilterRoute", () => {
+  it("is true only when the label slugs to something routable", () => {
+    expect(hasFilterRoute("javascript")).toBe(true);
+    expect(hasFilterRoute("→")).toBe(false);
+    expect(hasFilterRoute("")).toBe(false);
+  });
+});
+
+describe("toPageNumber", () => {
+  it("passes through valid 1-based integers", () => {
+    expect(toPageNumber("2")).toBe(2);
+    expect(toPageNumber(5)).toBe(5);
+  });
+
+  it("falls back to page 1 for missing or malformed values", () => {
+    expect(toPageNumber(undefined)).toBe(1);
+    expect(toPageNumber(NaN)).toBe(1);
+    expect(toPageNumber("0")).toBe(1);
+    expect(toPageNumber("-3")).toBe(1);
+    expect(toPageNumber("abc")).toBe(1);
   });
 });
 

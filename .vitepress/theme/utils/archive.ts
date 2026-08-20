@@ -19,16 +19,35 @@ const TOPIC_SEGMENT = "topic";
 const TAG_SEGMENT = "tag";
 const FIRST_PAGE = 1;
 
-// URL-safe slug for a topic or tag value. Lowercased, non-alphanumeric runs
-// collapsed to a single dash, edges trimmed. Two labels can slug to the same
-// value (e.g. "tailwind.css" and "tailwind-css"); the archive filters by slug
-// rather than exact label so both land on — and are counted by — one page.
+// Combining diacritical marks left behind after NFKD decomposition (é -> e + ´).
+const COMBINING_MARKS = /[\u0300-\u036f]/g;
+
+// URL-safe slug for a topic or tag value. Lowercased, accents folded to ASCII,
+// non-alphanumeric runs collapsed to a single dash, edges trimmed. Two labels
+// can slug to the same value (e.g. "tailwind.css" and "tailwind-css"); the
+// archive filters by slug rather than exact label so both land on — and are
+// counted by — one page.
 export function toFilterSlug(value: string): string {
   return String(value)
     .toLowerCase()
     .normalize("NFKD")
+    .replace(COMBINING_MARKS, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+// A label only earns a crawlable route when it slugs to a non-empty value; a
+// label of pure punctuation or non-Latin script slugs to "" and gets no page,
+// so callers must not render a link to one.
+export function hasFilterRoute(label: string): boolean {
+  return toFilterSlug(label).length > 0;
+}
+
+// The 1-based page a route resolves to, defaulting to page 1 for a missing or
+// malformed value rather than letting NaN silently render an empty archive.
+export function toPageNumber(raw: unknown): number {
+  const page = Number(raw);
+  return Number.isInteger(page) && page >= FIRST_PAGE ? page : FIRST_PAGE;
 }
 
 // Total number of pages needed to hold `count` posts under the first-page /

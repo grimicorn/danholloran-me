@@ -103,6 +103,18 @@ describe("tag paths", () => {
     expect(slugs).toContain("react");
     // The two tailwind labels collapse to a single slug bucket.
     expect(slugs.filter((slug) => slug === "tailwind-css")).toHaveLength(1);
+    // Deterministic representative label (lexicographically smallest) so the
+    // page title never flips with post order.
+    const tailwind = base.find((entry) => entry.params.tag === "tailwind-css");
+    expect(tailwind?.params.tagLabel).toBe("tailwind-css");
+  });
+
+  it("skips tags whose label has no routable slug", () => {
+    mockLoad.mockReturnValue(
+      makePosts([{ topic: "development", tags: ["→", "react"] }]) as any,
+    );
+    const slugs = tagBasePagePaths().map((entry) => entry.params.tag);
+    expect(slugs).toEqual(["react"]);
   });
 
   it("paginates a tag that overflows the first page", () => {

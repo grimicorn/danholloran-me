@@ -61,12 +61,13 @@ describe("PostsView", () => {
     expect(wrapper.html()).toContain("#javascript");
   });
 
-  it("renders the no-posts message when the filter matches nothing", () => {
+  it("renders the no-posts message with a clear-filters link", () => {
     const wrapper = mount(PostsView, {
       props: { posts: mockPosts, tag: "nonexistent" },
     });
-    expect(wrapper.html()).toContain("No posts found");
-    expect(wrapper.html()).toContain('href="/posts"');
+    const emptyBlock = wrapper.get(".text-center");
+    expect(emptyBlock.text()).toContain("No posts found");
+    expect(emptyBlock.get("a").attributes("href")).toBe("/posts");
   });
 
   it("renders real pagination links to numbered pages", () => {
@@ -80,15 +81,26 @@ describe("PostsView", () => {
     expect(wrapper.html()).not.toContain("/posts/post-10");
   });
 
-  it("renders the correct slice and back-links for a later page", () => {
+  it("renders the correct slice and a scoped previous-page link for a later page", () => {
     const wrapper = mount(PostsView, {
       props: { posts: buildPosts(21), page: 2 },
     });
-    const hrefs = anchorHrefs(wrapper.html());
-    // Page 2 holds posts 10..18 (9 posts) and links back to page 1 (/posts).
+    // Page 2 holds posts 10..18 (9 posts).
     expect(wrapper.html()).toContain("/posts/post-10");
     expect(wrapper.html()).not.toContain('/posts/post-0"');
-    expect(hrefs).toContain("/posts");
+    // The previous-page control (scoped to the pagination nav) points at page 1.
+    const pagination = wrapper.get('nav[aria-label="Archive pagination"]');
+    expect(anchorHrefs(pagination.html())).toContain("/posts");
+  });
+
+  it("normalizes a malformed page param to page 1 instead of an empty slice", () => {
+    const wrapper = mount(PostsView, {
+      props: { posts: buildPosts(21), page: Number("nope") },
+    });
+    // NaN page must not slice out an empty archive; page 1 content shows.
+    expect(wrapper.html()).toContain("/posts/post-0");
+    const pagination = wrapper.get('nav[aria-label="Archive pagination"]');
+    expect(anchorHrefs(pagination.html())).toContain("/posts/page/2");
   });
 
   it("scopes pagination links to the active topic filter", () => {
@@ -99,7 +111,21 @@ describe("PostsView", () => {
     const wrapper = mount(PostsView, {
       props: { posts, topic: "development" },
     });
-    const hrefs = anchorHrefs(wrapper.html());
-    expect(hrefs).toContain("/posts/topic/development/page/2");
+    const pagination = wrapper.get('nav[aria-label="Archive pagination"]');
+    expect(anchorHrefs(pagination.html())).toContain(
+      "/posts/topic/development/page/2",
+    );
+  });
+
+  it("renders a distinct heading for a filtered archive page", () => {
+    const topicWrapper = mount(PostsView, {
+      props: { posts: mockPosts, topic: "development" },
+    });
+    expect(topicWrapper.get("h1").text()).toBe("Posts on development");
+
+    const tagWrapper = mount(PostsView, {
+      props: { posts: mockPosts, tag: "javascript", tagLabel: "javascript" },
+    });
+    expect(tagWrapper.get("h1").text()).toBe("Posts tagged #javascript");
   });
 });

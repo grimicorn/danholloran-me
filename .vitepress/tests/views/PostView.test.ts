@@ -388,4 +388,18 @@ describe("PostView", () => {
       );
     });
   });
+
+  it("renders a route-less tag as plain text, not a dead link", () => {
+    const post = {
+      ...mockPosts[0],
+      frontmatter: { ...mockPosts[0].frontmatter, tags: ["→", "react"] },
+    };
+    const wrapper = shallowMount(PostView, {
+      props: { post, posts: mockPosts },
+    });
+    // The unroutable tag has no /posts/tag/ link, the routable one does.
+    expect(wrapper.findAll("a[href^='/posts/tag/']")).toHaveLength(1);
+    expect(wrapper.html()).toContain("#→");
+    expect(wrapper.html()).not.toContain('href="/posts/tag/"');
+  });
 });
