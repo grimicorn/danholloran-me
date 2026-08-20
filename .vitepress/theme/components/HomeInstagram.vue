@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted, ref } from "vue";
 import { data as instagramPosts } from "@content/instagram/instagram.data.ts";
 import socialLinks from "@data/socialLinks.ts";
 import { formatPostDate } from "@utils/formatDate";
@@ -6,6 +7,26 @@ import { formatPostDate } from "@utils/formatDate";
 const instagramHandle = socialLinks.INSTAGRAM.match(
   /(?:https?:\/\/)?(?:www\.)?instagram\.com\/([A-Za-z0-9_.]+)/,
 )?.[1];
+
+// One full row of tiles at the widest breakpoint.
+const MAX_TILES = 6;
+const displayedPosts = instagramPosts.slice(0, MAX_TILES);
+
+function randomImageIndex(imageCount: number) {
+  return Math.floor(Math.random() * imageCount);
+}
+
+// SSR and the initial client render both use index 0 so hydration matches;
+// the random pick only happens after mount to avoid a hydration mismatch. This
+// mirrors HomeHero's onMounted quote pick and accepts a one-time post-hydration
+// swap as the price of a stable server render.
+const imageIndexes = ref<number[]>(displayedPosts.map(() => 0));
+
+onMounted(() => {
+  imageIndexes.value = displayedPosts.map((post) =>
+    randomImageIndex(post.frontmatter.images.length),
+  );
+});
 </script>
 
 <template>
@@ -85,7 +106,7 @@ const instagramHandle = socialLinks.INSTAGRAM.match(
         class="stagger in grid grid-cols-6 gap-3 max-lg:grid-cols-3 max-sm:grid-cols-2"
       >
         <a
-          v-for="(post, index) in instagramPosts.slice(0, 6)"
+          v-for="(post, index) in displayedPosts"
           :key="post.frontmatter.url"
           :href="post.frontmatter.url"
           target="blank"
@@ -96,7 +117,7 @@ const instagramHandle = socialLinks.INSTAGRAM.match(
             class="absolute inset-0 transition-transform duration-500 group-hover:scale-[1.04]"
           >
             <img
-              :src="`${post.frontmatter.images[Math.floor(Math.random() * post.frontmatter.images.length)]}`"
+              :src="post.frontmatter.images[imageIndexes[index]]"
               :alt="
                 post.frontmatter.caption ||
                 `${post.frontmatter.location} image` ||
