@@ -9,6 +9,7 @@ import {
   archiveHref,
   hasFilterRoute,
   pageSlice,
+  pickRepresentativeLabel,
   toFilterSlug,
   toPageNumber,
   totalPagesForCount,
@@ -72,10 +73,7 @@ function registerTopic(bySlug: Map<string, string>, label: string): void {
     return;
   }
   const slug = toFilterSlug(label);
-  const existing = bySlug.get(slug);
-  if (existing === undefined || label < existing) {
-    bySlug.set(slug, label);
-  }
+  bySlug.set(slug, pickRepresentativeLabel(bySlug.get(slug), label));
 }
 
 function matchesTopic(post: Post): boolean {
@@ -110,12 +108,20 @@ const activeTopicLabel = computed(
       ?.label ?? "",
 );
 
+const pageSuffix = computed(() =>
+  currentPage.value > FIRST_PAGE ? ` — Page ${currentPage.value}` : "",
+);
+
 const pageHeading = computed(() => {
   if (activeTopicSlug.value !== null) {
-    return `Posts on ${activeTopicLabel.value || topic}`;
+    return `Posts on ${activeTopicLabel.value || topic}${pageSuffix.value}`;
   }
   if (activeTagSlug.value !== null) {
-    return `Posts tagged #${tagLabel || tag}`;
+    return `Posts tagged #${tagLabel || tag}${pageSuffix.value}`;
+  }
+  // Unfiltered page 1 keeps the two-line hero; later pages get a distinct H1.
+  if (currentPage.value > FIRST_PAGE) {
+    return `Writing${pageSuffix.value}`;
   }
   return null;
 });

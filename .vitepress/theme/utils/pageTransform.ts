@@ -4,7 +4,7 @@ import { parseFrontmatter } from "./frontmatter";
 import type { PageData } from "vitepress";
 import { isPublished, loadDatedPosts } from "./loadPublishedPosts";
 import { SITE_URL } from "./constants";
-import { archiveHref } from "./archive";
+import { archiveHref, toPageNumber } from "./archive";
 
 // The blog index's JSON-LD lists at most this many recent posts.
 const MAX_BLOG_POSTING_ENTRIES = 10;
@@ -281,7 +281,7 @@ interface ArchiveScope {
 }
 
 function archivePageNumber(pageData: PageData): number {
-  return Number(pageData.params?.page) || 1;
+  return toPageNumber(pageData.params?.page);
 }
 
 function resolveArchiveScope(pageData: PageData): ArchiveScope | null {

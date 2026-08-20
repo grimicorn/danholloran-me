@@ -1,5 +1,10 @@
 import { loadPublishedPosts, type PublishedPost } from "./loadPublishedPosts";
-import { extraPageNumbers, toFilterSlug } from "./archive";
+import {
+  extraPageNumbers,
+  hasFilterRoute,
+  pickRepresentativeLabel,
+  toFilterSlug,
+} from "./archive";
 
 // Shared with every archive `.paths.ts` so their `watch` globs can't drift from
 // where the posts actually live.
@@ -57,18 +62,13 @@ function addPostToBucket(
   postSlug: string,
   key: string,
 ): void {
-  const slug = toFilterSlug(key);
-  if (slug.length === 0) {
+  if (!hasFilterRoute(key)) {
     return;
   }
+  const slug = toFilterSlug(key);
   const bucket = bySlug.get(slug) ?? { label: key, posts: new Set<string>() };
   bucket.posts.add(postSlug);
-  // Deterministic representative when labels collide (e.g. "tailwind.css" vs
-  // "tailwind-css"): the lexicographically smallest label wins, so the page's
-  // title/heading never flips just because a post was added in a new order.
-  if (key < bucket.label) {
-    bucket.label = key;
-  }
+  bucket.label = pickRepresentativeLabel(bucket.label, key);
   bySlug.set(slug, bucket);
 }
 

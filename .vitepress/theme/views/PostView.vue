@@ -4,7 +4,7 @@ import { Post } from "@typedefs";
 import resume from "@data/resume.ts";
 import NewsletterTerminal from "@components/NewsletterTerminal.vue";
 import PostLightbox from "@components/PostLightbox.vue";
-import { hasFilterRoute, toFilterSlug } from "@utils/archive";
+import { archiveHref, hasFilterRoute, toFilterSlug } from "@utils/archive";
 
 const ZOOM_LABEL = "Zoom image";
 
@@ -280,7 +280,7 @@ function formatDate(d: string) {
       <template v-for="tag in post.frontmatter.tags" :key="tag">
         <a
           v-if="hasFilterRoute(tag)"
-          :href="`/posts/tag/${toFilterSlug(tag)}`"
+          :href="archiveHref(1, { tagSlug: toFilterSlug(tag) })"
           class="text-fg-muted border-line tag-hover rounded-xs border px-2.5 py-1 font-mono text-[0.7rem] no-underline transition-colors"
         >
           #{{ tag }}

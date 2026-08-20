@@ -38,9 +38,23 @@ export function toFilterSlug(value: string): string {
 
 // A label only earns a crawlable route when it slugs to a non-empty value; a
 // label of pure punctuation or non-Latin script slugs to "" and gets no page,
-// so callers must not render a link to one.
-export function hasFilterRoute(label: string): boolean {
-  return toFilterSlug(label).length > 0;
+// so callers must not render a link to one. Non-string values never route.
+export function hasFilterRoute(label: unknown): boolean {
+  return typeof label === "string" && toFilterSlug(label).length > 0;
+}
+
+// The single tie-break for labels that collide on one slug (e.g. "tailwind.css"
+// and "tailwind-css"): the lexicographically smallest label wins, so the page's
+// title/heading is stable regardless of the order posts are added. Shared by
+// the build-time route generator and the in-view topic row so they never drift.
+export function pickRepresentativeLabel(
+  existing: string | undefined,
+  candidate: string,
+): string {
+  if (existing === undefined || candidate < existing) {
+    return candidate;
+  }
+  return existing;
 }
 
 // The 1-based page a route resolves to, defaulting to page 1 for a missing or

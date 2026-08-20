@@ -154,4 +154,41 @@ describe("transformSitemapItems", () => {
     const result = transformSitemapItems([{ url: "" }]);
     expect(result[0].lastmod).toEqual(mtime);
   });
+
+  it("stamps archive routes with the newest published post date", () => {
+    const newest = "2024-06-01";
+    mockPostFiles(
+      ["newer.md", "older.md"],
+      [{ date: newest }, { date: "2020-01-01" }],
+    );
+
+    const result = transformSitemapItems([
+      { url: "posts/page/2" },
+      { url: "posts/topic/travel" },
+      { url: "posts/tag/javascript/page/2" },
+    ]);
+    result.forEach((item) => {
+      expect(item.lastmod).toEqual(new Date(newest));
+    });
+  });
+
+  it("does not treat a post slug prefixed page-/tag- as an archive route", () => {
+    const postDate = "2024-03-15";
+    mockPostFiles(["page-load-times.md"], [{ date: postDate }]);
+
+    const result = transformSitemapItems([{ url: "posts/page-load-times" }]);
+    // Matched as a real post (its frontmatter date), not the archive branch.
+    expect(result[0].lastmod).toEqual(new Date(postDate));
+  });
+
+  it("falls through to file lookup for archive routes when no post is dated", () => {
+    const mtime = new Date("2024-02-02");
+    mockPostFiles(["undated.md"], [{ title: "Undated" }]);
+    mockExistsSync.mockReturnValue(false);
+    mockStatSync.mockReturnValue({ mtime } as any);
+
+    const result = transformSitemapItems([{ url: "posts/topic/travel" }]);
+    // No usable date anywhere, no backing file → current-date fallback.
+    expect(result[0].lastmod).toBeInstanceOf(Date);
+  });
 });
