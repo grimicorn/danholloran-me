@@ -4,6 +4,7 @@ import { Post } from "@typedefs";
 import resume from "@data/resume.ts";
 import NewsletterTerminal from "@components/NewsletterTerminal.vue";
 import PostLightbox from "@components/PostLightbox.vue";
+import { toFilterSlug } from "@utils/archive";
 
 const ZOOM_LABEL = "Zoom image";
 
@@ -279,7 +280,7 @@ function formatDate(d: string) {
       <a
         v-for="tag in post.frontmatter.tags"
         :key="tag"
-        :href="`/posts?tag=${tag}`"
+        :href="`/posts/tag/${toFilterSlug(tag)}`"
         class="text-fg-muted border-line tag-hover rounded-xs border px-2.5 py-1 font-mono text-[0.7rem] no-underline transition-colors"
       >
         #{{ tag }}
