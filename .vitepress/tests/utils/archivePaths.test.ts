@@ -74,6 +74,23 @@ describe("topic paths", () => {
     expect(topicExtraPagePaths()).toEqual([]);
   });
 
+  it("collapses topics that collide on slug to one deterministic bucket", () => {
+    mockLoad.mockReturnValue(
+      makePosts([
+        { topic: "travel", tags: [] },
+        { topic: "Travel", tags: [] },
+      ]) as any,
+    );
+    const base = topicBasePagePaths();
+    expect(base).toHaveLength(1);
+    // Lexicographically smallest label wins ("Travel" < "travel").
+    expect(base[0].params).toEqual({
+      topic: "travel",
+      topicLabel: "Travel",
+      page: "1",
+    });
+  });
+
   it("paginates a topic that overflows the first page", () => {
     mockLoad.mockReturnValue(
       makePosts(

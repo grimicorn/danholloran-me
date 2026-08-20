@@ -172,7 +172,7 @@ export default defineConfig({
     [
       "noscript",
       {},
-      "<style>.fade-in,.reveal,.reveal-left,.reveal-right,.stagger>*{opacity:1!important;transform:none!important;}</style>",
+      "<style>.fade-in,.reveal,.reveal-left,.reveal-right,.stagger>*,.accent-line{opacity:1!important;transform:none!important;}</style>",
     ],
     [
       "meta",

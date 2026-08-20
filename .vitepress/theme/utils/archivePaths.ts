@@ -6,8 +6,10 @@ import {
   toFilterSlug,
 } from "./archive";
 
-// Shared with every archive `.paths.ts` so their `watch` globs can't drift from
-// where the posts actually live.
+// The posts glob every archive `.paths.ts` declares in its `watch` array,
+// mirroring the existing `posts/[slug].paths.ts` convention. Defined once so all
+// five routes point at one directory. (Editing a post may still need a dev-server
+// restart for the routes to regenerate — same caveat as `[slug].paths.ts`.)
 export const POSTS_WATCH_GLOB = "./.vitepress/content/posts/*.md";
 
 // Build-time route generation for the paginated / filtered blog archive. Each
@@ -81,8 +83,13 @@ function topicBuckets(): FilterBucket[] {
 
 function tagBuckets(): FilterBucket[] {
   const posts = loadPublishedPosts();
+  // Only string tags route, matching PostView's `hasFilterRoute(tag)` gate on
+  // the raw value — coercing a numeric YAML tag with String() would launder it
+  // past that guard and generate a page no post links to.
   return bucketsFromKeyed(posts, (post) =>
-    Array.isArray(post.tags) ? post.tags.map(String) : [],
+    Array.isArray(post.tags)
+      ? post.tags.filter((tag): tag is string => typeof tag === "string")
+      : [],
   );
 }
 

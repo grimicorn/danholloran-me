@@ -36,11 +36,18 @@ export function toFilterSlug(value: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-// A label only earns a crawlable route when it slugs to a non-empty value; a
-// label of pure punctuation or non-Latin script slugs to "" and gets no page,
-// so callers must not render a link to one. Non-string values never route.
+// A label only earns a crawlable route when it slugs to a non-empty value that
+// isn't the reserved "all" sentinel. A pure-punctuation / non-Latin label slugs
+// to "" and gets no page; a label slugging to "all" would collide with the
+// no-filter sentinel and render the whole archive under a "Posts tagged #all"
+// title, so it's excluded too. Non-string values never route.
 export function hasFilterRoute(label: unknown): boolean {
-  return typeof label === "string" && toFilterSlug(label).length > 0;
+  if (typeof label !== "string") {
+    return false;
+  }
+  const slug = toFilterSlug(label);
+  // ALL_TOPIC and ALL_TAG are both "all", so one check covers both dimensions.
+  return slug.length > 0 && slug !== ALL_TOPIC;
 }
 
 // The single tie-break for labels that collide on one slug (e.g. "tailwind.css"

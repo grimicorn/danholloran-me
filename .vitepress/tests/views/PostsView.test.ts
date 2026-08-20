@@ -91,6 +91,8 @@ describe("PostsView", () => {
     // The previous-page control (scoped to the pagination nav) points at page 1.
     const pagination = wrapper.get('nav[aria-label="Archive pagination"]');
     expect(anchorHrefs(pagination.html())).toContain("/posts");
+    // A later unfiltered page gets a distinct H1 instead of the page-1 hero.
+    expect(wrapper.get("h1").text()).toBe("Writing — Page 2");
   });
 
   it("normalizes a malformed page param to page 1 instead of an empty slice", () => {

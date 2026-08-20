@@ -6,6 +6,7 @@ import {
   extraPageNumbers,
   hasFilterRoute,
   pageSlice,
+  pickRepresentativeLabel,
   toFilterSlug,
   toPageNumber,
   totalPagesForCount,
@@ -41,6 +42,28 @@ describe("hasFilterRoute", () => {
     expect(hasFilterRoute("javascript")).toBe(true);
     expect(hasFilterRoute("→")).toBe(false);
     expect(hasFilterRoute("")).toBe(false);
+  });
+
+  it("rejects non-strings and the reserved 'all' sentinel", () => {
+    expect(hasFilterRoute(2024 as unknown)).toBe(false);
+    expect(hasFilterRoute(undefined)).toBe(false);
+    expect(hasFilterRoute("all")).toBe(false);
+    expect(hasFilterRoute("All")).toBe(false);
+  });
+});
+
+describe("pickRepresentativeLabel", () => {
+  it("takes the candidate when there is no existing label", () => {
+    expect(pickRepresentativeLabel(undefined, "Travel")).toBe("Travel");
+  });
+
+  it("keeps the lexicographically smallest label", () => {
+    expect(pickRepresentativeLabel("tailwind.css", "tailwind-css")).toBe(
+      "tailwind-css",
+    );
+    expect(pickRepresentativeLabel("tailwind-css", "tailwind.css")).toBe(
+      "tailwind-css",
+    );
   });
 });
 

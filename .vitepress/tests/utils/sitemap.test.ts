@@ -181,14 +181,17 @@ describe("transformSitemapItems", () => {
     expect(result[0].lastmod).toEqual(new Date(postDate));
   });
 
-  it("falls through to file lookup for archive routes when no post is dated", () => {
-    const mtime = new Date("2024-02-02");
+  it("falls back to the current date for an archive route when nothing is dated", () => {
+    const now = new Date("2026-08-20T00:00:00.000Z");
+    vi.useFakeTimers();
+    vi.setSystemTime(now);
+    // No post carries a usable date (archiveLastmod is null) and no backing file
+    // exists, so the archive route drops through to the current-date fallback.
     mockPostFiles(["undated.md"], [{ title: "Undated" }]);
     mockExistsSync.mockReturnValue(false);
-    mockStatSync.mockReturnValue({ mtime } as any);
 
     const result = transformSitemapItems([{ url: "posts/topic/travel" }]);
-    // No usable date anywhere, no backing file → current-date fallback.
-    expect(result[0].lastmod).toBeInstanceOf(Date);
+    expect(result[0].lastmod).toEqual(now);
+    vi.useRealTimers();
   });
 });
