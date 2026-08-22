@@ -12,8 +12,11 @@ const instagramHandle = socialLinks.INSTAGRAM.match(
 const MAX_TILES = 6;
 const displayedPosts = instagramPosts.slice(0, MAX_TILES);
 
-function randomImageIndex(imageCount: number) {
-  return Math.floor(Math.random() * imageCount);
+function randomImageIndex(images: string[] | undefined) {
+  if (!images?.length) {
+    return 0;
+  }
+  return Math.floor(Math.random() * images.length);
 }
 
 // SSR and the initial client render both use index 0 so hydration matches;
@@ -24,7 +27,7 @@ const imageIndexes = ref<number[]>(displayedPosts.map(() => 0));
 
 onMounted(() => {
   imageIndexes.value = displayedPosts.map((post) =>
-    randomImageIndex(post.frontmatter.images.length),
+    randomImageIndex(post.frontmatter.images),
   );
 });
 </script>
