@@ -30,6 +30,10 @@ onMounted(() => {
     randomImageIndex(post.frontmatter.images),
   );
 });
+
+function tileImage(post: (typeof displayedPosts)[number], index: number) {
+  return post.frontmatter.images?.[imageIndexes.value[index]];
+}
 </script>
 
 <template>
@@ -117,10 +121,11 @@ onMounted(() => {
           class="ig-tile group border-line hover:border-accent relative block aspect-square overflow-hidden rounded-xs border transition-colors duration-200"
         >
           <div
+            v-if="tileImage(post, index)"
             class="absolute inset-0 transition-transform duration-500 group-hover:scale-[1.04]"
           >
             <img
-              :src="post.frontmatter.images[imageIndexes[index]]"
+              :src="tileImage(post, index)"
               :alt="
                 post.frontmatter.caption ||
                 `${post.frontmatter.location} image` ||
