@@ -16,14 +16,17 @@ export function hashString(seed: string): number {
 }
 
 export function pickDeterministicIndex(seed: string, length: number): number {
-  if (length <= 0) {
-    throw new RangeError("pickDeterministicIndex requires a positive length");
+  if (!Number.isInteger(length) || length <= 0) {
+    throw new RangeError(
+      "pickDeterministicIndex requires a positive integer length",
+    );
   }
   return hashString(seed) % length;
 }
 
-// Falls back to the first image when the seed is missing rather than throwing,
-// since a post whose permalink failed to load should still show a tile.
+// Falls back to the first image when the seed is absent rather than throwing,
+// since a post whose permalink failed to load should still show a tile. An
+// empty string is treated as absent for the same reason (it can't seed a pick).
 export function pickDeterministicImage(
   seed: string | undefined,
   images: string[] | undefined,

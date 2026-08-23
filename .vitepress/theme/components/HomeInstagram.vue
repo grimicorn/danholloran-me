@@ -14,7 +14,8 @@ const displayedPosts = instagramPosts.slice(0, MAX_TILES);
 
 // Seed the pick on each post's permalink so the server and client resolve the
 // same image with zero post-hydration swap and no second image fetch. Resolved
-// once here (the pick is pure) rather than per render to avoid re-hashing.
+// once per setup (the pick is pure) rather than on every render to avoid
+// re-hashing.
 const tiles = displayedPosts.map((post) => ({
   post,
   image: pickDeterministicImage(post.frontmatter.url, post.frontmatter.images),
@@ -113,8 +114,9 @@ const tiles = displayedPosts.map((post) => ({
               :src="tile.image"
               :alt="
                 tile.post.frontmatter.caption ||
-                `${tile.post.frontmatter.location} image` ||
-                `Instagram Post ${index}`
+                (tile.post.frontmatter.location
+                  ? `${tile.post.frontmatter.location} image`
+                  : `Instagram Post ${index + 1}`)
               "
               width="480"
               height="480"
