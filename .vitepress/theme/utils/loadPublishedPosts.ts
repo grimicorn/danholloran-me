@@ -51,7 +51,7 @@ function parsePostFile(file: string): ParsedPost {
 // it — so warn loudly either way, stating the outcome the value actually
 // produced (mirrors resolveSortTime's fail-loud policy).
 export function isPublished(
-  frontmatter: { draft?: unknown },
+  frontmatter: { draft?: unknown; [key: string]: unknown },
   source: string,
 ): boolean {
   const { draft } = frontmatter;
