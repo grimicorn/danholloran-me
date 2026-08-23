@@ -51,7 +51,7 @@ function parsePostFile(file: string): ParsedPost {
 // it — so warn loudly either way, stating the outcome the value actually
 // produced (mirrors resolveSortTime's fail-loud policy).
 export function isPublished(
-  frontmatter: { draft?: unknown; [key: string]: unknown },
+  frontmatter: { draft?: unknown },
   source: string,
 ): boolean {
   const { draft } = frontmatter;
@@ -109,7 +109,7 @@ export function loadPublishedPosts(): PublishedPost[] {
   return readdirSync(POSTS_DIR)
     .filter(isPostFile)
     .map(parsePostFile)
-    .filter((post) => isPublished(post, post.slug))
+    .filter((post) => isPublished({ draft: post.draft }, post.slug))
     .map(withSortTime)
     .sort(byNewestFirst);
 }

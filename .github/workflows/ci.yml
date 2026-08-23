@@ -49,7 +49,9 @@ jobs:
           fi
 
       - name: Type check
+        if: ${{ !cancelled() }}
         run: npm run typecheck
 
       - name: Test
+        if: ${{ !cancelled() }}
         run: npm run test:ci
