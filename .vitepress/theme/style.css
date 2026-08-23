@@ -258,9 +258,9 @@ html.dark img[src*="topography"] {
     will-change: auto !important;
   }
 
-  /* Scroll-driven bar: collapse it so nothing paints or reads as 100% scrolled */
+  /* Scroll-driven bar: remove it so nothing paints or reads as 100% scrolled */
   .progress-bar {
-    transform: scaleX(0) !important;
+    display: none !important;
   }
 }
 
