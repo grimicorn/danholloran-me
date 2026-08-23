@@ -12,14 +12,21 @@ describe("AppSocialLinks", () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it("renders one link per social platform", () => {
+  it("renders each platform's label bound to its href", () => {
+    const expectedLinks = [
+      ["GitHub", mockSocialLinks.GITHUB],
+      ["Instagram", mockSocialLinks.INSTAGRAM],
+      ["LinkedIn", mockSocialLinks.LINKEDIN],
+      ["X", mockSocialLinks.X],
+      ["Bluesky", mockSocialLinks.BLUE_SKY],
+    ];
     const wrapper = mount(AppSocialLinks);
-    const links = wrapper.findAll("li a");
 
-    expect(links).toHaveLength(Object.keys(mockSocialLinks).length);
-    expect(links.map((link) => link.attributes("href"))).toEqual(
-      Object.values(mockSocialLinks),
-    );
+    const renderedLinks = wrapper
+      .findAll("li a")
+      .map((link) => [link.attributes("aria-label"), link.attributes("href")]);
+
+    expect(renderedLinks).toEqual(expectedLinks);
   });
 
   it("opens each link safely in a new tab", () => {

@@ -44,6 +44,7 @@ vi.mock("@composables/useNavPanels.ts", async () => {
 });
 
 import AppMobileMenu from "@components/AppMobileMenu.vue";
+import AppSocialLinks from "@components/AppSocialLinks.vue";
 
 const mountOpts = { global: { stubs: { Teleport: true } } };
 
@@ -90,6 +91,13 @@ describe("AppMobileMenu", () => {
   it("renders correctly", () => {
     wrapper = shallowMount(AppMobileMenu, mountOpts);
     expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it("shows the social links regardless of breakpoint", () => {
+    wrapper = shallowMount(AppMobileMenu, mountOpts);
+    expect(
+      wrapper.findComponent(AppSocialLinks).props("hideOnMobile"),
+    ).toBeFalsy();
   });
 
   it("moves focus to the close control when it opens", async () => {

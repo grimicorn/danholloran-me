@@ -47,8 +47,13 @@ const socialIcons: SocialIcon[] = [
 <template>
   <!-- `contents` on the list and items keeps each link a direct flex child of
   the parent, so the surrounding layout (gap, alignment) is unchanged. -->
-  <ul class="contents">
-    <li v-for="social in socialIcons" :key="social.label" class="contents">
+  <ul role="list" class="contents">
+    <li
+      v-for="social in socialIcons"
+      :key="social.label"
+      role="listitem"
+      class="contents"
+    >
       <a
         :href="social.href"
         target="_blank"

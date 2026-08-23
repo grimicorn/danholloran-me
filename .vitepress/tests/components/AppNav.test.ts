@@ -30,10 +30,18 @@ vi.mock("@composables/useNavPanels.ts", async () => {
 });
 
 import AppNav from "@components/AppNav.vue";
+import AppSocialLinks from "@components/AppSocialLinks.vue";
 
 describe("AppNav", () => {
   it("renders correctly", () => {
     const wrapper = shallowMount(AppNav);
     expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it("hides the social links below the md breakpoint", () => {
+    const wrapper = shallowMount(AppNav);
+    expect(wrapper.findComponent(AppSocialLinks).props("hideOnMobile")).toBe(
+      true,
+    );
   });
 });
