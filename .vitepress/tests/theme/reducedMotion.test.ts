@@ -1,12 +1,14 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, it, expect } from "vitest";
 
-const STYLE_PATH = resolve(process.cwd(), ".vitepress/theme/style.css");
-const FOOTER_PATH = resolve(
-  process.cwd(),
-  ".vitepress/theme/components/AppFooter.vue",
-);
+const THEME_DIR = resolve(process.cwd(), ".vitepress/theme");
+const STYLE_PATH = resolve(THEME_DIR, "style.css");
+const FOOTER_PATH = resolve(THEME_DIR, "components/AppFooter.vue");
+// Strict: the loops this change owns must win the cascade unconditionally.
+const OWNED_ANIMATION_OFF = /animation:\s*none\s*!important/;
+// Loose: any rule that silences the animation counts as coverage for the
+// regression net (scoped components legitimately drop `!important`).
 const ANIMATION_OFF = /animation:\s*none/;
 const INFINITE_ANIMATION =
   /animation(?:-iteration-count)?\s*:[^;]*\binfinite\b/;
@@ -42,7 +44,9 @@ function sliceBalancedBlock(css: string, openBrace: number): string {
   throw new Error("Unbalanced braces in prefers-reduced-motion block");
 }
 
-// Non-nested rules only: prelude + a brace-free declaration body.
+// Non-nested rules only: prelude + a brace-free declaration body. A rule that
+// nests mis-parses (its declarations land in the prelude); loop detection below
+// tolerates that by scanning prelude and body together.
 function flatRules(css: string): StyleRule[] {
   const rulePattern = /([^{}]+)\{([^{}]*)\}/g;
   const rules: StyleRule[] = [];
@@ -71,6 +75,10 @@ function reducedMotionRules(css: string): StyleRule[] {
   return rules;
 }
 
+function reducedMotionRulesOf(path: string): StyleRule[] {
+  return reducedMotionRules(readStyleSource(path));
+}
+
 function declarationsFor(rules: StyleRule[], selector: string): string {
   const bodies = rules
     .filter((rule) => rule.selectors.includes(selector))
@@ -95,7 +103,9 @@ function baseSelector(selector: string): string {
 
 function infiniteLoopSelectors(css: string): string[] {
   return flatRules(css)
-    .filter((rule) => INFINITE_ANIMATION.test(rule.body))
+    .filter((rule) =>
+      INFINITE_ANIMATION.test(rule.selectors.join(";") + ";" + rule.body),
+    )
     .flatMap((rule) => rule.selectors);
 }
 
@@ -107,7 +117,15 @@ function uncoveredInfiniteLoops(css: string): string[] {
   );
 }
 
-// Continuous decorative loops that reduced-motion must silence, per file.
+function themeStyleFiles(): string[] {
+  return readdirSync(THEME_DIR, { recursive: true, encoding: "utf8" })
+    .filter((name) => /\.(css|vue)$/.test(name))
+    .map((name) => resolve(THEME_DIR, name));
+}
+
+// Continuous decorative CSS loops that reduced-motion must silence, per file.
+// `.progress-bar` is scroll-timeline driven (no `infinite`) and removed rather
+// than paused, so it rides along here but is asserted separately below.
 const NEUTRALIZED_LOOPS: Array<{ path: string; selectors: string[] }> = [
   {
     path: STYLE_PATH,
@@ -126,37 +144,48 @@ const ENTRANCE_SELECTORS = [
   ".accent-line",
   ".fade-in",
 ];
-// Files this change owns; a loop added here without coverage must fail below.
-const GUARDED_FILES = [STYLE_PATH, FOOTER_PATH];
 
 describe("prefers-reduced-motion coverage", () => {
   LOOP_CASES.forEach(({ path, selector }) => {
     it(`stops ${selector} in its own reduced-motion rule`, () => {
-      const rules = reducedMotionRules(readStyleSource(path));
-      expect(declarationsFor(rules, selector)).toMatch(ANIMATION_OFF);
+      expect(declarationsFor(reducedMotionRulesOf(path), selector)).toMatch(
+        OWNED_ANIMATION_OFF,
+      );
     });
   });
 
   it("releases the live-dot compositor hint", () => {
-    const rules = reducedMotionRules(readStyleSource(STYLE_PATH));
-    expect(declarationsFor(rules, ".live-dot")).toMatch(/will-change:\s*auto/);
+    expect(
+      declarationsFor(reducedMotionRulesOf(STYLE_PATH), ".live-dot"),
+    ).toMatch(/will-change:\s*auto/);
   });
 
   it("removes the scroll progress bar instead of pinning it full-width", () => {
-    const rules = reducedMotionRules(readStyleSource(STYLE_PATH));
-    expect(declarationsFor(rules, ".progress-bar")).toMatch(/display:\s*none/);
+    expect(
+      declarationsFor(reducedMotionRulesOf(STYLE_PATH), ".progress-bar"),
+    ).toMatch(/display:\s*none/);
+  });
+
+  it("cancels the sitewide smooth scrolling", () => {
+    expect(declarationsFor(reducedMotionRulesOf(STYLE_PATH), "html")).toMatch(
+      /scroll-behavior:\s*auto/,
+    );
   });
 
   ENTRANCE_SELECTORS.forEach((selector) => {
     it(`keeps the ${selector} entrance reset intact`, () => {
-      const rules = reducedMotionRules(readStyleSource(STYLE_PATH));
-      const declarations = declarationsFor(rules, selector);
+      const declarations = declarationsFor(
+        reducedMotionRulesOf(STYLE_PATH),
+        selector,
+      );
       expect(declarations).toMatch(/opacity:\s*1/);
       expect(declarations).toMatch(/transform:\s*none/);
     });
   });
 
-  GUARDED_FILES.forEach((path) => {
+  // Regression net: no infinite loop anywhere in the theme may ship without a
+  // reduced-motion rule that silences it.
+  themeStyleFiles().forEach((path) => {
     it(`leaves no infinite loop uncovered in ${path.split("/").pop()}`, () => {
       expect(uncoveredInfiniteLoops(readStyleSource(path))).toEqual([]);
     });
@@ -167,10 +196,15 @@ describe("prefers-reduced-motion coverage", () => {
     expect(uncoveredInfiniteLoops(css)).toContain(".spinner");
   });
 
+  it("flags an infinite loop declared in a rule that also nests", () => {
+    const css = ".spin { animation: rot 1s infinite; &:hover { color: red; } }";
+    expect(uncoveredInfiniteLoops(css).length).toBeGreaterThan(0);
+  });
+
   it("accepts an infinite loop that reduced-motion neutralizes", () => {
     const css =
       ".spinner { animation: spin 1s infinite; }" +
-      "@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }";
+      "@media (prefers-reduced-motion: reduce) { .spinner { animation: none !important; } }";
     expect(uncoveredInfiniteLoops(css)).toEqual([]);
   });
 });

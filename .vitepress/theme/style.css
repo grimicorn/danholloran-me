@@ -235,6 +235,11 @@ html.dark img[src*="topography"] {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Cancel the sitewide smooth anchor/route scrolling (vestibular trigger) */
+  html {
+    scroll-behavior: auto !important;
+  }
+
   .reveal,
   .reveal-left,
   .reveal-right,
