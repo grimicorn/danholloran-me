@@ -244,6 +244,13 @@ html.dark img[src*="topography"] {
     opacity: 1 !important;
     transform: none !important;
   }
+
+  /* Also stop the continuous decorative loops, not just entrance reveals */
+  .live-dot,
+  .mountain-float,
+  .progress-bar {
+    animation: none !important;
+  }
 }
 
 /* Topography patterns */
