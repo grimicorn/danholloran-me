@@ -45,9 +45,9 @@ const socialIcons: SocialIcon[] = [
 </script>
 
 <template>
-  <!-- `contents` on the list and items keeps each link a direct flex child of
-  the parent, so the surrounding layout (gap, alignment) is unchanged. -->
   <ul role="list" class="contents">
+    <!-- `contents` on the list and items keeps each link a direct flex child of
+    the parent, so the surrounding layout (gap, alignment) is unchanged. -->
     <li
       v-for="social in socialIcons"
       :key="social.label"

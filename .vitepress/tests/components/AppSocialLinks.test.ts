@@ -14,6 +14,17 @@ describe("AppSocialLinks", () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
+  it("renders a link for every platform in the real data module", async () => {
+    const actual = await vi.importActual<{ default: Record<string, string> }>(
+      "@data/socialLinks",
+    );
+    const wrapper = mount(AppSocialLinks);
+
+    expect(wrapper.findAll("li a")).toHaveLength(
+      Object.keys(actual.default).length,
+    );
+  });
+
   it("renders each platform's label bound to its href", () => {
     const expectedLinks = [
       ["GitHub", mockSocialLinks.GITHUB],
