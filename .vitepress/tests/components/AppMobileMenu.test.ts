@@ -6,7 +6,7 @@ import {
   type VueWrapper,
 } from "@vue/test-utils";
 import type { Ref } from "vue";
-import { mockNavItems, mockSocialLinks } from "../__fixtures__/mockData";
+import { mockNavItems } from "../__fixtures__/mockData";
 
 const store = vi.hoisted(() => {
   return {} as {
@@ -42,8 +42,6 @@ vi.mock("@composables/useNavPanels.ts", async () => {
     }),
   };
 });
-
-vi.mock("@data/socialLinks", () => ({ default: mockSocialLinks }));
 
 import AppMobileMenu from "@components/AppMobileMenu.vue";
 

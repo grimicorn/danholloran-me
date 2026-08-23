@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { shallowMount } from "@vue/test-utils";
-import { mockNavItems, mockSocialLinks } from "../__fixtures__/mockData";
+import { mockNavItems } from "../__fixtures__/mockData";
 
 vi.mock("vitepress", () => ({
   useRouter: () => ({ go: vi.fn() }),
@@ -28,8 +28,6 @@ vi.mock("@composables/useNavPanels.ts", async () => {
     }),
   };
 });
-
-vi.mock("@data/socialLinks", () => ({ default: mockSocialLinks }));
 
 import AppNav from "@components/AppNav.vue";
 
