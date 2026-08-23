@@ -131,10 +131,13 @@ export const mockSearchItems: SearchItem[] = [
   },
 ];
 
-// Two images per post so the permalink-seeded pick has more than one bucket to
-// land in. The two permalinks straddle buckets on purpose (photo1 hashes to
-// index 0 → -a, photo2 to index 1 → -b), so a test that expected a single fixed
-// position would fail. createContentLoader wraps each item with a `frontmatter` key.
+// Real posts carry a single image; the synthetic second image per post gives
+// the permalink-seeded pick more than one bucket to land in. The two permalinks
+// straddle buckets on purpose (photo1 → shortcode `aaa000`, index 0 → -a;
+// photo2 → shortcode `def456`, index 1 → -b), so a test expecting a single
+// fixed position would fail. photo2 also uses the production `www.` + trailing
+// slash shape to prove the shortcode seed ignores URL cosmetics.
+// createContentLoader wraps each item with a `frontmatter` key.
 export const mockInstagramPosts = [
   {
     url: "/content/instagram/photo1",
@@ -161,7 +164,7 @@ export const mockInstagramPosts = [
         "/images/instagram/photo2-a.jpg",
         "/images/instagram/photo2-b.jpg",
       ],
-      url: "https://instagram.com/p/def456",
+      url: "https://www.instagram.com/p/def456/",
     } as InstagramPost,
   },
 ];

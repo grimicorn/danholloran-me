@@ -1,7 +1,7 @@
-// FNV-1a 32-bit hash: tiny, dependency-free, and stable across separate JS
-// runs, so a given seed hashes identically on the server and the client. That
-// stability is what lets the Instagram tiles agree on an image with no
-// post-hydration swap.
+// FNV-1a 32-bit hash over the seed's UTF-16 code units: tiny, dependency-free,
+// and stable across separate JS runs, so a given seed hashes identically on the
+// server and the client. That stability is what lets the Instagram tiles agree
+// on an image with no post-hydration swap.
 const FNV_OFFSET_BASIS = 0x811c9dc5;
 const FNV_PRIME = 0x01000193;
 
@@ -24,8 +24,9 @@ export function pickDeterministicIndex(seed: string, length: number): number {
   return hashString(seed) % length;
 }
 
-// Falls back to the first image when the seed is absent rather than throwing,
-// since a post whose permalink failed to load should still show a tile. An
+// A non-positive length is internal misuse, so pickDeterministicIndex throws;
+// a missing seed comes from external content (loosely-typed frontmatter), so we
+// degrade to the first image rather than take down the whole page's SSR. An
 // empty string is treated as absent for the same reason (it can't seed a pick).
 export function pickDeterministicImage(
   seed: string | undefined,

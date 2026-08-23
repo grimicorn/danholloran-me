@@ -27,7 +27,7 @@ describe("hashString", () => {
     expect(hashString("")).toBe(0x811c9dc5);
   });
 
-  it("matches the known FNV-1a vector so the algorithm can't drift", () => {
+  it("matches the known FNV-1a (UTF-16) vector so the algorithm can't drift", () => {
     // Cross-run stability is the feature; pin a golden value so any change to
     // the hash (which would reshuffle every published tile) fails loudly.
     expect(hashString("post-42")).toBe(0x18684e04);

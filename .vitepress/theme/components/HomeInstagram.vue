@@ -12,13 +12,24 @@ const instagramHandle = socialLinks.INSTAGRAM.match(
 const MAX_TILES = 6;
 const displayedPosts = instagramPosts.slice(0, MAX_TILES);
 
+// Seed on the immutable /p/<shortcode> id rather than the full permalink so URL
+// cosmetics (www., trailing slash, an Instagram ?igsh= share suffix) can't
+// reshuffle a post's pick between builds. Falls back to the raw url if the
+// pattern ever changes shape.
+function permalinkSeed(url: string | undefined) {
+  return url?.match(/\/p\/([A-Za-z0-9_-]+)/)?.[1] ?? url;
+}
+
 // Seed the pick on each post's permalink so the server and client resolve the
 // same image with zero post-hydration swap and no second image fetch. Resolved
 // once per setup (the pick is pure) rather than on every render to avoid
 // re-hashing.
 const tiles = displayedPosts.map((post) => ({
   post,
-  image: pickDeterministicImage(post.frontmatter.url, post.frontmatter.images),
+  image: pickDeterministicImage(
+    permalinkSeed(post.frontmatter.url),
+    post.frontmatter.images,
+  ),
 }));
 </script>
 
@@ -114,9 +125,8 @@ const tiles = displayedPosts.map((post) => ({
               :src="tile.image"
               :alt="
                 tile.post.frontmatter.caption ||
-                (tile.post.frontmatter.location
-                  ? `${tile.post.frontmatter.location} image`
-                  : `Instagram Post ${index + 1}`)
+                `${tile.post.frontmatter.location} image` ||
+                `Instagram Post ${index}`
               "
               width="480"
               height="480"

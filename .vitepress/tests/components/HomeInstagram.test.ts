@@ -41,13 +41,13 @@ describe("HomeInstagram", () => {
   });
 
   it("picks each post's image deterministically from its permalink seed", () => {
-    const wrapper = shallowMount(HomeInstagram);
+    const html = shallowMount(HomeInstagram).html();
 
     for (const image of EXPECTED_IMAGES) {
-      expect(wrapper.html()).toContain(image);
+      expect(html).toContain(image);
     }
     for (const image of UNEXPECTED_IMAGES) {
-      expect(wrapper.html()).not.toContain(image);
+      expect(html).not.toContain(image);
     }
   });
 
@@ -55,8 +55,9 @@ describe("HomeInstagram", () => {
     const container = document.createElement("div");
     container.innerHTML = await renderToString(createSSRApp(HomeInstagram));
 
+    const serverHtml = container.innerHTML;
     for (const image of EXPECTED_IMAGES) {
-      expect(container.innerHTML).toContain(image);
+      expect(serverHtml).toContain(image);
     }
 
     const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
@@ -66,11 +67,12 @@ describe("HomeInstagram", () => {
 
     // The client must keep every server-rendered image and never swap to the
     // other bucket; a post-mount re-pick would surface an unexpected image here.
+    const clientHtml = container.innerHTML;
     for (const image of EXPECTED_IMAGES) {
-      expect(container.innerHTML).toContain(image);
+      expect(clientHtml).toContain(image);
     }
     for (const image of UNEXPECTED_IMAGES) {
-      expect(container.innerHTML).not.toContain(image);
+      expect(clientHtml).not.toContain(image);
     }
 
     // Assert on message content so an unrelated Vue dev warning doesn't fail this.
