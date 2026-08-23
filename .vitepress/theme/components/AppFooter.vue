@@ -104,4 +104,10 @@ footer.dark {
 .location-fade-leave-to {
   opacity: 0;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .heartbeat {
+    animation: none;
+  }
+}
 </style>

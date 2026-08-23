@@ -248,8 +248,19 @@ html.dark img[src*="topography"] {
   /* Also stop the continuous decorative loops, not just entrance reveals */
   .live-dot,
   .mountain-float,
+  .glitch,
   .progress-bar {
     animation: none !important;
+  }
+
+  /* Drop the compositing hint left over from the paused pulse */
+  .live-dot {
+    will-change: auto !important;
+  }
+
+  /* Scroll-driven bar: collapse it so nothing paints or reads as 100% scrolled */
+  .progress-bar {
+    transform: scaleX(0) !important;
   }
 }
 
