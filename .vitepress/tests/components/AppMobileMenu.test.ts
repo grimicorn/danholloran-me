@@ -95,9 +95,9 @@ describe("AppMobileMenu", () => {
 
   it("shows the social links regardless of breakpoint", () => {
     wrapper = shallowMount(AppMobileMenu, mountOpts);
-    expect(
-      wrapper.findComponent(AppSocialLinks).props("hideOnMobile"),
-    ).toBeFalsy();
+    expect(wrapper.findComponent(AppSocialLinks).props("hideOnMobile")).toBe(
+      false,
+    );
   });
 
   it("moves focus to the close control when it opens", async () => {

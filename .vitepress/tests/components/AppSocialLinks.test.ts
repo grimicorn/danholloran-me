@@ -6,6 +6,8 @@ vi.mock("@data/socialLinks", () => ({ default: mockSocialLinks }));
 
 import AppSocialLinks from "@components/AppSocialLinks.vue";
 
+const expectedLinkCount = Object.keys(mockSocialLinks).length;
+
 describe("AppSocialLinks", () => {
   it("renders the social links list", () => {
     const wrapper = mount(AppSocialLinks);
@@ -29,20 +31,25 @@ describe("AppSocialLinks", () => {
     expect(renderedLinks).toEqual(expectedLinks);
   });
 
-  it("opens each link safely in a new tab", () => {
+  it("opens each link safely in a new tab with an icon", () => {
     const wrapper = mount(AppSocialLinks);
 
-    wrapper.findAll("li a").forEach((link) => {
+    const links = wrapper.findAll("li a");
+    expect(links).toHaveLength(expectedLinkCount);
+    links.forEach((link) => {
       expect(link.attributes("target")).toBe("_blank");
       expect(link.attributes("rel")).toBe("noopener");
       expect(link.attributes("aria-label")).toBeTruthy();
+      expect(link.find("svg").exists()).toBe(true);
     });
   });
 
   it("keeps links visible on mobile by default", () => {
     const wrapper = mount(AppSocialLinks);
 
-    wrapper.findAll("li a").forEach((link) => {
+    const links = wrapper.findAll("li a");
+    expect(links).toHaveLength(expectedLinkCount);
+    links.forEach((link) => {
       expect(link.classes()).not.toContain("max-md:hidden");
     });
   });
@@ -50,7 +57,9 @@ describe("AppSocialLinks", () => {
   it("hides links below the md breakpoint when hideOnMobile is set", () => {
     const wrapper = mount(AppSocialLinks, { props: { hideOnMobile: true } });
 
-    wrapper.findAll("li a").forEach((link) => {
+    const links = wrapper.findAll("li a");
+    expect(links).toHaveLength(expectedLinkCount);
+    links.forEach((link) => {
       expect(link.classes()).toContain("max-md:hidden");
     });
   });
