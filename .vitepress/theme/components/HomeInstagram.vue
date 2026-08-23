@@ -13,10 +13,12 @@ const MAX_TILES = 6;
 const displayedPosts = instagramPosts.slice(0, MAX_TILES);
 
 // Seed the pick on each post's permalink so the server and client resolve the
-// same image with zero post-hydration swap and no second image fetch.
-function tileImage(post: (typeof displayedPosts)[number]) {
-  return pickDeterministicImage(post.frontmatter.images, post.frontmatter.url);
-}
+// same image with zero post-hydration swap and no second image fetch. Resolved
+// once here (the pick is pure) rather than per render to avoid re-hashing.
+const tiles = displayedPosts.map((post) => ({
+  post,
+  image: pickDeterministicImage(post.frontmatter.url, post.frontmatter.images),
+}));
 </script>
 
 <template>
@@ -96,22 +98,22 @@ function tileImage(post: (typeof displayedPosts)[number]) {
         class="stagger in grid grid-cols-6 gap-3 max-lg:grid-cols-3 max-sm:grid-cols-2"
       >
         <a
-          v-for="(post, index) in displayedPosts"
-          :key="post.frontmatter.url"
-          :href="post.frontmatter.url"
+          v-for="(tile, index) in tiles"
+          :key="tile.post.frontmatter.url"
+          :href="tile.post.frontmatter.url"
           target="_blank"
           rel="noopener"
           class="ig-tile group border-line hover:border-accent relative block aspect-square overflow-hidden rounded-xs border transition-colors duration-200"
         >
           <div
-            v-if="tileImage(post)"
+            v-if="tile.image"
             class="absolute inset-0 transition-transform duration-500 group-hover:scale-[1.04]"
           >
             <img
-              :src="tileImage(post)"
+              :src="tile.image"
               :alt="
-                post.frontmatter.caption ||
-                `${post.frontmatter.location} image` ||
+                tile.post.frontmatter.caption ||
+                `${tile.post.frontmatter.location} image` ||
                 `Instagram Post ${index}`
               "
               width="480"

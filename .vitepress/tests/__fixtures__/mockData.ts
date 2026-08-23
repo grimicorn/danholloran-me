@@ -131,8 +131,10 @@ export const mockSearchItems: SearchItem[] = [
   },
 ];
 
-// Single image per post so Math.random() selection is always index 0.
-// createContentLoader wraps each item with a `frontmatter` key.
+// Two images per post so the permalink-seeded pick has more than one bucket to
+// land in. The two permalinks straddle buckets on purpose (photo1 hashes to
+// index 0 → -a, photo2 to index 1 → -b), so a test that expected a single fixed
+// position would fail. createContentLoader wraps each item with a `frontmatter` key.
 export const mockInstagramPosts = [
   {
     url: "/content/instagram/photo1",
@@ -145,7 +147,7 @@ export const mockInstagramPosts = [
         "/images/instagram/photo1-a.jpg",
         "/images/instagram/photo1-b.jpg",
       ],
-      url: "https://instagram.com/p/abc123",
+      url: "https://instagram.com/p/aaa000",
     } as InstagramPost,
   },
   {

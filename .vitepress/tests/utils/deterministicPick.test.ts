@@ -51,33 +51,38 @@ describe("pickDeterministicIndex", () => {
     expect(seen.size).toBe(images.length);
   });
 
-  it("returns 0 for a non-positive length", () => {
-    expect(pickDeterministicIndex("post-42", 0)).toBe(0);
-    expect(pickDeterministicIndex("post-42", -3)).toBe(0);
+  it("throws for a non-positive length rather than fabricating an index", () => {
+    expect(() => pickDeterministicIndex("post-42", 0)).toThrow(RangeError);
+    expect(() => pickDeterministicIndex("post-42", -3)).toThrow(RangeError);
   });
 });
 
 describe("pickDeterministicImage", () => {
   it("returns the same image for the same seed", () => {
-    expect(pickDeterministicImage(images, "post-42")).toBe(
-      pickDeterministicImage(images, "post-42"),
+    expect(pickDeterministicImage("post-42", images)).toBe(
+      pickDeterministicImage("post-42", images),
     );
   });
 
   it("returns an image from the provided list", () => {
-    expect(images).toContain(pickDeterministicImage(images, "post-42"));
+    expect(images).toContain(pickDeterministicImage("post-42", images));
   });
 
   it("distributes different seeds across different images", () => {
     const seen = new Set<string | undefined>();
     for (let seed = 0; seed < 50; seed++) {
-      seen.add(pickDeterministicImage(images, `seed-${seed}`));
+      seen.add(pickDeterministicImage(`seed-${seed}`, images));
     }
     expect(seen.size).toBe(images.length);
   });
 
+  it("falls back to the first image when the seed is missing", () => {
+    expect(pickDeterministicImage(undefined, images)).toBe(images[0]);
+    expect(pickDeterministicImage("", images)).toBe(images[0]);
+  });
+
   it("returns undefined for an empty or missing image list", () => {
-    expect(pickDeterministicImage([], "post-42")).toBeUndefined();
-    expect(pickDeterministicImage(undefined, "post-42")).toBeUndefined();
+    expect(pickDeterministicImage("post-42", [])).toBeUndefined();
+    expect(pickDeterministicImage("post-42", undefined)).toBeUndefined();
   });
 });

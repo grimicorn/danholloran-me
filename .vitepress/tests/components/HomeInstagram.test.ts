@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { shallowMount, mount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import { createSSRApp, nextTick } from "vue";
 import { renderToString } from "vue/server-renderer";
 import { mockInstagramPosts, mockSocialLinks } from "../__fixtures__/mockData";
@@ -18,6 +18,18 @@ vi.mock("@utils/formatDate", () => ({
 
 import HomeInstagram from "@components/HomeInstagram.vue";
 
+// The two fixture permalinks straddle buckets: photo1 hashes to index 0 (-a),
+// photo2 to index 1 (-b). Asserting that exact split proves the seed drives the
+// pick — a "first image" or "last image" shortcut would fail one of these.
+const EXPECTED_IMAGES = [
+  "/images/instagram/photo1-a.jpg",
+  "/images/instagram/photo2-b.jpg",
+];
+const UNEXPECTED_IMAGES = [
+  "/images/instagram/photo1-b.jpg",
+  "/images/instagram/photo2-a.jpg",
+];
+
 describe("HomeInstagram", () => {
   afterEach(() => {
     vi.restoreAllMocks();
@@ -29,47 +41,37 @@ describe("HomeInstagram", () => {
   });
 
   it("picks each post's image deterministically from its permalink seed", () => {
-    // Both mock permalinks hash to index 1, so the pick lands on the -b image
-    // rather than the index-0 default — proving the seed, not position, drives it.
-    const wrapper = mount(HomeInstagram);
+    const wrapper = shallowMount(HomeInstagram);
 
-    expect(wrapper.html()).toContain("/images/instagram/photo1-b.jpg");
-    expect(wrapper.html()).not.toContain("/images/instagram/photo1-a.jpg");
-    expect(wrapper.html()).toContain("/images/instagram/photo2-b.jpg");
-    expect(wrapper.html()).not.toContain("/images/instagram/photo2-a.jpg");
-  });
-
-  it("renders the identical image on the server and client with no swap", async () => {
-    const serverHtml = await renderToString(createSSRApp(HomeInstagram));
-
-    // Every image the server rendered must survive to the client unchanged; a
-    // post-hydration swap would drop one of these from the mounted markup.
-    for (const image of [
-      "/images/instagram/photo1-b.jpg",
-      "/images/instagram/photo2-b.jpg",
-    ]) {
-      expect(serverHtml).toContain(image);
-    }
-
-    const wrapper = mount(HomeInstagram);
-    await nextTick();
-
-    for (const image of [
-      "/images/instagram/photo1-b.jpg",
-      "/images/instagram/photo2-b.jpg",
-    ]) {
+    for (const image of EXPECTED_IMAGES) {
       expect(wrapper.html()).toContain(image);
     }
+    for (const image of UNEXPECTED_IMAGES) {
+      expect(wrapper.html()).not.toContain(image);
+    }
   });
 
-  it("hydrates the server markup without a mismatch warning", async () => {
+  it("hydrates the server markup with no image swap or mismatch warning", async () => {
     const container = document.createElement("div");
     container.innerHTML = await renderToString(createSSRApp(HomeInstagram));
+
+    for (const image of EXPECTED_IMAGES) {
+      expect(container.innerHTML).toContain(image);
+    }
 
     const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     createSSRApp(HomeInstagram).mount(container);
     await nextTick();
+
+    // The client must keep every server-rendered image and never swap to the
+    // other bucket; a post-mount re-pick would surface an unexpected image here.
+    for (const image of EXPECTED_IMAGES) {
+      expect(container.innerHTML).toContain(image);
+    }
+    for (const image of UNEXPECTED_IMAGES) {
+      expect(container.innerHTML).not.toContain(image);
+    }
 
     // Assert on message content so an unrelated Vue dev warning doesn't fail this.
     const logged = [...errorSpy.mock.calls, ...warnSpy.mock.calls]

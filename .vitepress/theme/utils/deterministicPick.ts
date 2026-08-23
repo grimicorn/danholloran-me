@@ -17,17 +17,22 @@ export function hashString(seed: string): number {
 
 export function pickDeterministicIndex(seed: string, length: number): number {
   if (length <= 0) {
-    return 0;
+    throw new RangeError("pickDeterministicIndex requires a positive length");
   }
   return hashString(seed) % length;
 }
 
+// Falls back to the first image when the seed is missing rather than throwing,
+// since a post whose permalink failed to load should still show a tile.
 export function pickDeterministicImage(
+  seed: string | undefined,
   images: string[] | undefined,
-  seed: string,
 ): string | undefined {
   if (!images?.length) {
     return undefined;
+  }
+  if (!seed) {
+    return images[0];
   }
   return images[pickDeterministicIndex(seed, images.length)];
 }
