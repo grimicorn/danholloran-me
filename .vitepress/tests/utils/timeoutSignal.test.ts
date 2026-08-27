@@ -32,7 +32,9 @@ describe("withTimeoutSignal", () => {
 
     expect(signal).toBeDefined();
     expect(signal?.aborted).toBe(false);
-    vi.advanceTimersByTime(TIMEOUT_MS);
+    vi.advanceTimersByTime(TIMEOUT_MS - 1);
+    expect(signal?.aborted).toBe(false);
+    vi.advanceTimersByTime(1);
     expect(signal?.aborted).toBe(true);
   });
 

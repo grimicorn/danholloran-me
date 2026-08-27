@@ -453,6 +453,21 @@ describe("useNewsletter", () => {
       expect(status.value).toBe("success");
     });
 
+    it("cancels the fallback timer once a successful request settles", async () => {
+      vi.useFakeTimers();
+      vi.stubGlobal("AbortSignal", {});
+      const fetchSpy = stubFetch(true);
+      const { email, subscribe } = useNewsletter();
+
+      email.value = VALID_EMAIL;
+      await subscribe();
+
+      const fallbackSignal = fetchSpy.mock.calls[0][1]?.signal;
+      vi.advanceTimersByTime(TIMEOUT_MS);
+      expect(fallbackSignal?.aborted).toBe(false);
+      expect(vi.getTimerCount()).toBe(0);
+    });
+
     it("aborts a hung request via the fallback timer when AbortSignal.timeout is unavailable", async () => {
       vi.useFakeTimers();
       vi.stubGlobal("AbortSignal", {});
