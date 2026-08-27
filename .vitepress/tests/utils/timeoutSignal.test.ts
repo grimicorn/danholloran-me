@@ -38,6 +38,31 @@ describe("withTimeoutSignal", () => {
     expect(signal?.aborted).toBe(true);
   });
 
+  it("aborts the fallback with a TimeoutError, matching native semantics", () => {
+    vi.useFakeTimers();
+    vi.stubGlobal("AbortSignal", {});
+
+    const { signal } = withTimeoutSignal(TIMEOUT_MS);
+    vi.advanceTimersByTime(TIMEOUT_MS);
+
+    expect(signal?.reason).toBeInstanceOf(DOMException);
+    expect(signal?.reason.name).toBe("TimeoutError");
+  });
+
+  it("stays unbounded when AbortSignal.timeout is present but throws", () => {
+    vi.stubGlobal("AbortSignal", {
+      timeout: () => {
+        throw new Error("boom");
+      },
+    });
+    vi.stubGlobal("AbortController", undefined);
+
+    const { signal, clear } = withTimeoutSignal(TIMEOUT_MS);
+
+    expect(signal).toBeUndefined();
+    expect(() => clear()).not.toThrow();
+  });
+
   it("clear() cancels the fallback timer so a settled request never aborts", () => {
     vi.useFakeTimers();
     vi.stubGlobal("AbortSignal", {});
