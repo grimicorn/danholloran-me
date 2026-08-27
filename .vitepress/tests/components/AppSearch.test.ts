@@ -1,7 +1,10 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { shallowMount, mount, VueWrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
-import { mockSearchItems } from "../__fixtures__/mockData";
+import {
+  mockSearchItems,
+  mockStaticSearchItems,
+} from "../__fixtures__/mockData";
 
 import type { Ref } from "vue";
 
@@ -28,6 +31,10 @@ vi.mock("@composables/useNavPanels.ts", async () => {
 
 vi.mock("@content/posts/search.data.ts", () => ({
   data: mockSearchItems,
+}));
+
+vi.mock("@data/staticSearch.data.ts", () => ({
+  data: mockStaticSearchItems,
 }));
 
 import AppSearch from "@components/AppSearch.vue";
@@ -117,6 +124,38 @@ describe("AppSearch", () => {
     document.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
 
     expect(mocks.routerGo).toHaveBeenCalledTimes(1);
+  });
+
+  it("returns the Resume page when searching for a page keyword", async () => {
+    const search = mountSearch();
+
+    await search.find("input").setValue("resume");
+    await nextTick();
+
+    const options = search.findAll('[role="option"]');
+    expect(options.length).toBeGreaterThan(0);
+    const resumeOption = options.find((option) =>
+      option.text().includes("Resume"),
+    );
+    expect(resumeOption).toBeTruthy();
+    expect(resumeOption!.text()).toContain("page");
+    expect(resumeOption!.attributes("href")).toBe("/resume");
+  });
+
+  it("returns a project when searching for a project name", async () => {
+    const search = mountSearch();
+
+    await search.find("input").setValue("Acme Project");
+    await nextTick();
+
+    const options = search.findAll('[role="option"]');
+    expect(options.length).toBeGreaterThan(0);
+    const projectOption = options.find((option) =>
+      option.text().includes("Acme Project"),
+    );
+    expect(projectOption).toBeTruthy();
+    expect(projectOption!.text()).toContain("project");
+    expect(projectOption!.attributes("href")).toBe("https://acme.example");
   });
 
   it("collapses aria-expanded when the search panel is closed", async () => {

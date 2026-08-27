@@ -131,6 +131,23 @@ export const mockSearchItems: SearchItem[] = [
   },
 ];
 
+export const mockStaticSearchItems: SearchItem[] = [
+  {
+    type: "page",
+    title: "Resume",
+    desc: "Full professional history & download",
+    href: "/resume",
+    kw: "resume cv work history",
+  },
+  {
+    type: "project",
+    title: "Acme Project",
+    desc: "Acme Corp",
+    href: "https://acme.example",
+    kw: "Acme Corp Vue.js A featured project.",
+  },
+];
+
 // Single image per post so Math.random() selection is always index 0.
 // createContentLoader wraps each item with a `frontmatter` key.
 export const mockInstagramPosts = [
