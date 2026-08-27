@@ -5,7 +5,15 @@ declare const data: SearchItem[];
 export { data };
 
 // Projects without their own URL point at the home page projects section.
-const PROJECTS_ANCHOR = "/#projects";
+export const PROJECTS_ANCHOR = "/#projects";
+
+const MARKDOWN_LINK = /\[([^\]]+)\]\([^)]*\)/g;
+
+// Project descriptions are markdown; keep the link text, drop the URLs so raw
+// hosts (github.com, org, wikipedia) don't leak into the search index.
+function toPlainText(markdown: string): string {
+  return markdown.replace(MARKDOWN_LINK, "$1");
+}
 
 const pages: SearchItem[] = [
   {
@@ -45,14 +53,14 @@ const pages: SearchItem[] = [
   },
 ];
 
-function projectToSearchItem(project: ProjectInterface): SearchItem {
+export function projectToSearchItem(project: ProjectInterface): SearchItem {
   const skillNames = project.skills.map((skill) => skill.name).join(" ");
   return {
     type: "project",
     title: project.title,
     desc: project.company,
-    href: project.url ?? PROJECTS_ANCHOR,
-    kw: `${project.company} ${skillNames} ${project.content}`,
+    href: project.url || PROJECTS_ANCHOR,
+    kw: `${project.company} ${skillNames} ${toPlainText(project.content)}`,
   };
 }
 
@@ -61,6 +69,8 @@ export function buildStaticSearchItems(): SearchItem[] {
 }
 
 export default {
+  // Refresh the search index in dev when the project source changes.
+  watch: ["./projects.ts"],
   load(): SearchItem[] {
     return buildStaticSearchItems();
   },

@@ -158,6 +158,32 @@ describe("AppSearch", () => {
     expect(projectOption!.attributes("href")).toBe("https://acme.example");
   });
 
+  it("navigates external project urls via window.location, not the SPA router", async () => {
+    const originalLocation = window.location;
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      writable: true,
+      value: { href: "" },
+    });
+
+    const search = mountSearch();
+    await search.find("input").setValue("Acme Project");
+    await nextTick();
+    const projectOption = search
+      .findAll('[role="option"]')
+      .find((option) => option.text().includes("Acme Project"));
+    await projectOption!.trigger("click");
+
+    expect(window.location.href).toBe("https://acme.example");
+    expect(mocks.routerGo).not.toHaveBeenCalled();
+
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      writable: true,
+      value: originalLocation,
+    });
+  });
+
   it("collapses aria-expanded when the search panel is closed", async () => {
     const search = mountSearch();
     mocks.isSearchOpen!.value = false;

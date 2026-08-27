@@ -118,8 +118,16 @@ function toggle() {
   isSearchOpen.value ? close() : open();
 }
 
+function isExternal(href: string): boolean {
+  return /^https?:\/\//.test(href);
+}
+
 function navigate(href: string) {
   close();
+  if (isExternal(href)) {
+    window.location.href = href;
+    return;
+  }
   router.go(href);
 }
 
