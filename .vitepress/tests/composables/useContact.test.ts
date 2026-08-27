@@ -362,20 +362,22 @@ describe("useContact", () => {
       await contact.submit();
 
       const fallbackSignal = fetchSpy.mock.calls[0][1]?.signal;
+      expect(fallbackSignal).toBeDefined();
+      expect(vi.getTimerCount()).toBe(0);
       vi.advanceTimersByTime(TIMEOUT_MS);
       expect(fallbackSignal?.aborted).toBe(false);
-      expect(vi.getTimerCount()).toBe(0);
     });
 
     it("cancels the fallback timer when the response is not ok", async () => {
       vi.useFakeTimers();
       vi.stubGlobal("AbortSignal", {});
-      stubFetch(false);
+      const fetchSpy = stubFetch(false);
       const contact = useContact();
 
       fill(contact, VALID_FIELDS);
       await contact.submit();
 
+      expect(fetchSpy.mock.calls[0][1]?.signal).toBeDefined();
       expect(contact.status.value).toBe("error");
       expect(vi.getTimerCount()).toBe(0);
     });
@@ -383,14 +385,15 @@ describe("useContact", () => {
     it("cancels the fallback timer when the request rejects", async () => {
       vi.useFakeTimers();
       vi.stubGlobal("AbortSignal", {});
-      vi.spyOn(globalThis, "fetch").mockRejectedValue(
-        new TypeError("Failed to fetch"),
-      );
+      const fetchSpy = vi
+        .spyOn(globalThis, "fetch")
+        .mockRejectedValue(new TypeError("Failed to fetch"));
       const contact = useContact();
 
       fill(contact, VALID_FIELDS);
       await contact.submit();
 
+      expect(fetchSpy.mock.calls[0][1]?.signal).toBeDefined();
       expect(contact.status.value).toBe("error");
       expect(vi.getTimerCount()).toBe(0);
     });

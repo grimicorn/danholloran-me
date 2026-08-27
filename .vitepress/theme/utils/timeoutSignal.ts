@@ -13,18 +13,9 @@ export interface TimeoutSignal {
 
 const noOp = () => {};
 
-// Match native AbortSignal.timeout, which aborts with a TimeoutError so a caller
-// can tell a timeout from a user-initiated abort. DOMException is guarded because
-// the browsers missing AbortSignal.timeout are the same old ones.
-function timeoutReason(): DOMException | undefined {
-  if (typeof DOMException !== "function") {
-    return undefined;
-  }
-  return new DOMException("signal timed out", "TimeoutError");
-}
-
 // The premise here is non-conforming environments, so a partial polyfill that
-// throws must degrade to unbounded, never escape and pin the form at "loading".
+// throws must degrade (to the fallback, then to unbounded) rather than escape
+// and pin the form at "loading".
 function nativeTimeoutSignal(timeoutMs: number): AbortSignal | undefined {
   if (
     typeof AbortSignal === "undefined" ||
@@ -43,16 +34,9 @@ function fallbackTimeoutSignal(timeoutMs: number): TimeoutSignal | undefined {
   if (typeof AbortController !== "function") {
     return undefined;
   }
-  try {
-    const controller = new AbortController();
-    const timer = setTimeout(
-      () => controller.abort(timeoutReason()),
-      timeoutMs,
-    );
-    return { signal: controller.signal, clear: () => clearTimeout(timer) };
-  } catch {
-    return undefined;
-  }
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return { signal: controller.signal, clear: () => clearTimeout(timer) };
 }
 
 export function withTimeoutSignal(timeoutMs: number): TimeoutSignal {
