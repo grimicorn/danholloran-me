@@ -175,17 +175,19 @@ describe("AppSearch", () => {
     expect(mocks.routerGo).not.toHaveBeenCalled();
   });
 
-  it("drops a static entry whose href duplicates a post", async () => {
+  it("folds a project that links to its own post into a single post result", async () => {
     const search = mountSearch();
 
     await search.find("input").setValue("collision");
     await nextTick();
 
     const options = search.findAll('[role="option"]');
-    const duplicate = options.find((option) =>
-      option.text().includes("Duplicate Of First Post"),
-    );
-    expect(duplicate).toBeUndefined();
+    // The colliding project's keyword resolves to the post entry, not a
+    // second option with the project's own title.
+    expect(options.length).toBe(1);
+    expect(options[0].text()).toContain("First Post");
+    expect(options[0].text()).toContain("post");
+    expect(options[0].text()).not.toContain("Duplicate Of First Post");
   });
 
   it("collapses aria-expanded when the search panel is closed", async () => {

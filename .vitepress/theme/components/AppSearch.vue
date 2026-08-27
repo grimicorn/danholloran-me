@@ -12,19 +12,14 @@ import MiniSearch from "minisearch";
 import { SearchItem } from "@typedefs";
 import { data as postItems } from "../../content/posts/search.data.ts";
 import { data as staticItems } from "../../data/staticSearch.data.ts";
+import { mergeSearchIndex } from "../../data/searchIndex.ts";
 import { useRouter } from "vitepress";
 import { useNavPanels } from "@composables/useNavPanels.ts";
 
 const router = useRouter();
 const { isSearchOpen, openSearch, closeAll } = useNavPanels();
 
-// A project may link to its own blog post; let the richer post entry win so the
-// same destination isn't indexed twice.
-const postHrefs = new Set(postItems.map((item) => item.href));
-const ALL_ITEMS: SearchItem[] = [
-  ...staticItems.filter((item) => !postHrefs.has(item.href)),
-  ...postItems,
-];
+const ALL_ITEMS: SearchItem[] = mergeSearchIndex(staticItems, postItems);
 
 const ms = new MiniSearch<SearchItem & { id: number }>({
   fields: ["title", "desc", "kw"],
@@ -124,8 +119,17 @@ function toggle() {
   isSearchOpen.value ? close() : open();
 }
 
+const EXTERNAL_PROTOCOLS = ["http:", "https:", "mailto:"];
+
 function isExternal(href: string): boolean {
-  return /^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith("//");
+  if (href.startsWith("//")) {
+    return true;
+  }
+  const scheme = href.match(/^[a-z][a-z0-9+.-]*:/i)?.[0].toLowerCase();
+  if (!scheme) {
+    return false;
+  }
+  return EXTERNAL_PROTOCOLS.includes(scheme);
 }
 
 function navigate(href: string) {
