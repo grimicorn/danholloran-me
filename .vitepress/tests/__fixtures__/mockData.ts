@@ -146,6 +146,14 @@ export const mockStaticSearchItems: SearchItem[] = [
     href: "https://acme.example",
     kw: "Acme Corp Vue.js A featured project.",
   },
+  // Collides with the "/posts/first-post" post entry to exercise deduping.
+  {
+    type: "project",
+    title: "Duplicate Of First Post",
+    desc: "Collision",
+    href: "/posts/first-post",
+    kw: "duplicate collision project",
+  },
 ];
 
 // Single image per post so Math.random() selection is always index 0.

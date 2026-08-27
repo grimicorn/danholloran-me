@@ -7,7 +7,9 @@ export { data };
 // Projects without their own URL point at the home page projects section.
 export const PROJECTS_ANCHOR = "/#projects";
 
-const MARKDOWN_LINK = /\[([^\]]+)\]\([^)]*\)/g;
+// Matches `[text](url)` and `![alt](src)`, tolerating one level of parentheses
+// inside the URL (e.g. Wikipedia slugs) so no stray `)` leaks into keywords.
+const MARKDOWN_LINK = /!?\[([^\]]*)\]\((?:[^()]|\([^()]*\))*\)/g;
 
 // Project descriptions are markdown; keep the link text, drop the URLs so raw
 // hosts (github.com, org, wikipedia) don't leak into the search index.
@@ -70,7 +72,7 @@ export function buildStaticSearchItems(): SearchItem[] {
 
 export default {
   // Refresh the search index in dev when the project source changes.
-  watch: ["./projects.ts"],
+  watch: ["./projects.ts", "./skills.ts"],
   load(): SearchItem[] {
     return buildStaticSearchItems();
   },

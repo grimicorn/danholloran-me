@@ -18,7 +18,13 @@ import { useNavPanels } from "@composables/useNavPanels.ts";
 const router = useRouter();
 const { isSearchOpen, openSearch, closeAll } = useNavPanels();
 
-const ALL_ITEMS: SearchItem[] = [...staticItems, ...postItems];
+// A project may link to its own blog post; let the richer post entry win so the
+// same destination isn't indexed twice.
+const postHrefs = new Set(postItems.map((item) => item.href));
+const ALL_ITEMS: SearchItem[] = [
+  ...staticItems.filter((item) => !postHrefs.has(item.href)),
+  ...postItems,
+];
 
 const ms = new MiniSearch<SearchItem & { id: number }>({
   fields: ["title", "desc", "kw"],
@@ -119,7 +125,7 @@ function toggle() {
 }
 
 function isExternal(href: string): boolean {
-  return /^https?:\/\//.test(href);
+  return /^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith("//");
 }
 
 function navigate(href: string) {

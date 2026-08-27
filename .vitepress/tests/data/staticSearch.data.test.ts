@@ -54,6 +54,19 @@ describe("staticSearch data loader", () => {
     expect(item.kw).not.toContain("https://vuejs.org");
   });
 
+  it("strips image syntax and parenthesized link URLs without leaving junk", () => {
+    const messyProject = {
+      ...mockProjects[0],
+      content:
+        "See ![diagram](/img/arch.png) and [EDI](https://en.wikipedia.org/wiki/Foo_(bar)) docs.",
+    };
+    const item = projectToSearchItem(messyProject);
+    expect(item.kw).toContain("diagram");
+    expect(item.kw).toContain("EDI");
+    expect(item.kw).not.toContain("wikipedia");
+    expect(item.kw).not.toContain(")");
+  });
+
   it("exposes the same items through the default loader's load()", () => {
     expect(loader.load()).toEqual(buildStaticSearchItems());
   });

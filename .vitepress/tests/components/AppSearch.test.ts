@@ -51,6 +51,7 @@ describe("AppSearch", () => {
     wrapper?.unmount();
     wrapper = null;
     mocks.routerGo.mockClear();
+    vi.unstubAllGlobals();
     if (mocks.isSearchOpen) {
       mocks.isSearchOpen.value = true;
     }
@@ -159,12 +160,8 @@ describe("AppSearch", () => {
   });
 
   it("navigates external project urls via window.location, not the SPA router", async () => {
-    const originalLocation = window.location;
-    Object.defineProperty(window, "location", {
-      configurable: true,
-      writable: true,
-      value: { href: "" },
-    });
+    const location = { href: "" };
+    vi.stubGlobal("location", location);
 
     const search = mountSearch();
     await search.find("input").setValue("Acme Project");
@@ -174,14 +171,21 @@ describe("AppSearch", () => {
       .find((option) => option.text().includes("Acme Project"));
     await projectOption!.trigger("click");
 
-    expect(window.location.href).toBe("https://acme.example");
+    expect(location.href).toBe("https://acme.example");
     expect(mocks.routerGo).not.toHaveBeenCalled();
+  });
 
-    Object.defineProperty(window, "location", {
-      configurable: true,
-      writable: true,
-      value: originalLocation,
-    });
+  it("drops a static entry whose href duplicates a post", async () => {
+    const search = mountSearch();
+
+    await search.find("input").setValue("collision");
+    await nextTick();
+
+    const options = search.findAll('[role="option"]');
+    const duplicate = options.find((option) =>
+      option.text().includes("Duplicate Of First Post"),
+    );
+    expect(duplicate).toBeUndefined();
   });
 
   it("collapses aria-expanded when the search panel is closed", async () => {
