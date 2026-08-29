@@ -5,6 +5,9 @@ const SUBMIT_PATH = "/";
 // Netlify's honeypot: forwarded verbatim (never trimmed) so a whitespace-only
 // bot fill still trips it, matching the native no-JS submit.
 const HONEYPOT_FIELD = "bot-field";
+// Netlify keys the submission to a form by this field; without it Netlify drops
+// the POST while still returning 200, so the guard below treats it as required.
+const FORM_NAME_FIELD = "form-name";
 // Bounds the Netlify Forms request so a hung connection aborts and re-enables
 // the form instead of pinning status at "loading" until a page reload.
 const REQUEST_TIMEOUT_MS = 10_000;
@@ -18,10 +21,11 @@ const NETWORK_ERROR_MESSAGE = "Network error. Please try again.";
 
 // Serializes the live form so every field the markup declares — including the
 // bot-field honeypot and the Netlify form-name — reaches Netlify Forms, keeping
-// the JS payload from drifting away from the no-JS submit. `append` preserves
+// the JS payload's field set aligned with the no-JS submit. `append` preserves
 // repeated field names; file inputs (never present on this form) are skipped.
-// User-entered values are trimmed to normalize incidental whitespace; the
-// honeypot is forwarded raw so a whitespace-only bot fill still trips it.
+// User-entered values are trimmed to normalize incidental whitespace (a
+// deliberate divergence from the no-JS submit); the honeypot is forwarded raw so
+// a whitespace-only bot fill still trips it.
 function toRequestBody(formData: FormData): URLSearchParams {
   const body = new URLSearchParams();
   for (const [field, value] of formData.entries()) {
@@ -51,7 +55,7 @@ function resolveRequestBody(event: SubmitEvent): RequestResolution {
   const body = toRequestBody(new FormData(form));
   // A missing form-name makes Netlify drop the POST while still returning 200;
   // guard so a markup regression never reports a false success.
-  if (!body.get("form-name")) {
+  if (!body.get(FORM_NAME_FIELD)) {
     return { errorMessage: ERROR_MESSAGE };
   }
   if (REQUIRED_FIELDS.some((field) => !body.get(field))) {
