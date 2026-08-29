@@ -1,4 +1,5 @@
 import { ref } from "vue";
+import { withTimeoutSignal } from "@utils/timeoutSignal";
 
 const SUBMIT_PATH = "/";
 // Netlify's honeypot: forwarded verbatim (never trimmed) so a whitespace-only
@@ -14,18 +15,6 @@ const ALL_FIELDS_MESSAGE = "Please fill in all fields before sending.";
 const SUCCESS_MESSAGE = "Message sent — I'll be in touch soon.";
 const ERROR_MESSAGE = "Something went wrong. Please try again.";
 const NETWORK_ERROR_MESSAGE = "Network error. Please try again.";
-
-// Undefined on browsers without AbortSignal.timeout so the request stays
-// unbounded (as before) rather than throwing and failing every submit.
-function requestTimeoutSignal(): AbortSignal | undefined {
-  if (
-    typeof AbortSignal === "undefined" ||
-    typeof AbortSignal.timeout !== "function"
-  ) {
-    return undefined;
-  }
-  return AbortSignal.timeout(REQUEST_TIMEOUT_MS);
-}
 
 // Serializes the live form so every field the markup declares — including the
 // bot-field honeypot and the Netlify form-name — reaches Netlify Forms, keeping
@@ -96,12 +85,13 @@ export function useContact() {
     status.value = "loading";
     statusMessage.value = "";
 
+    const timeout = withTimeoutSignal(REQUEST_TIMEOUT_MS);
     try {
       const res = await fetch(SUBMIT_PATH, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: resolution.body.toString(),
-        signal: requestTimeoutSignal(),
+        signal: timeout.signal,
       });
       if (!res.ok) {
         status.value = "error";
@@ -112,6 +102,8 @@ export function useContact() {
       status.value = "error";
       statusMessage.value = NETWORK_ERROR_MESSAGE;
       return;
+    } finally {
+      timeout.clear();
     }
 
     status.value = "success";
