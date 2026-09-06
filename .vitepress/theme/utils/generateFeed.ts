@@ -88,11 +88,17 @@ function resolveItemTitle(
 // Raw frontmatter `tags` is author-controlled YAML that can arrive as a
 // scalar (string/number) or be missing entirely, not just an array — feeding
 // that straight to `.map` throws. `normalizeTags` guards the container shape;
-// the string filter then matches archivePaths' `tagBuckets` policy of
-// dropping non-string tags rather than coercing them into a laundered label.
+// the string filter then matches archivePaths' `tagBuckets` non-string policy
+// of dropping non-string tags rather than coercing them into a laundered
+// label. Trimming and dropping the empty result additionally keeps a blank or
+// whitespace-only tag from shipping as a junk `<category>` element (`tagBuckets`
+// gets the same outcome for free via its route-slugging step, which isn't
+// appropriate to reuse here).
 function feedCategories(tags: unknown): { name: string }[] {
   return normalizeTags(tags)
     .filter((tag): tag is string => typeof tag === "string")
+    .map((tag) => tag.trim())
+    .filter((tag) => tag.length > 0)
     .map((tag) => ({ name: tag }));
 }
 

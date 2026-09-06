@@ -548,4 +548,16 @@ describe("generateFeed", () => {
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(itemCategories(feedItems(xml)[0])).toEqual(["js"]);
   });
+
+  it("drops empty and whitespace-only string tags", async () => {
+    mockPostFiles(
+      ["blank-tags.md"],
+      [{ title: "Blank Tags", date: "2024-01-01", tags: ["", "   ", "js"] }],
+    );
+
+    const xml = generateFeed(passthroughRenderer());
+
+    expect(() => parseFeedXml(xml)).not.toThrow();
+    expect(itemCategories(feedItems(xml)[0])).toEqual(["js"]);
+  });
 });
