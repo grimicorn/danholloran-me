@@ -1,6 +1,7 @@
 import { Feed } from "feed";
 import type { MarkdownRenderer } from "vitepress";
 import { loadDatedPosts } from "./loadPublishedPosts";
+import { normalizeTags } from "./normalizeTags";
 import { SITE_URL, SITE_DESCRIPTION } from "./constants";
 
 // `]]>` closes a CDATA section. The `feed` library wraps every item title,
@@ -84,6 +85,17 @@ function resolveItemTitle(
   return slug;
 }
 
+// Raw frontmatter `tags` is author-controlled YAML that can arrive as a
+// scalar (string/number) or be missing entirely, not just an array — feeding
+// that straight to `.map` throws. `normalizeTags` guards the container shape;
+// the string filter then matches archivePaths' `tagBuckets` policy of
+// dropping non-string tags rather than coercing them into a laundered label.
+function feedCategories(tags: unknown): { name: string }[] {
+  return normalizeTags(tags)
+    .filter((tag): tag is string => typeof tag === "string")
+    .map((tag) => ({ name: tag }));
+}
+
 // The markdown renderer is injected (an external dependency, kept out of this
 // module so it stays testable in isolation). The build passes one created from
 // the resolved site config (see config.ts `buildEnd`), so feed bodies run
@@ -115,7 +127,7 @@ export function generateFeed(renderer: MarkdownRenderer): string {
       description,
       content: renderBody(renderer, post),
       date: new Date(post.sortTime),
-      category: post.tags?.map((tag: string) => ({ name: tag })) ?? [],
+      category: feedCategories(post.tags),
       image: post.image ? `${SITE_URL}${post.image}` : undefined,
     });
   }
