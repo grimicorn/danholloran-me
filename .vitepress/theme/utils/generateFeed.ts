@@ -93,13 +93,15 @@ function resolveItemTitle(
 // label. Trimming and dropping the empty result additionally keeps a blank or
 // whitespace-only tag from shipping as a junk `<category>` element (`tagBuckets`
 // gets the same outcome for free via its route-slugging step, which isn't
-// appropriate to reuse here).
+// appropriate to reuse here). Deduping after the trim stops two tags that
+// differ only by surrounding whitespace (e.g. "js" and " js ") from shipping
+// as two byte-identical `<category>` elements on the same item.
 function feedCategories(tags: unknown): { name: string }[] {
-  return normalizeTags(tags)
+  const trimmedTags = normalizeTags(tags)
     .filter((tag): tag is string => typeof tag === "string")
     .map((tag) => tag.trim())
-    .filter((tag) => tag.length > 0)
-    .map((tag) => ({ name: tag }));
+    .filter((tag) => tag.length > 0);
+  return [...new Set(trimmedTags)].map((tag) => ({ name: tag }));
 }
 
 // The markdown renderer is injected (an external dependency, kept out of this

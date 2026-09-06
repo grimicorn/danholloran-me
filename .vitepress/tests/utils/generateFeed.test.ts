@@ -560,4 +560,26 @@ describe("generateFeed", () => {
     expect(() => parseFeedXml(xml)).not.toThrow();
     expect(itemCategories(feedItems(xml)[0])).toEqual(["js"]);
   });
+
+  it("trims surrounding whitespace from a tag it keeps", async () => {
+    mockPostFiles(
+      ["padded-tags.md"],
+      [{ title: "Padded Tags", date: "2024-01-01", tags: ["  js  "] }],
+    );
+
+    const xml = generateFeed(passthroughRenderer());
+
+    expect(itemCategories(feedItems(xml)[0])).toEqual(["js"]);
+  });
+
+  it("dedupes tags that are identical once trimmed", async () => {
+    mockPostFiles(
+      ["duplicate-tags.md"],
+      [{ title: "Duplicate Tags", date: "2024-01-01", tags: ["js", " js "] }],
+    );
+
+    const xml = generateFeed(passthroughRenderer());
+
+    expect(itemCategories(feedItems(xml)[0])).toEqual(["js"]);
+  });
 });
