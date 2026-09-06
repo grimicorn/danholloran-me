@@ -582,4 +582,30 @@ describe("generateFeed", () => {
 
     expect(itemCategories(feedItems(xml)[0])).toEqual(["js"]);
   });
+
+  it("keeps the feed well-formed for tags with XML-special characters", async () => {
+    // <category> is a plain text node (not CDATA-wrapped, unlike title/
+    // description/content), so this pins that xml-js's writer escapes it on
+    // its own rather than relying on neutralizeCdata, which tags deliberately
+    // skip.
+    mockPostFiles(
+      ["special-tags.md"],
+      [
+        {
+          title: "Special Tags",
+          date: "2024-01-01",
+          tags: ["A & B", "<script>", "one ]]> two"],
+        },
+      ],
+    );
+
+    const xml = generateFeed(passthroughRenderer());
+
+    expect(() => parseFeedXml(xml)).not.toThrow();
+    expect(itemCategories(feedItems(xml)[0])).toEqual([
+      "A & B",
+      "<script>",
+      "one ]]> two",
+    ]);
+  });
 });
