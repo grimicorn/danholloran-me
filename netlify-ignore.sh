@@ -1,12 +1,22 @@
 #!/bin/bash
 # Exit 0 = skip build, exit 1 = proceed with build.
-# Skips the build only when every changed file is a .md with "draft: true" in its frontmatter.
+# Skips the build only when the diff was computed successfully AND every
+# changed file is a .md with "draft: true" in its frontmatter. Any failure or
+# ambiguity in computing the diff (shallow clone, first commit, squash, etc.)
+# fails safe and builds — we'd rather build unnecessarily than silently skip
+# a real deploy.
 
 changed_files=$(git diff --name-only HEAD^ HEAD 2>/dev/null)
+diff_exit_code=$?
+
+if [ "$diff_exit_code" -ne 0 ]; then
+  echo "Could not compute diff (git diff exited $diff_exit_code) — proceeding with build."
+  exit 1
+fi
 
 if [ -z "$changed_files" ]; then
-  echo "No changed files detected, skipping build."
-  exit 0
+  echo "Diff computed successfully but no changed files were reported — proceeding with build."
+  exit 1
 fi
 
 while IFS= read -r file; do
