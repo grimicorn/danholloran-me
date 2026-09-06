@@ -6,13 +6,15 @@
 # fails safe and builds — we'd rather build unnecessarily than silently skip
 # a real deploy.
 
-changed_files=$(git diff --name-only HEAD^ HEAD 2>/dev/null)
+diff_output=$(git diff --name-only HEAD^ HEAD 2>&1)
 diff_exit_code=$?
 
 if [ "$diff_exit_code" -ne 0 ]; then
-  echo "Could not compute diff (git diff exited $diff_exit_code) — proceeding with build."
+  echo "Could not compute diff (git diff exited $diff_exit_code: $diff_output) — proceeding with build."
   exit 1
 fi
+
+changed_files="$diff_output"
 
 if [ -z "$changed_files" ]; then
   echo "Diff computed successfully but no changed files were reported — proceeding with build."

@@ -24,6 +24,12 @@ function runGit(...args: string[]): void {
     env: GIT_ENV,
   });
 
+  if (result.error) {
+    throw new Error(
+      `git ${args.join(" ")} failed to spawn: ${result.error.message}`,
+    );
+  }
+
   if (result.status !== 0) {
     throw new Error(`git ${args.join(" ")} failed: ${result.stderr}`);
   }
@@ -35,14 +41,20 @@ function commitFile(fileName: string, contents: string, message: string): void {
   runGit("commit", "-q", "-m", message);
 }
 
-function runNetlifyIgnore(): number {
+function runNetlifyIgnore(): { status: number; stdout: string } {
   const result = spawnSync("bash", [SCRIPT_PATH], {
     cwd: repoDir,
     encoding: "utf-8",
     env: GIT_ENV,
   });
 
-  return result.status ?? -1;
+  if (result.error) {
+    throw new Error(
+      `netlify-ignore.sh failed to spawn: ${result.error.message}`,
+    );
+  }
+
+  return { status: result.status ?? -1, stdout: result.stdout };
 }
 
 describe("netlify-ignore.sh", () => {
@@ -60,28 +72,40 @@ describe("netlify-ignore.sh", () => {
   it("builds when there is no parent commit to diff against", () => {
     commitFile("file.txt", "hello", "init");
 
-    expect(runNetlifyIgnore()).toBe(1);
+    const { status, stdout } = runNetlifyIgnore();
+
+    expect(status).toBe(1);
+    expect(stdout).toContain("Could not compute diff");
   });
 
   it("builds when the diff succeeds but reports no changed files", () => {
     commitFile("file.txt", "hello", "init");
     runGit("commit", "-q", "--allow-empty", "-m", "empty commit");
 
-    expect(runNetlifyIgnore()).toBe(1);
+    const { status, stdout } = runNetlifyIgnore();
+
+    expect(status).toBe(1);
+    expect(stdout).toContain("no changed files were reported");
   });
 
   it("builds when a non-markdown file changed", () => {
     commitFile("file.txt", "hello", "init");
     commitFile("file.txt", "hello world", "update");
 
-    expect(runNetlifyIgnore()).toBe(1);
+    const { status, stdout } = runNetlifyIgnore();
+
+    expect(status).toBe(1);
+    expect(stdout).toContain("Non-markdown file changed: file.txt");
   });
 
   it("builds when a non-draft markdown file changed", () => {
     commitFile("file.txt", "hello", "init");
     commitFile("post.md", "---\ndraft: false\n---\nbody\n", "publish post");
 
-    expect(runNetlifyIgnore()).toBe(1);
+    const { status, stdout } = runNetlifyIgnore();
+
+    expect(status).toBe(1);
+    expect(stdout).toContain("Non-draft markdown file changed: post.md");
   });
 
   it("builds when a markdown file was deleted", () => {
@@ -89,13 +113,35 @@ describe("netlify-ignore.sh", () => {
     runGit("rm", "post.md");
     runGit("commit", "-q", "-m", "delete draft");
 
-    expect(runNetlifyIgnore()).toBe(1);
+    const { status, stdout } = runNetlifyIgnore();
+
+    expect(status).toBe(1);
+    expect(stdout).toContain("Markdown file deleted: post.md");
+  });
+
+  it("builds when a draft markdown file changed alongside a non-markdown file", () => {
+    commitFile("file.txt", "hello", "init");
+    writeFileSync(join(repoDir, "post.md"), "---\ndraft: true\n---\nbody\n");
+    writeFileSync(join(repoDir, "file.txt"), "hello world");
+    runGit("add", ".");
+    runGit("commit", "-q", "-m", "draft post plus source change");
+
+    const { status, stdout } = runNetlifyIgnore();
+
+    expect(status).toBe(1);
+    expect(stdout).toContain("Non-markdown file changed: file.txt");
   });
 
   it("skips only when every changed file is a draft markdown file", () => {
     commitFile("file.txt", "hello", "init");
-    commitFile("post.md", "---\ndraft: true\n---\nbody\n", "add draft");
+    writeFileSync(join(repoDir, "post.md"), "---\ndraft: true\n---\nbody\n");
+    writeFileSync(join(repoDir, "post2.md"), "---\ndraft: true\n---\nbody\n");
+    runGit("add", ".");
+    runGit("commit", "-q", "-m", "add draft posts");
 
-    expect(runNetlifyIgnore()).toBe(0);
+    const { status, stdout } = runNetlifyIgnore();
+
+    expect(status).toBe(0);
+    expect(stdout).toContain("Only draft markdown files changed");
   });
 });
