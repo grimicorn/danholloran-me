@@ -8,13 +8,11 @@ import { spawnSync } from "node:child_process";
 // to point every git invocation at the real repo instead of an argument's
 // working directory. If the test runner ever inherits one of these, the
 // temp-repo isolation below silently breaks and commands operate on the real
-// repo, so strip them before layering on the isolation env vars.
-const processEnvWithoutGitOverrides = { ...process.env };
-delete processEnvWithoutGitOverrides.GIT_DIR;
-delete processEnvWithoutGitOverrides.GIT_WORK_TREE;
-delete processEnvWithoutGitOverrides.GIT_INDEX_FILE;
-delete processEnvWithoutGitOverrides.GIT_OBJECT_DIRECTORY;
-delete processEnvWithoutGitOverrides.GIT_CEILING_DIRECTORIES;
+// repo, so strip the whole GIT_* family before layering on the isolation env
+// vars below (an enumerated list would miss the next one git adds).
+const processEnvWithoutGitOverrides = Object.fromEntries(
+  Object.entries(process.env).filter(([name]) => !name.startsWith("GIT_")),
+);
 
 // Also isolate git from this machine's global/system config (e.g. an
 // iCloud-synced ~/.gitconfig) so these subprocess calls can't fail or behave
@@ -30,6 +28,7 @@ type ProcessEnv = Record<string, string | undefined>;
 const SCRIPT_PATH = join(__dirname, "../../../netlify-ignore.sh");
 
 let repoDir: string;
+let shimCleanups: Array<() => void>;
 
 function runGit(...args: string[]): void {
   const result = spawnSync("git", args, {
@@ -58,6 +57,7 @@ function commitFile(fileName: string, contents: string, message: string): void {
 function runNetlifyIgnore(env: ProcessEnv = GIT_ENV): {
   status: number;
   stdout: string;
+  stderr: string;
 } {
   const result = spawnSync("bash", [SCRIPT_PATH], {
     cwd: repoDir,
@@ -71,21 +71,35 @@ function runNetlifyIgnore(env: ProcessEnv = GIT_ENV): {
     );
   }
 
-  return { status: result.status ?? -1, stdout: result.stdout };
+  return {
+    status: result.status ?? -1,
+    stdout: result.stdout,
+    stderr: result.stderr,
+  };
+}
+
+function locateRealGitBinary(): string {
+  const whichResult = spawnSync("which", ["git"], { encoding: "utf-8" });
+  const path = whichResult.stdout?.trim();
+
+  if (whichResult.status !== 0 || !path) {
+    throw new Error(
+      `could not locate the real git binary: ${whichResult.stderr ?? whichResult.error?.message}`,
+    );
+  }
+
+  return path;
 }
 
 // Puts a fake `git` ahead of the real one on PATH that prints a warning to
 // stderr on every `git diff` call, then hands off to the real git binary so
 // behavior is otherwise unchanged. Used to prove the script's diff/stderr
 // handling doesn't let a successful-but-noisy diff pollute the file list it
-// parses (see netlify-ignore.sh's separate stderr capture).
-function createGitDiffStderrWarningShim(): {
-  env: ProcessEnv;
-  cleanup: () => void;
-} {
-  const realGitPath = spawnSync("which", ["git"], {
-    encoding: "utf-8",
-  }).stdout.trim();
+// parses (see netlify-ignore.sh's separate stderr capture). The shim
+// directory is tracked in `shimCleanups` so `afterEach` removes it even if
+// the caller never reaches its own cleanup call.
+function createGitDiffStderrWarningShim(): { env: ProcessEnv } {
+  const realGitPath = locateRealGitBinary();
   const shimDir = mkdtempSync(join(tmpdir(), "git-shim-"));
   const shimPath = join(shimDir, "git");
 
@@ -101,16 +115,15 @@ function createGitDiffStderrWarningShim(): {
     ].join("\n"),
   );
   chmodSync(shimPath, 0o755);
+  shimCleanups.push(() => rmSync(shimDir, { recursive: true, force: true }));
 
-  return {
-    env: { ...GIT_ENV, PATH: `${shimDir}:${GIT_ENV.PATH}` },
-    cleanup: () => rmSync(shimDir, { recursive: true, force: true }),
-  };
+  return { env: { ...GIT_ENV, PATH: `${shimDir}:${GIT_ENV.PATH}` } };
 }
 
 describe("netlify-ignore.sh", () => {
   beforeEach(() => {
     repoDir = mkdtempSync(join(tmpdir(), "netlify-ignore-"));
+    shimCleanups = [];
     runGit("init", "-q");
     runGit("config", "user.email", "test@example.com");
     runGit("config", "user.name", "Test");
@@ -118,6 +131,7 @@ describe("netlify-ignore.sh", () => {
 
   afterEach(() => {
     rmSync(repoDir, { recursive: true, force: true });
+    shimCleanups.forEach((cleanup) => cleanup());
   });
 
   it("builds when there is no parent commit to diff against", () => {
@@ -152,6 +166,30 @@ describe("netlify-ignore.sh", () => {
   it("builds when a non-draft markdown file changed", () => {
     commitFile("file.txt", "hello", "init");
     commitFile("post.md", "---\ndraft: false\n---\nbody\n", "publish post");
+
+    const { status, stdout } = runNetlifyIgnore();
+
+    expect(status).toBe(1);
+    expect(stdout).toContain("Non-draft markdown file changed: post.md");
+  });
+
+  it("builds when a non-draft post's body happens to contain a 'draft: true' line", () => {
+    commitFile("file.txt", "hello", "init");
+    commitFile(
+      "post.md",
+      "---\ndraft: false\n---\nexample config:\ndraft: true\n",
+      "publish post with tricky body",
+    );
+
+    const { status, stdout } = runNetlifyIgnore();
+
+    expect(status).toBe(1);
+    expect(stdout).toContain("Non-draft markdown file changed: post.md");
+  });
+
+  it("builds when a markdown file has no frontmatter at all", () => {
+    commitFile("file.txt", "hello", "init");
+    commitFile("post.md", "just some text, no frontmatter\n", "add plain md");
 
     const { status, stdout } = runNetlifyIgnore();
 
@@ -202,9 +240,8 @@ describe("netlify-ignore.sh", () => {
     runGit("add", "post.md");
     runGit("commit", "-q", "-m", "add draft");
 
-    const { env, cleanup } = createGitDiffStderrWarningShim();
+    const { env } = createGitDiffStderrWarningShim();
     const { status, stdout } = runNetlifyIgnore(env);
-    cleanup();
 
     expect(status).toBe(0);
     expect(stdout).toContain("Only draft markdown files changed");
