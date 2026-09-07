@@ -41,7 +41,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   clearInterval(interval);
-  reducedMotion?.removeEventListener("change", applyMotionPreference);
+  reducedMotion.removeEventListener("change", applyMotionPreference);
 });
 </script>
 
