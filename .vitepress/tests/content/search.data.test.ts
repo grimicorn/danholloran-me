@@ -2,20 +2,23 @@ import { describe, it, expect, vi } from "vitest";
 import type { ContentData } from "vitepress";
 import type { PostSearchItem } from "@typedefs";
 import { transformSearchData } from "../../content/posts/search.data.ts";
+import { POSTS_GLOB } from "../../content/posts/transformPosts.ts";
 
 // createContentLoader is provided by vitepress at build time and throws
 // outside an active vitepress process (see posts.data.test.ts for the same
-// pattern); capture the config it's handed so the wiring itself can be
-// asserted. Behavior is exercised by calling the exported transform
+// pattern); capture the pattern/config it's handed so the wiring itself can
+// be asserted. Behavior is exercised by calling the exported transform
 // directly, matching how transformPosts.test.ts tests transformPosts.
 // `var`, not `let`: the mocked `createContentLoader` below runs as a side
 // effect of the static `transformSearchData` import above (search.data.ts
 // calls createContentLoader at module scope), which executes before a
 // hoisted-but-not-yet-initialized `let` binding would be reachable.
+var capturedPattern: string;
 var capturedConfig: { transform: (_data: ContentData[]) => PostSearchItem[] };
 
 vi.mock("vitepress", () => ({
-  createContentLoader: (_pattern: string, config: typeof capturedConfig) => {
+  createContentLoader: (pattern: string, config: typeof capturedConfig) => {
+    capturedPattern = pattern;
     capturedConfig = config;
     return { watch: [], load: () => [] };
   },
@@ -42,12 +45,37 @@ function makeRawPostWithTags(tags: unknown): ContentData {
 }
 
 describe("search.data.ts list loader", () => {
-  it("registers transformSearchData as the loader's transform", () => {
+  it("registers the shared posts glob and transformSearchData with createContentLoader", () => {
+    expect(capturedPattern).toBe(POSTS_GLOB);
     expect(capturedConfig.transform).toBe(transformSearchData);
   });
 });
 
 describe("transformSearchData", () => {
+  it("derives the slug-based href from the content loader url", () => {
+    const [item] = transformSearchData([makeRawPostWithTags(["js"])]);
+
+    expect(item.href).toBe("/posts/example-post");
+  });
+
+  it("does not strip a url that merely resembles the content-folder prefix", () => {
+    // Pins the escaped dot in the slug-derivation regex: `.` is a wildcard,
+    // so an unescaped version would also match "/xvitepress/content/posts/"
+    // and strip it down to "example-post" — the same href as a real post at
+    // the actual content-folder path, a silent collision.
+    const rawPost = {
+      url: "/xvitepress/content/posts/example-post",
+      src: undefined,
+      html: undefined,
+      excerpt: undefined,
+      frontmatter: { ...DEFAULT_FRONTMATTER, tags: [] },
+    } as ContentData;
+
+    const [item] = transformSearchData([rawPost]);
+
+    expect(item.href).not.toBe("/posts/example-post");
+  });
+
   it("joins array tags into the keyword string", () => {
     const [item] = transformSearchData([makeRawPostWithTags(["js", "css"])]);
 
