@@ -17,8 +17,11 @@ const maxLocationWidth =
 
 let interval: ReturnType<typeof setInterval> | undefined;
 // Assigned in onMounted before applyMotionPreference is ever called; declared
-// without `| undefined` so a real "not initialized yet" bug throws loudly
-// instead of silently disabling the location rotation.
+// without `| undefined` so a real "not initialized yet" bug on that path
+// throws loudly instead of silently disabling the location rotation. Teardown
+// still guards with `?.` below: if onMounted itself failed before assignment
+// (e.g. matchMedia throwing), onUnmounted can still run, and a crash there
+// would mask the original mount error behind a confusing new one.
 let reducedMotion: MediaQueryList;
 
 // Honor prefers-reduced-motion: don't auto-rotate the location text (WCAG
@@ -41,7 +44,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   clearInterval(interval);
-  reducedMotion.removeEventListener("change", applyMotionPreference);
+  reducedMotion?.removeEventListener("change", applyMotionPreference);
 });
 </script>
 

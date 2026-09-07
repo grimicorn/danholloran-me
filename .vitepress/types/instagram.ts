@@ -7,7 +7,11 @@ export interface InstagramPost {
   url: string;
 }
 
+// Frontmatter is untyped, unvalidated markdown content — a post can omit any
+// field (see HomeInstagram.vue's tileAlt/pickDeterministicImage, which already
+// treat caption/location/images/url as optional). `Partial` keeps that honest
+// instead of asserting fields the loader never actually guarantees.
 export interface InstagramContentItem {
-  frontmatter: InstagramPost;
+  frontmatter: Partial<InstagramPost>;
   url: string;
 }
