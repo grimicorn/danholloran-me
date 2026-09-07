@@ -13,7 +13,6 @@
     "resolveJsonModule": true,
     "ignoreDeprecations": "6.0",
     "allowImportingTsExtensions": true,
-    "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
       "@/*": [".vitepress/*"],

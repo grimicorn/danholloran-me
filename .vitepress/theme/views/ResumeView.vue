@@ -4,19 +4,9 @@
 // ================================================
 import { useRevealAnimations } from "@composables/useRevealAnimations";
 import resume from "@data/resume.ts";
+import { formatPeriod } from "@utils/formatDate";
 
 useRevealAnimations();
-
-function formatPeriod(start: Date, end: Date | null | undefined): string {
-  const fmt = (d: Date) =>
-    d.toLocaleDateString("en-US", {
-      month: "short",
-      year: "numeric",
-    });
-  return end === null || end === undefined
-    ? `${fmt(start)} – Present`
-    : `${fmt(start)} – ${fmt(end)}`;
-}
 </script>
 
 <template>
@@ -161,7 +151,7 @@ function formatPeriod(start: Date, end: Date | null | undefined): string {
                     >{{ job.role }}</span
                   >
                   <span
-                    v-if="job.end === null"
+                    v-if="job.end == null"
                     class="text-on-accent-dim bg-accent-dim rounded-xs px-1.5 py-px font-mono text-[0.6rem]"
                     >current</span
                   >

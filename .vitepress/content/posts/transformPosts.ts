@@ -58,9 +58,11 @@ export function transformPosts(raw: ContentData[]): Post[] {
         ...post,
         url: `/posts/${slug}`,
         frontmatter: {
-          // vitepress types raw frontmatter as `Record<string, any>`; the
-          // content authoring convention guarantees the PostMeta shape, so
-          // cast here rather than widen PostMeta's fields to `unknown`.
+          // vitepress types raw frontmatter as `Record<string, any>`, so TS
+          // can't verify it matches PostMeta at this spread. Malformed dates
+          // already get a loud runtime warning above (publishedTime); other
+          // malformed/missing fields are not yet validated at build time —
+          // this cast only silences the type error, it doesn't add safety.
           ...(post.frontmatter as PostMeta),
           slug,
           readTime: calculateReadTime(src ?? ""),

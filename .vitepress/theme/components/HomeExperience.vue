@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import resume from "@data/resume";
 import type { SkillInterface } from "@typedefs";
+import { formatPeriod } from "@utils/formatDate";
 
 interface TimelineEntry {
   title: string;
   subtitle: string;
   location: string;
   start: Date;
-  end: Date | null;
+  end: Date | null | undefined;
   skills: SkillInterface[];
 }
 
@@ -20,7 +21,7 @@ const experience: TimelineEntry[] = [
     subtitle: entry.company,
     location: entry.location,
     start: entry.start,
-    end: entry.end ?? null,
+    end: entry.end,
     skills: entry.skills,
   })),
   ...resume.education.map((entry): TimelineEntry => ({
@@ -32,17 +33,6 @@ const experience: TimelineEntry[] = [
     skills: entry.skills,
   })),
 ].sort((a, b) => b.start.getTime() - a.start.getTime());
-
-function formatPeriod(start: Date, end: Date | null): string {
-  const fmt = (d: Date) =>
-    d.toLocaleDateString("en-US", {
-      month: "short",
-      year: "numeric",
-    });
-  return end === null
-    ? `${fmt(start)} – Present`
-    : `${fmt(start)} – ${fmt(end)}`;
-}
 </script>
 
 <template>
@@ -102,7 +92,7 @@ function formatPeriod(start: Date, end: Date | null): string {
                   >{{ job.title }}</span
                 >
                 <span
-                  v-if="job.end === null"
+                  v-if="job.end == null"
                   class="text-on-accent-dim bg-accent-dim rounded-xs px-1.5 py-px font-mono text-[0.58rem]"
                 >
                   current

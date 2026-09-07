@@ -16,13 +16,16 @@ const maxLocationWidth =
   Math.max(...PAST_LOCATIONS.map((l) => `${l.city}, ${l.state}`.length)) + "ch";
 
 let interval: ReturnType<typeof setInterval> | undefined;
-let reducedMotion: MediaQueryList | undefined;
+// Assigned in onMounted before applyMotionPreference is ever called; declared
+// without `| undefined` so a real "not initialized yet" bug throws loudly
+// instead of silently disabling the location rotation.
+let reducedMotion: MediaQueryList;
 
 // Honor prefers-reduced-motion: don't auto-rotate the location text (WCAG
 // 2.2.2). Re-evaluated on preference change so a mid-session flip takes hold.
 function applyMotionPreference() {
   clearInterval(interval);
-  if (!reducedMotion || reducedMotion.matches) {
+  if (reducedMotion.matches) {
     return;
   }
   interval = setInterval(() => {
