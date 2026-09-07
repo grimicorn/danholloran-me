@@ -18,21 +18,23 @@ vi.mock("vitepress", () => ({
   },
 }));
 
-function makeRawPost(overrides: Record<string, unknown> = {}): ContentData {
+const DEFAULT_FRONTMATTER = {
+  title: "Example Post",
+  draft: false,
+  topic: "development",
+  date: "2025-01-01T00:00:00.000Z",
+  description: "An example post.",
+};
+
+// Every case here only varies `tags`; hoisting the rest of the frontmatter
+// keeps each test focused on the one thing it's proving.
+function makeRawPostWithTags(tags: unknown): ContentData {
   return {
     url: "/.vitepress/content/posts/example-post",
     src: undefined,
     html: undefined,
     excerpt: undefined,
-    frontmatter: {
-      title: "Example Post",
-      draft: false,
-      topic: "development",
-      date: "2025-01-01T00:00:00.000Z",
-      description: "An example post.",
-      tags: ["javascript"],
-    },
-    ...overrides,
+    frontmatter: { ...DEFAULT_FRONTMATTER, tags },
   } as ContentData;
 }
 
@@ -42,56 +44,51 @@ describe("search.data.ts transform", () => {
   });
 
   it("joins array tags into the keyword string", () => {
-    const [item] = capturedTransform([
-      makeRawPost({
-        frontmatter: { ...makeRawPost().frontmatter, tags: ["js", "css"] },
-      }),
-    ]);
+    const [item] = capturedTransform([makeRawPostWithTags(["js", "css"])]);
 
-    expect(item.kw).toContain("js");
-    expect(item.kw).toContain("css");
+    expect(item.kw).toBe("An example post. development js css");
   });
 
   it("drops a scalar string tag instead of exploding it into characters", () => {
-    const [item] = capturedTransform([
-      makeRawPost({
-        frontmatter: { ...makeRawPost().frontmatter, tags: "javascript" },
-      }),
-    ]);
-
     // A naive `...tags` spread of the string "javascript" would splice in
     // "j", "a", "v", ... as single-character keywords; normalizeTags guards
     // the container shape so none of that leaks into the index.
-    expect(item.kw.split(" ")).not.toContain("j");
+    const [item] = capturedTransform([makeRawPostWithTags("javascript")]);
+
     expect(item.kw).toBe("An example post. development");
   });
 
   it("does not throw and drops the tag when frontmatter tags is a number", () => {
-    const rawPost = makeRawPost({
-      frontmatter: { ...makeRawPost().frontmatter, tags: 2025 },
-    });
+    const rawPost = makeRawPostWithTags(2025);
 
     expect(() => capturedTransform([rawPost])).not.toThrow();
-    const [item] = capturedTransform([rawPost]);
-    expect(item.kw).toBe("An example post. development");
+    expect(capturedTransform([rawPost])[0].kw).toBe(
+      "An example post. development",
+    );
   });
 
   it("handles missing tags gracefully", () => {
-    const rawPost = makeRawPost({
-      frontmatter: { ...makeRawPost().frontmatter, tags: undefined },
-    });
+    const rawPost = makeRawPostWithTags(undefined);
 
     expect(() => capturedTransform([rawPost])).not.toThrow();
-    const [item] = capturedTransform([rawPost]);
-    expect(item.kw).toBe("An example post. development");
+    expect(capturedTransform([rawPost])[0].kw).toBe(
+      "An example post. development",
+    );
+  });
+
+  it("handles a bare null tags key gracefully", () => {
+    // Frontmatter YAML with a bare `tags:` key (no value) parses to `null`,
+    // distinct from the key being absent entirely.
+    const rawPost = makeRawPostWithTags(null);
+
+    expect(() => capturedTransform([rawPost])).not.toThrow();
+    expect(capturedTransform([rawPost])[0].kw).toBe(
+      "An example post. development",
+    );
   });
 
   it("keeps only the string entries when a tags array mixes types", () => {
-    const [item] = capturedTransform([
-      makeRawPost({
-        frontmatter: { ...makeRawPost().frontmatter, tags: ["js", 3, null] },
-      }),
-    ]);
+    const [item] = capturedTransform([makeRawPostWithTags(["js", 3, null])]);
 
     expect(item.kw).toBe("An example post. development js");
   });
