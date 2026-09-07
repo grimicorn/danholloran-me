@@ -253,9 +253,9 @@ function transformPost(pageData: PageData): void {
   // excludes it) — a reachable, indexable, empty page.
   if (!isPublished(data, slug)) return;
 
-  const title = data.title ?? "";
-  const description = data.description ?? "";
-  const image = data.image ?? DEFAULT_SOCIAL_IMAGE;
+  const title = (data.title as string | undefined) ?? "";
+  const description = (data.description as string | undefined) ?? "";
+  const image = (data.image as string | undefined) ?? DEFAULT_SOCIAL_IMAGE;
   const url = `${SITE_URL}/posts/${slug}`;
   setStandardPageMeta(
     pageData,

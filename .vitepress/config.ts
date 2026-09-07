@@ -56,7 +56,11 @@ export default defineConfig({
   },
   vite: {
     build: { cssMinify: "esbuild" },
-    plugins: [tailwindcss()],
+    // @tailwindcss/vite and vitepress each bundle their own (differing major)
+    // copy of vite's types, so the returned Plugin is structurally
+    // incompatible with vitepress's nested `vite` types even though it works
+    // fine at runtime. Cast to sidestep the dual-package type mismatch.
+    plugins: [tailwindcss() as any],
     resolve: {
       alias: {
         "@": fileURLToPath(new URL(".", import.meta.url)),

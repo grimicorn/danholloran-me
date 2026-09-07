@@ -27,6 +27,7 @@ export const mockSkills: SkillsMap = {
 
 export const mockResume: ResumeInterface = {
   firstName: "Jane",
+  shortFirstName: "Jane",
   lastName: "Doe",
   photo: "/images/photo.jpg",
   headline: "Senior Frontend Developer",

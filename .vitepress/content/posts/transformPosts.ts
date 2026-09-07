@@ -1,5 +1,5 @@
 import type { ContentData } from "vitepress";
-import type { Post } from "@typedefs";
+import type { Post, PostMeta } from "@typedefs";
 import { calculateReadTime } from "../../theme/utils/readTime.ts";
 import { normalizeTags } from "../../theme/utils/normalizeTags.ts";
 
@@ -58,7 +58,10 @@ export function transformPosts(raw: ContentData[]): Post[] {
         ...post,
         url: `/posts/${slug}`,
         frontmatter: {
-          ...post.frontmatter,
+          // vitepress types raw frontmatter as `Record<string, any>`; the
+          // content authoring convention guarantees the PostMeta shape, so
+          // cast here rather than widen PostMeta's fields to `unknown`.
+          ...(post.frontmatter as PostMeta),
           slug,
           readTime: calculateReadTime(src ?? ""),
           // Normalize once at this chokepoint so every list/detail consumer

@@ -1,4 +1,8 @@
 import { createContentLoader } from "vitepress";
+import type { InstagramContentItem } from "@typedefs";
+
+declare const data: InstagramContentItem[];
+export { data };
 
 export default createContentLoader(".vitepress/content/instagram/*.md", {
   transform(data) {

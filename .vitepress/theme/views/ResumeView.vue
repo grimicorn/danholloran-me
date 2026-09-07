@@ -7,13 +7,13 @@ import resume from "@data/resume.ts";
 
 useRevealAnimations();
 
-function formatPeriod(start: string, end: string | null): string {
-  const fmt = (d: string) =>
-    new Date(d).toLocaleDateString("en-US", {
+function formatPeriod(start: Date, end: Date | null | undefined): string {
+  const fmt = (d: Date) =>
+    d.toLocaleDateString("en-US", {
       month: "short",
       year: "numeric",
     });
-  return end === null
+  return end === null || end === undefined
     ? `${fmt(start)} – Present`
     : `${fmt(start)} – ${fmt(end)}`;
 }
@@ -256,7 +256,7 @@ function formatPeriod(start: string, end: string | null): string {
               <div class="flex flex-wrap gap-1.5">
                 <span
                   v-for="skill in education.skills"
-                  :key="skill"
+                  :key="skill.name"
                   class="tag"
                 >
                   {{ skill.name }}

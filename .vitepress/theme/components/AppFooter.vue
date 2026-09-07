@@ -1,4 +1,4 @@
-<script lang="js" setup>
+<script lang="ts" setup>
 import { PAST_LOCATIONS } from "@data/resume.ts";
 import { computed, ref, onMounted, onUnmounted } from "vue";
 import { useData } from "vitepress";
@@ -15,14 +15,14 @@ const locationIndex = ref(0);
 const maxLocationWidth =
   Math.max(...PAST_LOCATIONS.map((l) => `${l.city}, ${l.state}`.length)) + "ch";
 
-let interval;
-let reducedMotion;
+let interval: ReturnType<typeof setInterval> | undefined;
+let reducedMotion: MediaQueryList | undefined;
 
 // Honor prefers-reduced-motion: don't auto-rotate the location text (WCAG
 // 2.2.2). Re-evaluated on preference change so a mid-session flip takes hold.
 function applyMotionPreference() {
   clearInterval(interval);
-  if (reducedMotion.matches) {
+  if (!reducedMotion || reducedMotion.matches) {
     return;
   }
   interval = setInterval(() => {

@@ -6,3 +6,8 @@ export interface InstagramPost {
   images: string[];
   url: string;
 }
+
+export interface InstagramContentItem {
+  frontmatter: InstagramPost;
+  url: string;
+}
