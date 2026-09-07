@@ -193,18 +193,28 @@ describe("buildEmptyQueryResults", () => {
     expect(firstPostIndex).toBeLessThanOrEqual(EMPTY_QUERY_PAGE_LIMIT);
   });
 
-  it("backfills pages beyond the cap at the tail instead of dropping them, once the panel has room", () => {
+  it("backfills pages beyond the cap after posts and projects, instead of dropping them, once the panel has room", () => {
     const pageCount = EMPTY_QUERY_PAGE_LIMIT + 1;
     const manyPages = buildPages(pageCount);
-    const items = [...manyPages, ...mockSearchItems];
-    const roomyPanelSize = pageCount + mockSearchItems.length;
+    const overflowPageCount = pageCount - EMPTY_QUERY_PAGE_LIMIT;
+    const project = manyProjects(1)[0];
+    const items = [...manyPages, ...mockSearchItems, project];
+    const roomyPanelSize =
+      EMPTY_QUERY_PAGE_LIMIT + mockSearchItems.length + 1 + overflowPageCount;
 
     const result = buildEmptyQueryResults(items, roomyPanelSize);
 
     expect(result.length).toBe(roomyPanelSize);
-    expect(result.filter((item) => item.type === "page").length).toBe(
-      pageCount,
+    // Order must be leading pages, then posts, then projects, then the
+    // overflow pages — not overflow pages slotted in ahead of the project.
+    const lastNonPageIndex = Math.max(
+      result.findIndex((item) => item.type === "post"),
+      result.findIndex((item) => item.type === "project"),
     );
+    const firstOverflowPageIndex = result.findIndex(
+      (item, index) => item.type === "page" && index > EMPTY_QUERY_PAGE_LIMIT,
+    );
+    expect(firstOverflowPageIndex).toBeGreaterThan(lastNonPageIndex);
   });
 
   it("respects the panel size limit", () => {
@@ -217,5 +227,12 @@ describe("buildEmptyQueryResults", () => {
     const result = buildEmptyQueryResults(items, 3);
 
     expect(result.length).toBe(3);
+  });
+
+  it("returns an empty array for a zero or negative panel size instead of dropping the last item via slice(0, -1)", () => {
+    const items = [...buildStaticSearchItems([]), ...mockSearchItems];
+
+    expect(buildEmptyQueryResults(items, 0)).toEqual([]);
+    expect(buildEmptyQueryResults(items, -1)).toEqual([]);
   });
 });

@@ -128,13 +128,29 @@ function groupByType(
 // then projects, then any pages left over once the cap is applied. `items`
 // is expected pre-sorted by recency within each type (postItems already
 // sorts newest-first).
+//
+// With enough posts to fill the remaining slots on their own, projects (and
+// overflow pages) won't appear in the panel at all — that's intentional:
+// posts are the content most worth surfacing here, and everything else is
+// still one click away via the Blog/Home pages or a real search query.
 export function buildEmptyQueryResults(
   items: SearchItem[],
   panelSize: number = SEARCH_PANEL_SIZE,
 ): SearchItem[] {
-  const { page: pages, post: posts, project: projects } = groupByType(items);
-  const leadingPages = pages.slice(0, EMPTY_QUERY_PAGE_LIMIT);
-  const overflowPages = pages.slice(EMPTY_QUERY_PAGE_LIMIT);
-  const ordered = [...leadingPages, ...posts, ...projects, ...overflowPages];
+  const {
+    page: pageItems,
+    post: postItems,
+    project: projectItems,
+    ...otherTypeItems
+  } = groupByType(items);
+  const leadingPages = pageItems.slice(0, EMPTY_QUERY_PAGE_LIMIT);
+  const overflowPages = pageItems.slice(EMPTY_QUERY_PAGE_LIMIT);
+  const ordered = [
+    ...leadingPages,
+    ...postItems,
+    ...projectItems,
+    ...overflowPages,
+    ...Object.values(otherTypeItems).flat(),
+  ];
   return ordered.slice(0, Math.max(0, panelSize));
 }
