@@ -7,6 +7,7 @@ import {
   projectToSearchItem,
   PROJECTS_ANCHOR,
   SEARCH_PANEL_SIZE,
+  EMPTY_QUERY_PAGE_LIMIT,
 } from "@data/searchIndex";
 import { mockProjects, mockSearchItems } from "../__fixtures__/mockData";
 import type { SearchItem } from "@typedefs";
@@ -150,13 +151,16 @@ describe("buildEmptyQueryResults", () => {
 
   it("fills the panel with posts alone when there are enough to do so, excluding projects entirely", () => {
     const pageItem = buildStaticSearchItems([])[0];
-    const manyPosts: SearchItem[] = Array.from({ length: 10 }, (_u, index) => ({
-      type: "post",
-      title: `Post ${index}`,
-      desc: "",
-      href: `/posts/post-${index}`,
-      kw: "",
-    }));
+    const manyPosts: SearchItem[] = Array.from(
+      { length: 10 },
+      (_unused, index) => ({
+        type: "post",
+        title: `Post ${index}`,
+        desc: "",
+        href: `/posts/post-${index}`,
+        kw: "",
+      }),
+    );
     const items = [pageItem, ...manyProjects(5), ...manyPosts];
 
     const visibleTypes = buildEmptyQueryResults(items, SEARCH_PANEL_SIZE).map(
@@ -166,24 +170,41 @@ describe("buildEmptyQueryResults", () => {
     expect(visibleTypes).not.toContain("project");
   });
 
-  it("caps leading pages so an ever-growing pages list can't crowd out posts", () => {
-    const manyPages: SearchItem[] = Array.from({ length: 10 }, (_u, index) => ({
+  function buildPages(count: number): SearchItem[] {
+    return Array.from({ length: count }, (_unused, index) => ({
       type: "page",
       title: `Page ${index}`,
       desc: "",
       href: `/page-${index}`,
       kw: "",
     }));
+  }
+
+  it("caps leading pages so an ever-growing pages list can't crowd out posts", () => {
+    const manyPages = buildPages(10);
     const items = [...manyPages, ...mockSearchItems];
 
     const visibleTypes = buildEmptyQueryResults(items, SEARCH_PANEL_SIZE).map(
       (item) => item.type,
     );
+    const firstPostIndex = visibleTypes.indexOf("post");
 
-    expect(visibleTypes.filter((type) => type === "page").length).toBeLessThan(
-      manyPages.length,
+    expect(firstPostIndex).toBeGreaterThan(-1);
+    expect(firstPostIndex).toBeLessThanOrEqual(EMPTY_QUERY_PAGE_LIMIT);
+  });
+
+  it("backfills pages beyond the cap at the tail instead of dropping them, once the panel has room", () => {
+    const pageCount = EMPTY_QUERY_PAGE_LIMIT + 1;
+    const manyPages = buildPages(pageCount);
+    const items = [...manyPages, ...mockSearchItems];
+    const roomyPanelSize = pageCount + mockSearchItems.length;
+
+    const result = buildEmptyQueryResults(items, roomyPanelSize);
+
+    expect(result.length).toBe(roomyPanelSize);
+    expect(result.filter((item) => item.type === "page").length).toBe(
+      pageCount,
     );
-    expect(visibleTypes).toContain("post");
   });
 
   it("respects the panel size limit", () => {

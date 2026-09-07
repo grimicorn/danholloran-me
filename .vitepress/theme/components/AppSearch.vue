@@ -52,7 +52,7 @@ const resultRefs = ref<HTMLElement[]>([]);
 const filteredResults = computed((): SearchItem[] => {
   const q = query.value.trim();
   if (!q) {
-    return buildEmptyQueryResults(ALL_ITEMS, SEARCH_PANEL_SIZE);
+    return buildEmptyQueryResults(ALL_ITEMS);
   }
   return ms.search(q).slice(0, SEARCH_PANEL_SIZE) as unknown as SearchItem[];
 });

@@ -99,26 +99,42 @@ export function mergeSearchIndex(
 // shared by the component and its tests, instead of a repeated literal.
 export const SEARCH_PANEL_SIZE = 8;
 
-// Number of static pages allowed to lead the empty-query panel. Capped so an
-// ever-growing pages list can't crowd out posts the way projects did before
-// this fix — the whole point of a curated preview is to surface what's new.
-const EMPTY_QUERY_PAGE_LIMIT = 3;
+// Number of static pages allowed to *lead* the empty-query panel. Capped so
+// an ever-growing pages list can't crowd out posts the way projects did
+// before this fix. Pages beyond the cap aren't dropped — buildEmptyQueryResults
+// backfills them at the tail if posts/projects don't fill the panel.
+export const EMPTY_QUERY_PAGE_LIMIT = 3;
+
+// A Record keyed by every SearchItem type, rather than three separate
+// .filter() calls, so adding a new type to the union is a compile error here
+// instead of that type silently vanishing from the empty-query panel.
+function groupByType(
+  items: SearchItem[],
+): Record<SearchItem["type"], SearchItem[]> {
+  const groups: Record<SearchItem["type"], SearchItem[]> = {
+    page: [],
+    post: [],
+    project: [],
+  };
+  for (const item of items) {
+    groups[item.type].push(item);
+  }
+  return groups;
+}
 
 // The empty-query panel is a curated preview, not full-text search results,
 // so it gets its own explicit order: a few top-level pages for navigation,
 // then the newest posts (the content that actually changes week to week),
-// then projects filling whatever's left. `items` is expected pre-sorted by
-// recency within each type (postItems already sorts newest-first).
+// then projects, then any pages left over once the cap is applied. `items`
+// is expected pre-sorted by recency within each type (postItems already
+// sorts newest-first).
 export function buildEmptyQueryResults(
   items: SearchItem[],
   panelSize: number = SEARCH_PANEL_SIZE,
 ): SearchItem[] {
-  const pages = items.filter((item) => item.type === "page");
-  const posts = items.filter((item) => item.type === "post");
-  const projects = items.filter((item) => item.type === "project");
-  return [
-    ...pages.slice(0, EMPTY_QUERY_PAGE_LIMIT),
-    ...posts,
-    ...projects,
-  ].slice(0, panelSize);
+  const { page: pages, post: posts, project: projects } = groupByType(items);
+  const leadingPages = pages.slice(0, EMPTY_QUERY_PAGE_LIMIT);
+  const overflowPages = pages.slice(EMPTY_QUERY_PAGE_LIMIT);
+  const ordered = [...leadingPages, ...posts, ...projects, ...overflowPages];
+  return ordered.slice(0, Math.max(0, panelSize));
 }
