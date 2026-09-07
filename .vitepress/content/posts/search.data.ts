@@ -2,6 +2,7 @@ import { createContentLoader } from "vitepress";
 import type { ContentData } from "vitepress";
 import { PostSearchItem } from "@typedefs";
 import { normalizeTags } from "../../theme/utils/normalizeTags.ts";
+import { POSTS_GLOB } from "./transformPosts.ts";
 
 declare const data: PostSearchItem[];
 export { data };
@@ -23,7 +24,7 @@ export function transformSearchData(raw: ContentData[]): PostSearchItem[] {
     )
     .map(({ frontmatter, url }) => {
       const slug = url
-        .replace(/\/.vitepress\/content\/posts\//g, "")
+        .replace(/\/\.vitepress\/content\/posts\//g, "")
         .replace(/\/posts\//g, "");
       const date = new Date(frontmatter.date).toLocaleDateString("en-US", {
         month: "short",
@@ -47,6 +48,6 @@ export function transformSearchData(raw: ContentData[]): PostSearchItem[] {
     });
 }
 
-export default createContentLoader(".vitepress/content/posts/*.md", {
+export default createContentLoader(POSTS_GLOB, {
   transform: transformSearchData,
 });
