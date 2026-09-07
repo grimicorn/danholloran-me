@@ -2,11 +2,14 @@ import { describe, it, expect } from "vitest";
 import realProjects from "@data/projects";
 import {
   buildStaticSearchItems,
+  buildEmptyQueryResults,
   mergeSearchIndex,
   projectToSearchItem,
   PROJECTS_ANCHOR,
+  SEARCH_PANEL_SIZE,
 } from "@data/searchIndex";
 import { mockProjects, mockSearchItems } from "../__fixtures__/mockData";
+import type { SearchItem } from "@typedefs";
 
 describe("buildStaticSearchItems", () => {
   it("indexes the full set of static pages", () => {
@@ -95,16 +98,26 @@ describe("mergeSearchIndex", () => {
     expect(survivor.kw).toContain("Automation Platform");
     expect(survivor.kw).toContain(mockSearchItems[0].kw);
   });
+});
+
+describe("buildEmptyQueryResults", () => {
+  function manyProjects(count: number): SearchItem[] {
+    return Array.from({ length: count }, (_unused, index) =>
+      projectToSearchItem({
+        ...mockProjects[0],
+        title: `Project ${index}`,
+        url: `https://example.com/project-${index}`,
+      }),
+    );
+  }
 
   it("orders pages before posts before projects, regardless of input order", () => {
     const pageItem = buildStaticSearchItems([])[0];
-    const projectItems = mockProjects.map((project) =>
-      projectToSearchItem(project),
-    );
-    const staticItems = [...projectItems, pageItem];
-    const merged = mergeSearchIndex(staticItems, mockSearchItems);
+    const items = [...manyProjects(2), ...mockSearchItems, pageItem];
 
-    const typeOrder = merged.map((item) => item.type);
+    const result = buildEmptyQueryResults(items, SEARCH_PANEL_SIZE);
+
+    const typeOrder = result.map((item) => item.type);
     const lastPageIndex = typeOrder.lastIndexOf("page");
     const firstProjectIndex = typeOrder.indexOf("project");
     const postIndices = typeOrder.reduce<number[]>((indices, type, index) => {
@@ -114,28 +127,74 @@ describe("mergeSearchIndex", () => {
       return indices;
     }, []);
 
+    expect(postIndices.length).toBeGreaterThan(0);
+    expect(firstProjectIndex).toBeGreaterThan(-1);
     expect(lastPageIndex).toBeLessThan(Math.min(...postIndices));
     expect(Math.max(...postIndices)).toBeLessThan(firstProjectIndex);
   });
 
-  it("keeps every post ahead of projects even when projects outnumber the empty-query slice size", () => {
-    const manyProjects = Array.from({ length: 10 }, (_unused, index) =>
-      projectToSearchItem({
-        ...mockProjects[0],
-        title: `Project ${index}`,
-        url: `https://example.com/project-${index}`,
-      }),
-    );
+  it("keeps every post ahead of every project when projects outnumber the panel size", () => {
     const pageItem = buildStaticSearchItems([])[0];
-    const merged = mergeSearchIndex(
-      [pageItem, ...manyProjects],
-      mockSearchItems,
+    const items = [pageItem, ...manyProjects(10), ...mockSearchItems];
+
+    const visibleTypes = buildEmptyQueryResults(items, SEARCH_PANEL_SIZE).map(
+      (item) => item.type,
+    );
+    const lastPostIndex = visibleTypes.lastIndexOf("post");
+    const firstProjectIndex = visibleTypes.indexOf("project");
+
+    expect(lastPostIndex).toBeGreaterThan(-1);
+    expect(firstProjectIndex).toBeGreaterThan(-1);
+    expect(lastPostIndex).toBeLessThan(firstProjectIndex);
+  });
+
+  it("fills the panel with posts alone when there are enough to do so, excluding projects entirely", () => {
+    const pageItem = buildStaticSearchItems([])[0];
+    const manyPosts: SearchItem[] = Array.from({ length: 10 }, (_u, index) => ({
+      type: "post",
+      title: `Post ${index}`,
+      desc: "",
+      href: `/posts/post-${index}`,
+      kw: "",
+    }));
+    const items = [pageItem, ...manyProjects(5), ...manyPosts];
+
+    const visibleTypes = buildEmptyQueryResults(items, SEARCH_PANEL_SIZE).map(
+      (item) => item.type,
     );
 
-    const EMPTY_QUERY_PANEL_SIZE = 8;
-    const visibleTypes = merged
-      .slice(0, EMPTY_QUERY_PANEL_SIZE)
-      .map((item) => item.type);
+    expect(visibleTypes).not.toContain("project");
+  });
+
+  it("caps leading pages so an ever-growing pages list can't crowd out posts", () => {
+    const manyPages: SearchItem[] = Array.from({ length: 10 }, (_u, index) => ({
+      type: "page",
+      title: `Page ${index}`,
+      desc: "",
+      href: `/page-${index}`,
+      kw: "",
+    }));
+    const items = [...manyPages, ...mockSearchItems];
+
+    const visibleTypes = buildEmptyQueryResults(items, SEARCH_PANEL_SIZE).map(
+      (item) => item.type,
+    );
+
+    expect(visibleTypes.filter((type) => type === "page").length).toBeLessThan(
+      manyPages.length,
+    );
     expect(visibleTypes).toContain("post");
+  });
+
+  it("respects the panel size limit", () => {
+    const items = [
+      ...buildStaticSearchItems([]),
+      ...manyProjects(5),
+      ...mockSearchItems,
+    ];
+
+    const result = buildEmptyQueryResults(items, 3);
+
+    expect(result.length).toBe(3);
   });
 });

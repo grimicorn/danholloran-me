@@ -72,11 +72,9 @@ export function buildStaticSearchItems(
 // twice, fold the project's title and keywords into the post entry so it stays
 // findable by project name/skills, and drop the duplicate static entry.
 //
-// Result order is pages -> posts -> projects, not the input order. Search
-// relevance itself doesn't depend on this (MiniSearch ranks by match score,
-// not insertion order), but the empty-query panel just takes the first N
-// items off this array, so posts need to rank ahead of projects there or
-// enough projects push newest posts out of view.
+// Order here doesn't matter for full-text search (MiniSearch ranks by match
+// score, not insertion order) — it only matters for the empty-query preview
+// panel, which has its own explicit ordering in buildEmptyQueryResults below.
 export function mergeSearchIndex(
   staticItems: SearchItem[],
   postItems: SearchItem[],
@@ -90,12 +88,37 @@ export function mergeSearchIndex(
     return { ...post, kw: `${post.kw} ${collision.title} ${collision.kw}` };
   });
   const postHrefs = new Set(postItems.map((item) => item.href));
-  const remainingStatics = staticItems.filter(
-    (item) => !postHrefs.has(item.href),
-  );
-  const pages = remainingStatics.filter((item) => item.type === "page");
-  const nonPageStatics = remainingStatics.filter(
-    (item) => item.type !== "page",
-  );
-  return [...pages, ...mergedPosts, ...nonPageStatics];
+  return [
+    ...staticItems.filter((item) => !postHrefs.has(item.href)),
+    ...mergedPosts,
+  ];
+}
+
+// Number of results the search panel shows at once, for both the empty-query
+// preview and a query's top matches. Exported so it's one source of truth
+// shared by the component and its tests, instead of a repeated literal.
+export const SEARCH_PANEL_SIZE = 8;
+
+// Number of static pages allowed to lead the empty-query panel. Capped so an
+// ever-growing pages list can't crowd out posts the way projects did before
+// this fix — the whole point of a curated preview is to surface what's new.
+const EMPTY_QUERY_PAGE_LIMIT = 3;
+
+// The empty-query panel is a curated preview, not full-text search results,
+// so it gets its own explicit order: a few top-level pages for navigation,
+// then the newest posts (the content that actually changes week to week),
+// then projects filling whatever's left. `items` is expected pre-sorted by
+// recency within each type (postItems already sorts newest-first).
+export function buildEmptyQueryResults(
+  items: SearchItem[],
+  panelSize: number = SEARCH_PANEL_SIZE,
+): SearchItem[] {
+  const pages = items.filter((item) => item.type === "page");
+  const posts = items.filter((item) => item.type === "post");
+  const projects = items.filter((item) => item.type === "project");
+  return [
+    ...pages.slice(0, EMPTY_QUERY_PAGE_LIMIT),
+    ...posts,
+    ...projects,
+  ].slice(0, panelSize);
 }
