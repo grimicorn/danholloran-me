@@ -190,6 +190,21 @@ describe("AppSearch", () => {
     expect(options[0].text()).not.toContain("Duplicate Of First Post");
   });
 
+  it("shows posts ahead of projects in the default empty-query panel", () => {
+    const search = mountSearch();
+
+    const options = search.findAll('[role="option"]');
+    const types = options.map((option) => option.text());
+    const postIndex = types.findIndex((text) => text.includes("First Post"));
+    const projectIndex = types.findIndex((text) =>
+      text.includes("Acme Project"),
+    );
+
+    expect(postIndex).toBeGreaterThan(-1);
+    expect(projectIndex).toBeGreaterThan(-1);
+    expect(postIndex).toBeLessThan(projectIndex);
+  });
+
   it("collapses aria-expanded when the search panel is closed", async () => {
     const search = mountSearch();
     mocks.isSearchOpen!.value = false;

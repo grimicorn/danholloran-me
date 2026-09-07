@@ -95,4 +95,47 @@ describe("mergeSearchIndex", () => {
     expect(survivor.kw).toContain("Automation Platform");
     expect(survivor.kw).toContain(mockSearchItems[0].kw);
   });
+
+  it("orders pages before posts before projects, regardless of input order", () => {
+    const pageItem = buildStaticSearchItems([])[0];
+    const projectItems = mockProjects.map((project) =>
+      projectToSearchItem(project),
+    );
+    const staticItems = [...projectItems, pageItem];
+    const merged = mergeSearchIndex(staticItems, mockSearchItems);
+
+    const typeOrder = merged.map((item) => item.type);
+    const lastPageIndex = typeOrder.lastIndexOf("page");
+    const firstProjectIndex = typeOrder.indexOf("project");
+    const postIndices = typeOrder.reduce<number[]>((indices, type, index) => {
+      if (type === "post") {
+        indices.push(index);
+      }
+      return indices;
+    }, []);
+
+    expect(lastPageIndex).toBeLessThan(Math.min(...postIndices));
+    expect(Math.max(...postIndices)).toBeLessThan(firstProjectIndex);
+  });
+
+  it("keeps every post ahead of projects even when projects outnumber the empty-query slice size", () => {
+    const manyProjects = Array.from({ length: 10 }, (_unused, index) =>
+      projectToSearchItem({
+        ...mockProjects[0],
+        title: `Project ${index}`,
+        url: `https://example.com/project-${index}`,
+      }),
+    );
+    const pageItem = buildStaticSearchItems([])[0];
+    const merged = mergeSearchIndex(
+      [pageItem, ...manyProjects],
+      mockSearchItems,
+    );
+
+    const EMPTY_QUERY_PANEL_SIZE = 8;
+    const visibleTypes = merged
+      .slice(0, EMPTY_QUERY_PANEL_SIZE)
+      .map((item) => item.type);
+    expect(visibleTypes).toContain("post");
+  });
 });

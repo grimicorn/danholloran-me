@@ -71,6 +71,12 @@ export function buildStaticSearchItems(
 // A project may link to its own blog post. Rather than index the same href
 // twice, fold the project's title and keywords into the post entry so it stays
 // findable by project name/skills, and drop the duplicate static entry.
+//
+// Result order is pages -> posts -> projects, not the input order. Search
+// relevance itself doesn't depend on this (MiniSearch ranks by match score,
+// not insertion order), but the empty-query panel just takes the first N
+// items off this array, so posts need to rank ahead of projects there or
+// enough projects push newest posts out of view.
 export function mergeSearchIndex(
   staticItems: SearchItem[],
   postItems: SearchItem[],
@@ -84,8 +90,12 @@ export function mergeSearchIndex(
     return { ...post, kw: `${post.kw} ${collision.title} ${collision.kw}` };
   });
   const postHrefs = new Set(postItems.map((item) => item.href));
-  return [
-    ...staticItems.filter((item) => !postHrefs.has(item.href)),
-    ...mergedPosts,
-  ];
+  const remainingStatics = staticItems.filter(
+    (item) => !postHrefs.has(item.href),
+  );
+  const pages = remainingStatics.filter((item) => item.type === "page");
+  const nonPageStatics = remainingStatics.filter(
+    (item) => item.type !== "page",
+  );
+  return [...pages, ...mergedPosts, ...nonPageStatics];
 }
